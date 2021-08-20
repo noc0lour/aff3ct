@@ -7,7 +7,7 @@
 #include <memory>
 #include <chrono>
 #include <vector>
-#include <mipp.h>
+#include "mipp.h"
 
 namespace aff3ct
 {

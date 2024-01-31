@@ -58,6 +58,9 @@ public:
 	                                      const int                            n_ite   = 1,
 	                                            module::Encoder<B>            *encoder = nullptr) const;
 
+	template <typename B = int, typename Q = float>
+	module::Decoder_SIHO<B,Q>* build_viterbi(const std::vector<std::vector<int>>& trellis) const;
+
 private:
 	template <typename B = int, typename Q = float, typename QD = Q, tools::proto_max<Q> MAX1, tools::proto_max<QD> MAX2>
 	module::Decoder_SISO<B,Q>* _build_siso_seq(const std::vector<std::vector<int>> &trellis,

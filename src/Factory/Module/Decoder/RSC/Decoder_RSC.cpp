@@ -20,6 +20,7 @@
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_std.hpp"
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_fast.hpp"
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_very_fast.hpp"
+#include "Module/Decoder/RSC/Viterbi/Decoder_VITERBI_SIHO.hpp"
 #include "Factory/Module/Decoder/RSC/Decoder_RSC.hpp"
 
 using namespace aff3ct;
@@ -32,7 +33,7 @@ Decoder_RSC
 ::Decoder_RSC(const std::string &prefix)
 : Decoder(Decoder_RSC_name, prefix)
 {
-	this->type   = "BCJR";
+	this->type = "BCJR";
 	this->implem = "STD";
 }
 
@@ -52,7 +53,7 @@ void Decoder_RSC
 
 	args.erase({p+"-cw-size", "N"});
 
-	cli::add_options(args.at({p+"-type", "D"}), 0, "BCJR");
+	cli::add_options(args.at({p+"-type", "D"}), 0, "BCJR", "VITERBI");
 	cli::add_options(args.at({p+"-implem"   }), 0, "GENERIC", "FAST", "VERY_FAST");
 
 	tools::add_arg(args, p, class_name+"p+simd",
@@ -78,6 +79,7 @@ void Decoder_RSC
 
 	auto p = this->get_prefix();
 
+	if(vals.exist({p+"-type", "D"})) this->type = vals.at({p+"-type", "D"});
 	if(vals.exist({p+"-simd"   })) this->simd_strategy = vals.at({p+"-simd"});
 	if(vals.exist({p+"-max"    })) this->max           = vals.at({p+"-max" });
 	if(vals.exist({p+"-std"    })) this->standard      = vals.at({p+"-std" });
@@ -237,6 +239,18 @@ module::Decoder_SISO<B,Q>* Decoder_RSC
 }
 
 template <typename B, typename Q>
+module::Decoder_SIHO<B, Q>* Decoder_RSC
+::build_viterbi(const std::vector<std::vector<int>>& trellis) const
+{
+	if (this->buffered)
+	{
+		throw tools::invalid_argument("Viterbi decoder is incompatible with buffered encoding. "
+		                              "Please add --enc-no-buff or choose another decoder.");
+	}
+	return new module::Decoder_VITERBI_SIHO<B,Q>(this->K, trellis, true);
+}
+
+template <typename B, typename Q>
 module::Decoder_SIHO<B,Q>* Decoder_RSC
 ::build(const std::vector<std::vector<int>> &trellis,
               std::ostream                  &stream,
@@ -249,6 +263,10 @@ module::Decoder_SIHO<B,Q>* Decoder_RSC
 	}
 	catch (tools::cannot_allocate const&)
 	{
+		if (this->type == "VITERBI")
+		{
+			return build_viterbi<B,Q>(trellis);
+		}
 		return build_siso<B,Q>(trellis, stream, n_ite);
 	}
 }

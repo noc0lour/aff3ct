@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <sstream>
 #include <utility>
+#include <tuple>
 #include <ios>
 
 #include "Tools/Reporter/BFER/Reporter_BFER.hpp"
@@ -23,12 +24,12 @@ void Reporter_BFER<B>
 	auto& BFER_title = this->monitor_group.first;
 	auto& BFER_cols  = this->monitor_group.second;
 
-	BFER_title = {"Bit Error Rate (BER) and Frame Error Rate (FER)", ""};
-	BFER_cols.push_back(std::make_pair("FRA", ""));
-	BFER_cols.push_back(std::make_pair("BE", ""));
-	BFER_cols.push_back(std::make_pair("FE", ""));
-	BFER_cols.push_back(std::make_pair("BER", ""));
-	BFER_cols.push_back(std::make_pair("FER", ""));
+	BFER_title = {"Bit Error Rate (BER) and Frame Error Rate (FER)", "", 0};
+	BFER_cols.push_back(std::make_tuple("FRA", "", 12));
+	BFER_cols.push_back(std::make_tuple("BE", "", 0));
+	BFER_cols.push_back(std::make_tuple("FE", "", 0));
+	BFER_cols.push_back(std::make_tuple("BER", "", 0));
+	BFER_cols.push_back(std::make_tuple("FER", "", 0));
 
 	this->cols_groups.push_back(this->monitor_group);
 }
@@ -37,7 +38,7 @@ std::string format(unsigned long long val)
 {
 	std::stringstream os;
 
-	if (val > (unsigned long long)(1e8 -1))
+	if (val > (unsigned long long)(1e10 -1))
 		os << std::setprecision(2) << std::scientific << (double)val;
 	else
 		os << std::setprecision(0) << std::fixed      << val;

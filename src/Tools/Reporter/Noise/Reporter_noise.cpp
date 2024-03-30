@@ -1,4 +1,5 @@
 #include <utility>
+#include <tuple>
 #include <iomanip>
 #include <sstream>
 #include <cassert>
@@ -23,19 +24,19 @@ Reporter_noise<R>
 	switch (noise.get_type())
 	{
 		case Noise_type::SIGMA:
-			Noise_title = {"Signal Noise Ratio", "(SNR)"};
+			Noise_title = {"Signal Noise Ratio", "(SNR)", 0};
 			if (show_sigma)
-				Noise_cols.push_back(std::make_pair("Sigma", ""));
-			Noise_cols.push_back(std::make_pair("Es/N0", "(dB)"));
-			Noise_cols.push_back(std::make_pair("Eb/N0", "(dB)"));
+				Noise_cols.push_back(std::make_tuple("Sigma", "", 0));
+			Noise_cols.push_back(std::make_tuple("Es/N0", "(dB)", 0));
+			Noise_cols.push_back(std::make_tuple("Eb/N0", "(dB)", 0));
 			break;
 		case Noise_type::ROP:
-			Noise_title = {"Received Optical", "Power (ROP)"};
-			Noise_cols.push_back(std::make_pair("ROP", "(dB)"));
+			Noise_title = {"Received Optical", "Power (ROP)", 0};
+			Noise_cols.push_back(std::make_tuple("ROP", "(dB)", 0));
 			break;
 		case Noise_type::EP:
-			Noise_title = {"Event Probability", "(EP)"};
-			Noise_cols.push_back(std::make_pair("EP", ""));
+			Noise_title = {"Event Probability", "(EP)", 0};
+			Noise_cols.push_back(std::make_tuple("EP", "", 0));
 			break;
 	}
 

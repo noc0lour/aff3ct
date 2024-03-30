@@ -1,5 +1,5 @@
 #include "Simulation/Simulation.hpp"
-#include "Tools/signal_handler.h"
+#include "Tools/Signal_handler/Signal_handler.hpp"
 
 using namespace aff3ct;
 using namespace aff3ct::simulation;
@@ -8,7 +8,7 @@ Simulation
 ::Simulation()
 : simu_error(false)
 {
-	tools::setup_signal_handler();
+	tools::Signal_handler::init();
 }
 
 bool Simulation

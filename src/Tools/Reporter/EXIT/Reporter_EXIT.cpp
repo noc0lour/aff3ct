@@ -1,4 +1,5 @@
 #include <utility>
+#include <tuple>
 #include <iomanip>
 #include <sstream>
 #include <ios>
@@ -24,11 +25,11 @@ void Reporter_EXIT<B,R>
 	auto& EXIT_title = this->monitor_group.first;
 	auto& EXIT_cols  = this->monitor_group.second;
 
-	EXIT_title = {"EXIT chart depending on", "the channel A noise"};
-	EXIT_cols.push_back(std::make_pair("SIG_A",      "(dB)"));
-	EXIT_cols.push_back(std::make_pair("FRA",            ""));
-	EXIT_cols.push_back(std::make_pair("A_PRIORI",  "(I_A)"));
-	EXIT_cols.push_back(std::make_pair("EXTRINSIC", "(I_E)"));
+	EXIT_title = {"EXIT chart depending on", "the channel A noise", 0};
+	EXIT_cols.push_back(std::make_tuple("SIG_A",      "(dB)", 0));
+	EXIT_cols.push_back(std::make_tuple("FRA",            "", 0));
+	EXIT_cols.push_back(std::make_tuple("A_PRIORI",  "(I_A)", 0));
+	EXIT_cols.push_back(std::make_tuple("EXTRINSIC", "(I_E)", 0));
 
 	this->cols_groups.push_back(this->monitor_group);
 }

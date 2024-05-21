@@ -13,6 +13,3 @@
 [submodule "lib/cli"]
 	path = lib/cli
 	url = ../cli
-[submodule "lib/aff3ct-core"]
-	path = lib/aff3ct-core
-	url = ../aff3ct-core/

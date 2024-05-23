@@ -82,14 +82,8 @@ void Launcher
 	tools::add_arg(args, p, class_name+"version,v",
 		cli::None());
 
-#ifdef AFF3CT_CORE_BACKTRACE
+#ifdef AFF3CT_CORE_STACKTRACE
 	tools::add_arg(args, p, class_name+"except-no-bt",
-		cli::None(),
-		cli::arg_rank::ADV);
-#endif
-
-#ifndef NDEBUG
-	tools::add_arg(args, p, class_name+"except-a2l",
 		cli::None(),
 		cli::arg_rank::ADV);
 #endif
@@ -142,8 +136,7 @@ void Launcher
 	if(vals.exist({p+"-prec", "p"})) this->sim_prec = vals.to_int({p+"-prec", "p"});
 #endif
 
-	tools::exception::no_backtrace    =  vals.exist({"except-no-bt"});
-	tools::exception::no_addr_to_line = !vals.exist({"except-a2l"  });
+	tools::exception::no_stacktrace = vals.exist({"except-no-bt"});
 
 #ifdef AFF3CT_CORE_COLORS
 	if (vals.exist({"no-colors"}))

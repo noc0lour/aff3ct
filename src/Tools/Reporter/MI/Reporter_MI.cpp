@@ -1,4 +1,5 @@
 #include <utility>
+#include <tuple>
 #include <iomanip>
 #include <sstream>
 #include <ios>
@@ -23,11 +24,11 @@ void Reporter_MI<B,R>
 	auto& MI_title = this->monitor_group.first;
 	auto& MI_cols  = this->monitor_group.second;
 
-	MI_title = {"Mutual Information (MI)", ""};
-	MI_cols.push_back(std::make_pair("TRIALS", ""));
-	MI_cols.push_back(std::make_pair("MI",     ""));
-	MI_cols.push_back(std::make_pair("MIN",    ""));
-	MI_cols.push_back(std::make_pair("MAX",    ""));
+	MI_title = {"Mutual Information (MI)", "", 0};
+	MI_cols.push_back(std::make_tuple("TRIALS", "", 0));
+	MI_cols.push_back(std::make_tuple("MI",     "", 0));
+	MI_cols.push_back(std::make_tuple("MIN",    "", 0));
+	MI_cols.push_back(std::make_tuple("MAX",    "", 0));
 
 	this->cols_groups.push_back(this->monitor_group);
 }

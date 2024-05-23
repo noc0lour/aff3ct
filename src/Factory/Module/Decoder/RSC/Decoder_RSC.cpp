@@ -22,6 +22,7 @@
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_very_fast.hpp"
 #include "Module/Decoder/RSC/Viterbi/Decoder_Viterbi_SIHO.hpp"
 #include "Factory/Module/Decoder/RSC/Decoder_RSC.hpp"
+#include "Module/Decoder/RSC/Viterbi_list/Decoder_Viterbi_list_parallel.hpp"
 
 using namespace aff3ct;
 using namespace aff3ct::factory;
@@ -53,9 +54,9 @@ void Decoder_RSC
 
 	args.erase({p+"-cw-size", "N"});
 
-	cli::add_options(args.at({p+"-type", "D"}), 0, "BCJR", "VITERBI");
+	cli::add_options(args.at({p+"-type", "D"}), 0, "BCJR", "VITERBI", "PLVA");
 	cli::add_options(args.at({p+"-implem"   }), 0, "GENERIC", "FAST", "VERY_FAST");
-
+    
 	tools::add_arg(args, p, class_name+"p+simd",
 		cli::Text(cli::Including_set("INTRA", "INTER")));
 
@@ -70,6 +71,9 @@ void Decoder_RSC
 
 	tools::add_arg(args, p, class_name+"p+std",
 		cli::Text(cli::Including_set("LTE", "CCSDS")));
+
+    tools::add_arg(args, p, class_name+"p+lists,L",
+		cli::Integer(cli::Positive(), cli::Non_zero()));
 }
 
 void Decoder_RSC
@@ -79,11 +83,12 @@ void Decoder_RSC
 
 	auto p = this->get_prefix();
 
-	if(vals.exist({p+"-type", "D"})) this->type = vals.at({p+"-type", "D"});
-	if(vals.exist({p+"-simd"   })) this->simd_strategy = vals.at({p+"-simd"});
-	if(vals.exist({p+"-max"    })) this->max           = vals.at({p+"-max" });
-	if(vals.exist({p+"-std"    })) this->standard      = vals.at({p+"-std" });
-	if(vals.exist({p+"-no-buff"})) this->buffered      = false;
+	if(vals.exist({p+"-type", "D" })) this->type = vals.at({p+"-type", "D"});
+	if(vals.exist({p+"-simd"      })) this->simd_strategy = vals.at({p+"-simd"});
+	if(vals.exist({p+"-max"       })) this->max           = vals.at({p+"-max" });
+	if(vals.exist({p+"-std"       })) this->standard      = vals.at({p+"-std" });
+	if(vals.exist({p+"-no-buff"   })) this->buffered      = false;
+    if(vals.exist({p+"-lists", "L"})) this->L             = vals.to_int({p+"-lists", "L"});
 
 	if (this->standard == "LTE" && !vals.exist({p+"-poly"}))
 		this->poly = {013, 015};
@@ -141,8 +146,11 @@ void Decoder_RSC
 		if (!this->simd_strategy.empty())
 			headers[p].push_back(std::make_pair(std::string("SIMD strategy"), this->simd_strategy));
 
-		if (this->type != "VITERBI")
+		if (this->type == "BCJR")
             headers[p].push_back(std::make_pair(std::string("Max type"), this->max));
+
+        if (this->type == "PLVA")
+            headers[p].push_back(std::make_pair("Num. of lists (L)", std::to_string(this->L)));
 	}
 }
 
@@ -252,11 +260,25 @@ module::Decoder_SIHO<B, Q>* Decoder_RSC
 }
 
 template <typename B, typename Q>
+module::Decoder_SIHO<B, Q>* Decoder_RSC
+::build_viterbi_list(const std::vector<std::vector<int>>& trellis,
+                           module::CRC<B>                  *crc) const
+{
+	if (this->buffered)
+	{
+		throw tools::invalid_argument("Parallel list Viterbi decoder is incompatible with buffered encoding. "
+		                              "Please add --enc-no-buff or choose another decoder.");
+	}
+	return new module::Decoder_Viterbi_list_parallel<B,Q>(this->K, this->N_cw, this->L, *crc, trellis, true);
+}
+
+template <typename B, typename Q>
 module::Decoder_SIHO<B,Q>* Decoder_RSC
 ::build(const std::vector<std::vector<int>> &trellis,
               std::ostream                  &stream,
         const int                            n_ite,
-              module::Encoder<B>            *encoder) const
+              module::Encoder<B>            *encoder,
+              module::CRC<B>                 *crc) const
 {
 	try
 	{
@@ -267,6 +289,10 @@ module::Decoder_SIHO<B,Q>* Decoder_RSC
 		if (this->type == "VITERBI")
 		{
 			return build_viterbi<B,Q>(trellis);
+		}
+        if (crc != nullptr && this->type == "PLVA")
+		{
+			return build_viterbi_list<B,Q>(trellis, crc); 
 		}
 		return build_siso<B,Q>(trellis, stream, n_ite);
 	}
@@ -284,11 +310,11 @@ template aff3ct::module::Decoder_SISO<B,Q>* aff3ct::factory::Decoder_RSC::build_
 #endif
 
 #ifdef AFF3CT_MULTI_PREC
-template aff3ct::module::Decoder_SIHO<B_8 ,Q_8 >* aff3ct::factory::Decoder_RSC::build<B_8 ,Q_8 >(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_8 >*) const;
-template aff3ct::module::Decoder_SIHO<B_16,Q_16>* aff3ct::factory::Decoder_RSC::build<B_16,Q_16>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_16>*) const;
-template aff3ct::module::Decoder_SIHO<B_32,Q_32>* aff3ct::factory::Decoder_RSC::build<B_32,Q_32>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_32>*) const;
-template aff3ct::module::Decoder_SIHO<B_64,Q_64>* aff3ct::factory::Decoder_RSC::build<B_64,Q_64>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_64>*) const;
+template aff3ct::module::Decoder_SIHO<B_8 ,Q_8 >* aff3ct::factory::Decoder_RSC::build<B_8 ,Q_8 >(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_8 >*, module::CRC<B_8 >*) const;
+template aff3ct::module::Decoder_SIHO<B_16,Q_16>* aff3ct::factory::Decoder_RSC::build<B_16,Q_16>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_16>*, module::CRC<B_16>*) const;
+template aff3ct::module::Decoder_SIHO<B_32,Q_32>* aff3ct::factory::Decoder_RSC::build<B_32,Q_32>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_32>*, module::CRC<B_32>*) const;
+template aff3ct::module::Decoder_SIHO<B_64,Q_64>* aff3ct::factory::Decoder_RSC::build<B_64,Q_64>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_64>*, module::CRC<B_64>*) const;
 #else
-template aff3ct::module::Decoder_SIHO<B,Q>* aff3ct::factory::Decoder_RSC::build<B,Q>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B>*) const;
+template aff3ct::module::Decoder_SIHO<B,Q>* aff3ct::factory::Decoder_RSC::build<B,Q>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B>*, module::CRC<B>*) const;
 #endif
 // ==================================================================================== explicit template instantiation

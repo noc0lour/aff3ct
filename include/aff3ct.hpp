@@ -540,6 +540,9 @@
 #ifndef DECODER_VITERBI_SIHO_HPP_
 #include <Module/Decoder/RSC/Viterbi/Decoder_Viterbi_SIHO.hpp>
 #endif
+#ifndef DECODER_VITERBI_LIST_PARALLEL_HPP_
+#include <Module/Decoder/RSC/Viterbi_list/Decoder_Viterbi_list_parallel.hpp>
+#endif
 #ifndef DECODER_RS
 #include <Module/Decoder/RS/Decoder_RS.hpp>
 #endif

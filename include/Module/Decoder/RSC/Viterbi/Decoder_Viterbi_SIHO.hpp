@@ -22,26 +22,26 @@ namespace module
 {
 
 /*!
- * \class Decoder_VITERBI_SIHO
+ * \class Decoder_Viterbi_SIHO
  *
  * \brief Uses Viterbi's algorithm on a convolutional code.
  *
  */
 template <typename B = int, typename R = int>
-class Decoder_VITERBI_SIHO: public Decoder_SIHO<B, R>
+class Decoder_Viterbi_SIHO: public Decoder_SIHO<B, R>
 {
 public:
     /*!
      * \brief Constructor.
      */
-    Decoder_VITERBI_SIHO(const int K, const std::vector<std::vector<int>> trellis, const bool is_closed);
+    Decoder_Viterbi_SIHO(const int K, const std::vector<std::vector<int>> trellis, const bool is_closed);
 
     /*!
      * \brief Destructor.
      */
-    ~Decoder_VITERBI_SIHO() = default;
+    ~Decoder_Viterbi_SIHO() = default;
 
-    virtual Decoder_VITERBI_SIHO<B,R>* clone() const;
+    virtual Decoder_Viterbi_SIHO<B,R>* clone() const;
     
 protected:
     virtual int _decode_siho(const R* Y_N, B* X_N, const size_t frame_id);
@@ -76,9 +76,5 @@ private:
 };
 }
 }
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-#include "Module/Decoder/RSC/Viterbi/Decoder_VITERBI_SIHO.hxx"
-#endif
 
 #endif // DECODER_VITERBI_SIHO_BACKWARD_CLOSED_HPP_

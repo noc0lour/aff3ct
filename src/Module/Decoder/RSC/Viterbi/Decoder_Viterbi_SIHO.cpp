@@ -1,5 +1,5 @@
 
-#include "Module/Decoder/RSC/Viterbi/Decoder_VITERBI_SIHO.hpp"
+#include "Module/Decoder/RSC/Viterbi/Decoder_Viterbi_SIHO.hpp"
 
 #define DOUBLE_INF std::numeric_limits<double>::infinity()
 
@@ -8,8 +8,8 @@ using namespace aff3ct;
 using namespace aff3ct::module;
 
 template <typename B, typename R>
-Decoder_VITERBI_SIHO<B,R>
-::Decoder_VITERBI_SIHO(const int K, const std::vector<std::vector<int>> trellis, const bool is_closed)
+Decoder_Viterbi_SIHO<B,R>
+::Decoder_Viterbi_SIHO(const int K, const std::vector<std::vector<int>> trellis, const bool is_closed)
 : Decoder_SIHO<B, R> (K, is_closed ? 2 * K + 2 * static_cast<int>(std::log2(trellis[0].size())) : 2 * K),
   m_n_states         (static_cast<int>(trellis[0].size())                                              ),
   m_n_memories       (static_cast<int>(std::log2(m_n_states))                                          ),
@@ -29,17 +29,17 @@ Decoder_VITERBI_SIHO<B,R>
   m_closing_path     (std::vector<int> (m_n_states)                                                    ),
   m_closing_inputs   (std::vector<int> (m_n_states)                                                    )
 {
-	const std::string name = "Decoder_VITERBI_SIHO";
+	const std::string name = "Decoder_Viterbi_SIHO";
 	this->set_name(name);
 
 	this->setup();
 }
 
 template <typename B, typename R>
-Decoder_VITERBI_SIHO<B,R>* Decoder_VITERBI_SIHO<B,R>
+Decoder_Viterbi_SIHO<B,R>* Decoder_Viterbi_SIHO<B,R>
 ::clone() const
 {
-	auto m = new Decoder_VITERBI_SIHO(*this);
+	auto m = new Decoder_Viterbi_SIHO(*this);
 	m->deep_copy(*this);
 	return m;
 }
@@ -51,7 +51,7 @@ Decoder_VITERBI_SIHO<B,R>* Decoder_VITERBI_SIHO<B,R>
  * @tparam R Input floating-point data type
  */
 template <typename B, typename R>
-void Decoder_VITERBI_SIHO<B,R>::
+void Decoder_Viterbi_SIHO<B,R>::
 setup()
 {
 	// Filling T and C
@@ -112,7 +112,7 @@ setup()
  * @tparam R Input floating-point data type
  */
 template <typename B, typename R>
-void Decoder_VITERBI_SIHO<B,R>::
+void Decoder_Viterbi_SIHO<B,R>::
 _reset()
 {
 	std::fill(m_P.begin(), m_P.end(), DOUBLE_INF);
@@ -144,7 +144,7 @@ template <typename T> int sgn(T val) {
  * @param Y_N Input LLR pointer
  */
 template <typename B, typename R>
-void Decoder_VITERBI_SIHO<B,R>::
+void Decoder_Viterbi_SIHO<B,R>::
 _forward_pass(const R* Y_N)
 {
 	// Initialize first state at node metric 0
@@ -230,19 +230,6 @@ _forward_pass(const R* Y_N)
 	}
 }
 
-template<typename T>
-void print_vector(const std::vector<T> vect)
-{
-	std::string endv {""};
-	std::cout << "{";
-	for (long unsigned int i = 0 ; i < vect.size() ; i++)
-	{
-		endv = (i == vect.size() - 1) ? "" : ",";
-		std::cout << vect[i] << endv;
-	}
-	std::cout << "}" << std::endl;
-}
-
 /**
  * @brief Backwards pass for the Viterbi algorithm.
  * Follow the best path along the trellis to decode the received message.
@@ -253,7 +240,7 @@ void print_vector(const std::vector<T> vect)
  * @param V_K Output pointer for the decoded message
  */
 template <typename B, typename R>
-void Decoder_VITERBI_SIHO<B,R>::
+void Decoder_Viterbi_SIHO<B,R>::
 _backwards_pass(B* V_K)
 {
 	int state = 0;
@@ -273,7 +260,7 @@ _backwards_pass(B* V_K)
 
 
 template <typename B, typename R>
-int Decoder_VITERBI_SIHO<B,R>::
+int Decoder_Viterbi_SIHO<B,R>::
 _decode_siho(const R* Y_N, B* V_K, const size_t frame_id)
 {
 	_reset();
@@ -283,3 +270,14 @@ _decode_siho(const R* Y_N, B* V_K, const size_t frame_id)
 	return 0;
 }
 
+// ==================================================================================== explicit template instantiation
+#include "Tools/types.h"
+#ifdef AFF3CT_MULTI_PREC
+template class aff3ct::module::Decoder_Viterbi_SIHO<B_8,Q_8>;
+template class aff3ct::module::Decoder_Viterbi_SIHO<B_16,Q_16>;
+template class aff3ct::module::Decoder_Viterbi_SIHO<B_32,Q_32>;
+template class aff3ct::module::Decoder_Viterbi_SIHO<B_64,Q_64>;
+#else
+template class aff3ct::module::Decoder_Viterbi_SIHO<B,Q>;
+#endif
+// ==================================================================================== explicit template instantiation

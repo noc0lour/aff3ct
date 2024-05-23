@@ -20,7 +20,7 @@
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_std.hpp"
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_fast.hpp"
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_very_fast.hpp"
-#include "Module/Decoder/RSC/Viterbi/Decoder_VITERBI_SIHO.hpp"
+#include "Module/Decoder/RSC/Viterbi/Decoder_Viterbi_SIHO.hpp"
 #include "Factory/Module/Decoder/RSC/Decoder_RSC.hpp"
 
 using namespace aff3ct;
@@ -248,7 +248,7 @@ module::Decoder_SIHO<B, Q>* Decoder_RSC
 		throw tools::invalid_argument("Viterbi decoder is incompatible with buffered encoding. "
 		                              "Please add --enc-no-buff or choose another decoder.");
 	}
-	return new module::Decoder_VITERBI_SIHO<B,Q>(this->K, trellis, true);
+	return new module::Decoder_Viterbi_SIHO<B,Q>(this->K, trellis, true);
 }
 
 template <typename B, typename Q>

@@ -35,7 +35,7 @@ public:
 	std::string      standard      = "LTE";
 	bool             buffered      = true;
 	std::vector<int> poly          = {013, 015};
-    unsigned int     L             = 1;
+    unsigned int     L             = 8;
 
 	// -------------------------------------------------------------------------------------------------------- METHODS
 	explicit Decoder_RSC(const std::string &p = Decoder_RSC_prefix);

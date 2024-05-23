@@ -141,7 +141,8 @@ void Decoder_RSC
 		if (!this->simd_strategy.empty())
 			headers[p].push_back(std::make_pair(std::string("SIMD strategy"), this->simd_strategy));
 
-		headers[p].push_back(std::make_pair(std::string("Max type"), this->max));
+		if (this->type != "VITERBI")
+            headers[p].push_back(std::make_pair(std::string("Max type"), this->max));
 	}
 }
 

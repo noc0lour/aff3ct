@@ -52,8 +52,8 @@ public:
 	module::Decoder_SIHO<B,Q>* build(const std::vector<std::vector<int>> &trellis,
 	                                       std::ostream                  &stream  = std::cout,
 	                                 const int                            n_ite   = 1,
-	                                       module::Encoder<B>            *encoder = nullptr,
-                                           module::CRC<B>                *crc     = nullptr) const;
+                                     const module::CRC<B>                *crc     = nullptr,
+	                                       module::Encoder<B>            *encoder = nullptr) const;
 
 	template <typename B = int, typename Q = float>
 	module::Decoder_SISO<B,Q>* build_siso(const std::vector<std::vector<int>> &trellis,
@@ -65,7 +65,7 @@ public:
 	module::Decoder_SIHO<B,Q>* build_viterbi(const std::vector<std::vector<int>>& trellis) const;
     template <typename B = int, typename Q = float>
     module::Decoder_SIHO<B,Q>* build_viterbi_list(const std::vector<std::vector<int>>& trellis,
-                                                        module::CRC<B>                 *crc) const;
+                                                  const module::CRC<B>                 *crc) const;
 
 private:
 	template <typename B = int, typename Q = float, typename QD = Q, tools::proto_max<Q> MAX1, tools::proto_max<QD> MAX2>

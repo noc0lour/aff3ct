@@ -25,7 +25,8 @@ protected:
 
 public:
 	Codec_RSC(const factory::Encoder_RSC &enc_params,
-	          const factory::Decoder_RSC &dec_params);
+	          const factory::Decoder_RSC &dec_params,
+              const module::CRC<B>       *crc     = nullptr);
 	virtual ~Codec_RSC() = default;
 
 	virtual Codec_RSC<B,Q>* clone() const;

@@ -23,7 +23,7 @@ Decoder_Viterbi_list_parallel<B,Q>
 ::Decoder_Viterbi_list_parallel(const int K, 
                                 const int N, 
                                 const int L,
-                                      module::CRC<B>& crc,
+                                const module::CRC<B>& crc,
                                 const std::vector<std::vector<int>> trellis, 
                                 const bool is_closed)
 : Decoder_SIHO<B, Q>           ( K, is_closed ? 2 * K + 2 * static_cast<int>(std::log2(trellis[0].size())) : 2 * K ),
@@ -475,13 +475,13 @@ size_t Decoder_Viterbi_list_parallel<B,Q>
 }
 
 template<typename B, typename Q>
-void Decoder_Viterbi_list_parallel<B,Q>
-::_decode(const Q* Y_N, B* X_N, const size_t frame_id)
+int Decoder_Viterbi_list_parallel<B,Q>
+::_decode_siho(const Q* Y_N, B* X_N, const size_t frame_id)
 {
     _reset();
     _forward_pass(Y_N);
     _backwards_pass(X_N);
-    
+    return 0;
 }
 
 #include "Tools/types.h"

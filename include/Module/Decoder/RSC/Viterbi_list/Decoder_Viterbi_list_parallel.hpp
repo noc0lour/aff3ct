@@ -34,7 +34,7 @@ public:
     Decoder_Viterbi_list_parallel(const int K, 
                                   const int N, 
                                   const int L,
-                                        module::CRC<B>& crc,
+                                  const module::CRC<B>& crc,
                                   const std::vector<std::vector<int>> trellis,
                                   const bool is_closed);
 
@@ -49,7 +49,7 @@ public:
 
     void set_crc(module::CRC<B>* crc) { m_crc = crc->clone(); }
 protected:
-    virtual void _decode(const Q* Y_N, B* X_N, const size_t frame_id);
+    virtual int _decode_siho(const Q* Y_N, B* X_N, const size_t frame_id);
 
 
 

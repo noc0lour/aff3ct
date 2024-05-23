@@ -262,7 +262,7 @@ module::Decoder_SIHO<B, Q>* Decoder_RSC
 template <typename B, typename Q>
 module::Decoder_SIHO<B, Q>* Decoder_RSC
 ::build_viterbi_list(const std::vector<std::vector<int>>& trellis,
-                           module::CRC<B>                  *crc) const
+                     const module::CRC<B>                  *crc) const
 {
 	if (this->buffered)
 	{
@@ -277,8 +277,8 @@ module::Decoder_SIHO<B,Q>* Decoder_RSC
 ::build(const std::vector<std::vector<int>> &trellis,
               std::ostream                  &stream,
         const int                            n_ite,
-              module::Encoder<B>            *encoder,
-              module::CRC<B>                 *crc) const
+        const module::CRC<B>                 *crc,
+              module::Encoder<B>            *encoder) const
 {
 	try
 	{
@@ -310,11 +310,11 @@ template aff3ct::module::Decoder_SISO<B,Q>* aff3ct::factory::Decoder_RSC::build_
 #endif
 
 #ifdef AFF3CT_MULTI_PREC
-template aff3ct::module::Decoder_SIHO<B_8 ,Q_8 >* aff3ct::factory::Decoder_RSC::build<B_8 ,Q_8 >(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_8 >*, module::CRC<B_8 >*) const;
-template aff3ct::module::Decoder_SIHO<B_16,Q_16>* aff3ct::factory::Decoder_RSC::build<B_16,Q_16>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_16>*, module::CRC<B_16>*) const;
-template aff3ct::module::Decoder_SIHO<B_32,Q_32>* aff3ct::factory::Decoder_RSC::build<B_32,Q_32>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_32>*, module::CRC<B_32>*) const;
-template aff3ct::module::Decoder_SIHO<B_64,Q_64>* aff3ct::factory::Decoder_RSC::build<B_64,Q_64>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B_64>*, module::CRC<B_64>*) const;
+template aff3ct::module::Decoder_SIHO<B_8 ,Q_8 >* aff3ct::factory::Decoder_RSC::build<B_8 ,Q_8 >(const std::vector<std::vector<int>>&, std::ostream&, const int, const module::CRC<B_8 >*, module::Encoder<B_8 >*) const;
+template aff3ct::module::Decoder_SIHO<B_16,Q_16>* aff3ct::factory::Decoder_RSC::build<B_16,Q_16>(const std::vector<std::vector<int>>&, std::ostream&, const int, const module::CRC<B_16>*, module::Encoder<B_16>*) const;
+template aff3ct::module::Decoder_SIHO<B_32,Q_32>* aff3ct::factory::Decoder_RSC::build<B_32,Q_32>(const std::vector<std::vector<int>>&, std::ostream&, const int, const module::CRC<B_32>*, module::Encoder<B_32>*) const;
+template aff3ct::module::Decoder_SIHO<B_64,Q_64>* aff3ct::factory::Decoder_RSC::build<B_64,Q_64>(const std::vector<std::vector<int>>&, std::ostream&, const int, const module::CRC<B_64>*, module::Encoder<B_64>*) const;
 #else
-template aff3ct::module::Decoder_SIHO<B,Q>* aff3ct::factory::Decoder_RSC::build<B,Q>(const std::vector<std::vector<int>>&, std::ostream&, const int, module::Encoder<B>*, module::CRC<B>*) const;
+template aff3ct::module::Decoder_SIHO<B,Q>* aff3ct::factory::Decoder_RSC::build<B,Q>(const std::vector<std::vector<int>>&, std::ostream&, const int, const module::CRC<B>*, module::Encoder<B>*) const;
 #endif
 // ==================================================================================== explicit template instantiation

@@ -537,6 +537,9 @@
 #ifndef DECODER_RSC_DB_BCJR_HPP_
 #include <Module/Decoder/RSC_DB/BCJR/Decoder_RSC_DB_BCJR.hpp>
 #endif
+#ifndef DECODER_VITERBI_SIHO_HPP_
+#include <Module/Decoder/RSC/Viterbi/Decoder_VITERBI_SIHO.hpp>
+#endif
 #ifndef DECODER_RS
 #include <Module/Decoder/RS/Decoder_RS.hpp>
 #endif

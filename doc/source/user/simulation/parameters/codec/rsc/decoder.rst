@@ -21,7 +21,7 @@ Description of the allowed values:
 +==============+==================================================================+
 | ``BCJR``     | Select the |BCJR| algorithm from :cite:`Bahl1974`.               |
 +--------------+------------------------------------------------------------------+
-| ``VITERBI``  | Select the |VITERBI| algorithm from :cite:`Viterbi1967`.         |
+| ``VITERBI``  | Select the Viterbi algorithm from :cite:`Viterbi1967`.           |
 +--------------+------------------------------------------------------------------+
 | ``PLVA``     | Select the |PLVA| algorithm from :cite:`Seshadri1994`.           |
 +--------------+------------------------------------------------------------------+

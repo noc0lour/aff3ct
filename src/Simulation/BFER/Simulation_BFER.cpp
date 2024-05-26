@@ -356,6 +356,10 @@ Simulation_BFER<B, R>::launch()
             this->dumper_red->clear();
         }
 
+        if (!params_BFER.crit_nostop && !params_BFER.err_track_revert && !this->monitor_er_red->fe_limit_achieved() &&
+            (this->monitor_er_red->frame_limit_achieved() || this->stop_time_reached()))
+            break;
+
         for (auto& mod : sequence->get_modules<spu::module::Module>())
             for (auto& tsk : mod->tasks)
                 tsk->reset();

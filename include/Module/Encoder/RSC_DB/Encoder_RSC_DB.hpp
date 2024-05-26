@@ -48,7 +48,7 @@ class Encoder_RSC_DB
 
     virtual Encoder_RSC_DB<B>* clone() const;
 
-    int tail_length() const { return 0; }
+    inline int tail_length() const;
     std::vector<std::vector<int>> get_trellis();
 
     bool is_codeword(const B* X_N);
@@ -65,5 +65,9 @@ class Encoder_RSC_DB
 };
 }
 }
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#include "Module/Encoder/RSC_DB/Encoder_RSC_DB.hxx"
+#endif
 
 #endif /* ENCODER_RSC_DB_HPP_ */

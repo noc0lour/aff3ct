@@ -90,6 +90,13 @@ Binary_node<T>::get_contents() const
 }
 
 template<typename T>
+T*
+Binary_node<T>::get_c() const
+{
+    return this->get_contents();
+}
+
+template<typename T>
 void
 Binary_node<T>::set_contents(T* contents)
 {

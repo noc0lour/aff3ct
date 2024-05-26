@@ -127,7 +127,7 @@ class Binary_node
      *
      * \copydoc Binary_node::get_contents
      */
-    inline T* get_c() const { return this->get_contents(); }
+    inline T* get_c() const;
 
     /*!
      * \brief Set the contents of this node.

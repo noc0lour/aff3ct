@@ -297,7 +297,7 @@ AList ::read_format1(std::istream& stream)
         //							matrix.add_connection(row_index -1, i);
         //							throw spu::tools::runtime_error(__FILE__, __LINE__,
         //__func__, 							                                "The input AList
-        //is not consistent.");
+        // is not consistent.");
         //						}
         //						catch (std::exception const&)
         //						{

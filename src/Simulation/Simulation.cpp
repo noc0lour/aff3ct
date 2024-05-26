@@ -5,15 +5,14 @@
 using namespace aff3ct;
 using namespace aff3ct::simulation;
 
-Simulation
-::Simulation()
-: simu_error(false)
+Simulation ::Simulation()
+  : simu_error(false)
 {
-	spu::tools::Signal_handler::init();
+    spu::tools::Signal_handler::init();
 }
 
-bool Simulation
-::is_error() const
+bool
+Simulation ::is_error() const
 {
-	return this->simu_error;
+    return this->simu_error;
 }

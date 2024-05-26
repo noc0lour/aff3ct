@@ -92,13 +92,13 @@ print_version()
     std::string polar_bounds = "off";
 #endif
 
-#if defined(AFF3CT_CORE_COLORS)
+#if defined(SPU_COLORS)
     std::string terminal_colors = "on";
 #else
     std::string terminal_colors = "off";
 #endif
 
-#if defined(AFF3CT_CORE_STACKTRACE)
+#if defined(SPU_STACKTRACE)
     std::string stacktrace = "on";
 #else
     std::string stacktrace = "off";

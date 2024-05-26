@@ -78,7 +78,7 @@ Launcher ::get_description(cli::Argument_map_info& args) const
 
     tools::add_arg(args, p, class_name + "version,v", cli::None());
 
-#ifdef AFF3CT_CORE_STACKTRACE
+#ifdef SPU_STACKTRACE
     tools::add_arg(args, p, class_name + "except-no-bt", cli::None(), cli::arg_rank::ADV);
 #endif
 
@@ -88,7 +88,7 @@ Launcher ::get_description(cli::Argument_map_info& args) const
 
     args.add_link({ "no-legend" }, { "full-legend" });
 
-#ifdef AFF3CT_CORE_COLORS
+#ifdef SPU_COLORS
     tools::add_arg(args, p, class_name + "no-colors", cli::None());
 #endif
 
@@ -125,7 +125,7 @@ Launcher ::store(const cli::Argument_map_value& vals)
 
     spu::tools::exception::no_stacktrace = vals.exist({ "except-no-bt" });
 
-#ifdef AFF3CT_CORE_COLORS
+#ifdef SPU_COLORS
     if (vals.exist({ "no-colors" }))
     {
         rang::setControlMode(rang::control::Off);

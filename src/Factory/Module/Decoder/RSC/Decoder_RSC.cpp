@@ -20,6 +20,8 @@
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_very_fast.hpp"
 #include "Module/Decoder/RSC/BCJR/Seq_generic/Decoder_RSC_BCJR_seq_generic_std.hpp"
 #include "Module/Decoder/RSC/BCJR/Seq_generic/Decoder_RSC_BCJR_seq_generic_std_json.hpp"
+#include "Module/Decoder/RSC/Viterbi/Decoder_Viterbi_SIHO.hpp"
+#include "Module/Decoder/RSC/Viterbi_list/Decoder_Viterbi_list_parallel.hpp"
 #include "Tools/Documentation/documentation.h"
 
 using namespace aff3ct;
@@ -51,7 +53,7 @@ Decoder_RSC ::get_description(cli::Argument_map_info& args) const
 
     args.erase({ p + "-cw-size", "N" });
 
-    cli::add_options(args.at({ p + "-type", "D" }), 0, "BCJR");
+    cli::add_options(args.at({ p + "-type", "D" }), 0, "BCJR", "VITERBI", "PLVA");
     cli::add_options(args.at({ p + "-implem" }), 0, "GENERIC", "FAST", "VERY_FAST");
 
     tools::add_arg(args, p, class_name + "p+simd", cli::Text(cli::Including_set("INTRA", "INTER")));
@@ -63,6 +65,8 @@ Decoder_RSC ::get_description(cli::Argument_map_info& args) const
     tools::add_arg(args, p, class_name + "p+poly", cli::Text());
 
     tools::add_arg(args, p, class_name + "p+std", cli::Text(cli::Including_set("LTE", "CCSDS")));
+
+    tools::add_arg(args, p, class_name + "p+lists,L", cli::Integer(cli::Positive(), cli::Non_zero()));
 }
 
 void
@@ -72,10 +76,12 @@ Decoder_RSC ::store(const cli::Argument_map_value& vals)
 
     auto p = this->get_prefix();
 
+    if (vals.exist({ p + "-type", "D" })) this->type = vals.at({ p + "-type", "D" });
     if (vals.exist({ p + "-simd" })) this->simd_strategy = vals.at({ p + "-simd" });
     if (vals.exist({ p + "-max" })) this->max = vals.at({ p + "-max" });
     if (vals.exist({ p + "-std" })) this->standard = vals.at({ p + "-std" });
     if (vals.exist({ p + "-no-buff" })) this->buffered = false;
+    if (vals.exist({ p + "-lists", "L" })) this->L = vals.to_int({ p + "-lists", "L" });
 
     if (this->standard == "LTE" && !vals.exist({ p + "-poly" })) this->poly = { 013, 015 };
 
@@ -127,7 +133,9 @@ Decoder_RSC ::get_headers(std::map<std::string, tools::header_list>& headers, co
         if (!this->simd_strategy.empty())
             headers[p].push_back(std::make_pair(std::string("SIMD strategy"), this->simd_strategy));
 
-        headers[p].push_back(std::make_pair(std::string("Max type"), this->max));
+        if (this->type == "BCJR") headers[p].push_back(std::make_pair(std::string("Max type"), this->max));
+
+        if (this->type == "PLVA") headers[p].push_back(std::make_pair("Num. of lists (L)", std::to_string(this->L)));
     }
 }
 
@@ -254,9 +262,34 @@ Decoder_RSC ::build_siso(const std::vector<std::vector<int>>& trellis,
 
 template<typename B, typename Q>
 module::Decoder_SIHO<B, Q>*
+Decoder_RSC ::build_viterbi(const std::vector<std::vector<int>>& trellis) const
+{
+    if (this->buffered)
+    {
+        throw spu::tools::invalid_argument("Viterbi decoder is incompatible with buffered encoding. "
+                                           "Please add --enc-no-buff or choose another decoder.");
+    }
+    return new module::Decoder_Viterbi_SIHO<B, Q>(this->K, trellis, true);
+}
+
+template<typename B, typename Q>
+module::Decoder_SIHO<B, Q>*
+Decoder_RSC ::build_viterbi_list(const std::vector<std::vector<int>>& trellis, const module::CRC<B>* crc) const
+{
+    if (this->buffered)
+    {
+        throw spu::tools::invalid_argument("Parallel list Viterbi decoder is incompatible with buffered encoding. "
+                                           "Please add --enc-no-buff or choose another decoder.");
+    }
+    return new module::Decoder_Viterbi_list_parallel<B, Q>(this->K, this->N_cw, this->L, *crc, trellis, true);
+}
+
+template<typename B, typename Q>
+module::Decoder_SIHO<B, Q>*
 Decoder_RSC ::build(const std::vector<std::vector<int>>& trellis,
                     std::ostream& stream,
                     const int n_ite,
+                    const module::CRC<B>* crc,
                     module::Encoder<B>* encoder) const
 {
     try
@@ -265,6 +298,14 @@ Decoder_RSC ::build(const std::vector<std::vector<int>>& trellis,
     }
     catch (spu::tools::cannot_allocate const&)
     {
+        if (this->type == "VITERBI")
+        {
+            return build_viterbi<B, Q>(trellis);
+        }
+        if (crc != nullptr && this->type == "PLVA")
+        {
+            return build_viterbi_list<B, Q>(trellis, crc);
+        }
         return build_siso<B, Q>(trellis, stream, n_ite);
     }
 }
@@ -305,27 +346,32 @@ template aff3ct::module::Decoder_SIHO<B_8, Q_8>*
 aff3ct::factory::Decoder_RSC::build<B_8, Q_8>(const std::vector<std::vector<int>>&,
                                               std::ostream&,
                                               const int,
+                                              const module::CRC<B_8>*,
                                               module::Encoder<B_8>*) const;
 template aff3ct::module::Decoder_SIHO<B_16, Q_16>*
 aff3ct::factory::Decoder_RSC::build<B_16, Q_16>(const std::vector<std::vector<int>>&,
                                                 std::ostream&,
                                                 const int,
+                                                const module::CRC<B_16>*,
                                                 module::Encoder<B_16>*) const;
 template aff3ct::module::Decoder_SIHO<B_32, Q_32>*
 aff3ct::factory::Decoder_RSC::build<B_32, Q_32>(const std::vector<std::vector<int>>&,
                                                 std::ostream&,
                                                 const int,
+                                                const module::CRC<B_32>*,
                                                 module::Encoder<B_32>*) const;
 template aff3ct::module::Decoder_SIHO<B_64, Q_64>*
 aff3ct::factory::Decoder_RSC::build<B_64, Q_64>(const std::vector<std::vector<int>>&,
                                                 std::ostream&,
                                                 const int,
+                                                const module::CRC<B_64>*,
                                                 module::Encoder<B_64>*) const;
 #else
 template aff3ct::module::Decoder_SIHO<B, Q>*
 aff3ct::factory::Decoder_RSC::build<B, Q>(const std::vector<std::vector<int>>&,
                                           std::ostream&,
                                           const int,
+                                          const module::CRC<B>*,
                                           module::Encoder<B>*) const;
 #endif
 // ==================================================================================== explicit template instantiation

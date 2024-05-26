@@ -75,7 +75,8 @@ template<typename B, typename Q>
 tools::Codec_RSC<B, Q>*
 Codec_RSC ::build(const module::CRC<B>* crc) const
 {
-    return new tools::Codec_RSC<B, Q>(dynamic_cast<const Encoder_RSC&>(*enc), dynamic_cast<const Decoder_RSC&>(*dec));
+    return new tools::Codec_RSC<B, Q>(
+      dynamic_cast<const Encoder_RSC&>(*enc), dynamic_cast<const Decoder_RSC&>(*dec), crc);
 }
 
 // ==================================================================================== explicit template instantiation

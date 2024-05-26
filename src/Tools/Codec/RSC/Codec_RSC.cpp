@@ -13,7 +13,9 @@ using namespace aff3ct;
 using namespace aff3ct::tools;
 
 template<typename B, typename Q>
-Codec_RSC<B, Q>::Codec_RSC(const factory::Encoder_RSC& enc_params, const factory::Decoder_RSC& dec_params)
+Codec_RSC<B, Q>::Codec_RSC(const factory::Encoder_RSC& enc_params,
+                           const factory::Decoder_RSC& dec_params,
+                           const module::CRC<B>* crc)
   : Codec_SISO<B, Q>(enc_params.K, enc_params.N_cw, enc_params.N_cw)
   , buffered_encoding(enc_params.buffered)
   , trellis(new std::vector<std::vector<int>>())
@@ -65,7 +67,7 @@ Codec_RSC<B, Q>::Codec_RSC(const factory::Encoder_RSC& enc_params, const factory
     }
     catch (spu::tools::cannot_allocate const&)
     {
-        this->set_decoder_siho(dec_params.build<B, Q>(*trellis, std::cout, 1, &this->get_encoder()));
+        this->set_decoder_siho(dec_params.build<B, Q>(*trellis, std::cout, 1, crc, &this->get_encoder()));
     }
 
     this->set_extractor(

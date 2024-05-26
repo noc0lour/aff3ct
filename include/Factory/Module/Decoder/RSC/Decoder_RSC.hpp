@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Factory/Module/Decoder/Decoder.hpp"
+#include "Module/CRC/CRC.hpp"
 #include "Module/Decoder/Decoder_SIHO.hpp"
 #include "Module/Decoder/Decoder_SISO.hpp"
 #include "Module/Encoder/Encoder.hpp"
@@ -34,6 +35,7 @@ class Decoder_RSC : public Decoder
     std::string standard = "LTE";
     bool buffered = true;
     std::vector<int> poly = { 013, 015 };
+    unsigned int L = 8;
 
     // -------------------------------------------------------------------------------------------------------- METHODS
     explicit Decoder_RSC(const std::string& p = Decoder_RSC_prefix);
@@ -50,6 +52,7 @@ class Decoder_RSC : public Decoder
     module::Decoder_SIHO<B, Q>* build(const std::vector<std::vector<int>>& trellis,
                                       std::ostream& stream = std::cout,
                                       const int n_ite = 1,
+                                      const module::CRC<B>* crc = nullptr,
                                       module::Encoder<B>* encoder = nullptr) const;
 
     template<typename B = int, typename Q = float>
@@ -57,6 +60,12 @@ class Decoder_RSC : public Decoder
                                            std::ostream& stream = std::cout,
                                            const int n_ite = 1,
                                            module::Encoder<B>* encoder = nullptr) const;
+
+    template<typename B = int, typename Q = float>
+    module::Decoder_SIHO<B, Q>* build_viterbi(const std::vector<std::vector<int>>& trellis) const;
+    template<typename B = int, typename Q = float>
+    module::Decoder_SIHO<B, Q>* build_viterbi_list(const std::vector<std::vector<int>>& trellis,
+                                                   const module::CRC<B>* crc) const;
 
   private:
     template<typename B = int, typename Q = float, typename QD = Q, tools::proto_max<Q> MAX1, tools::proto_max<QD> MAX2>

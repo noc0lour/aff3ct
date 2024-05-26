@@ -24,7 +24,9 @@ class Codec_RSC : public Codec_SISO<B, Q>
     std::shared_ptr<std::vector<std::vector<int>>> trellis;
 
   public:
-    Codec_RSC(const factory::Encoder_RSC& enc_params, const factory::Decoder_RSC& dec_params);
+    Codec_RSC(const factory::Encoder_RSC& enc_params,
+              const factory::Decoder_RSC& dec_params,
+              const module::CRC<B>* crc = nullptr);
     virtual ~Codec_RSC() = default;
 
     virtual Codec_RSC<B, Q>* clone() const;

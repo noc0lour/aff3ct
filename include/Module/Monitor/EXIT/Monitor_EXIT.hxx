@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Module.hpp"
 #include "Module/Monitor/EXIT/Monitor_EXIT.hpp"
 
@@ -10,17 +9,17 @@ namespace module
 {
 
 template <typename B, typename R>
-runtime::Task& Monitor_EXIT<B,R>
+spu::runtime::Task& Monitor_EXIT<B,R>
 ::operator[](const mnt::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B, typename R>
-runtime::Socket& Monitor_EXIT<B,R>
+spu::runtime::Socket& Monitor_EXIT<B,R>
 ::operator[](const mnt::sck::check_mutual_info s)
 {
-	return Module::operator[]((size_t)mnt::tsk::check_mutual_info)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mnt::tsk::check_mutual_info)[(size_t)s];
 }
 
 template <typename B, typename R>

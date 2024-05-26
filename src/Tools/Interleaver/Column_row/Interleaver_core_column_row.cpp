@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/Column_row/Interleaver_core_column_row.hpp"
 
 using namespace aff3ct;
@@ -20,7 +21,7 @@ static typename Interleaver_core_column_row<T>::READ_ORDER read_order_cvt(const 
 
 	std::stringstream message;
 	message << "Unknown 'read_order' ( = " << read_order << ").";
-	throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 }
 
 template <typename T>
@@ -40,7 +41,7 @@ Interleaver_core_column_row<T>
 		std::stringstream message;
 		message << "'size' has to be equal to 'n_rows' * 'n_cols' ('size' = " << size
 		        << ", 'n_rows' = " << n_rows << ", 'n_cols' = " << n_cols << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->init();

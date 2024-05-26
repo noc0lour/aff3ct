@@ -1,7 +1,8 @@
 #include <type_traits>
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Turbo/Encoder_turbo.hpp"
 #include "Module/Encoder/Turbo/Encoder_turbo_legacy.hpp"
 #include "Factory/Module/Encoder/Turbo/Encoder_turbo.hpp"
@@ -186,7 +187,7 @@ module::Encoder_turbo<B>* Encoder_turbo<E1,E2>
 		if (this->type == "TURBO") return new module::Encoder_turbo_legacy<B>(this->K, this->N_cw, enc_n, itl);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 }

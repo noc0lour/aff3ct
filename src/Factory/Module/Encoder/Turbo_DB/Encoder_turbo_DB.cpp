@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Turbo_DB/Encoder_turbo_DB.hpp"
 #include "Factory/Module/Encoder/Turbo_DB/Encoder_turbo_DB.hpp"
 
@@ -131,7 +132,7 @@ module::Encoder_turbo_DB<B>* Encoder_turbo_DB
 {
 	if (this->type == "TURBO_DB") return new module::Encoder_turbo_DB<B>(this->K, this->N_cw, sub_enc, sub_enc, itl);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

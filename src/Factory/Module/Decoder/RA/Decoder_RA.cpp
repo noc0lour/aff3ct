@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/RA/Decoder_RA.hpp"
 #include "Factory/Module/Decoder/RA/Decoder_RA.hpp"
@@ -113,7 +114,7 @@ module::Decoder_SIHO<B,Q>* Decoder_RA
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "RA")
 		{
@@ -121,7 +122,7 @@ module::Decoder_SIHO<B,Q>* Decoder_RA
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

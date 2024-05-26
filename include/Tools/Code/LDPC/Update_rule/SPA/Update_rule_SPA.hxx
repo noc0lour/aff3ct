@@ -6,7 +6,8 @@
 #include <limits>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Update_rule/SPA/Update_rule_SPA.hpp"
 
 namespace aff3ct
@@ -22,14 +23,14 @@ Update_rule_SPA<R>
 	{
 		std::stringstream message;
 		message << "'max_chk_node_degree' has to greater than 0.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (typeid(R) != typeid(double) && typeid(R) != typeid(float))
 	{
 		std::stringstream message;
 		message << "The 'LSPA' update rule supports only 'float' or 'double' datatypes.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

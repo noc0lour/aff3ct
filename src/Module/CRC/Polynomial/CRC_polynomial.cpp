@@ -2,8 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Display/rang_format/rang_format.h"
 #include "Module/CRC/Polynomial/CRC_polynomial.hpp"
 
@@ -22,20 +22,20 @@ CRC_polynomial<B>
 	this->set_name(name);
 
 	if (poly_key.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "'poly_key' can't be empty, choose a CRC.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'poly_key' can't be empty, choose a CRC.");
 
 	if (!polynomial_packed)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "CRC '" + poly_key + "' is not supported.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "CRC '" + poly_key + "' is not supported.");
 
 	auto crc_name = CRC_polynomial<B>::get_name(poly_key);
 	if (this->size == 0 && crc_name.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Please specify the CRC 'size'.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Please specify the CRC 'size'.");
 
 	if (!crc_name.empty() && CRC_polynomial<B>::get_size(crc_name) != this->size)
 		std::clog << rang::tag::warning << "You specified \"" << this->size
-		                                   << " bits\" for your CRC size but the database advise you to use \""
-		                                   << std::get<1>(known_polynomials.at(crc_name))
-		                                   << " bits\", are you sure?" << std::endl;
+		                                << " bits\" for your CRC size but the database advise you to use \""
+		                                << std::get<1>(known_polynomials.at(crc_name))
+		                                << " bits\", are you sure?" << std::endl;
 
 	polynomial.push_back(1);
 	for (auto i = 0; i < this->size; i++)
@@ -164,7 +164,7 @@ bool CRC_polynomial<B>
 {
 	std::vector<B> V_K_unpack(this->K + this->size);
 	std::copy(V_K, V_K + this->K + this->size, V_K_unpack.begin());
-	tools::Bit_packer::unpack(V_K_unpack, this->K + this->size);
+	spu::tools::Bit_packer::unpack(V_K_unpack, this->K + this->size);
 	return _check(V_K_unpack.data(), frame_id);
 }
 

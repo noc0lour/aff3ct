@@ -3,6 +3,8 @@
 #include <string>
 #include <cmath>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Standard/Gaussian_noise_generator_std.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Fast/Gaussian_noise_generator_fast.hpp"
@@ -12,7 +14,6 @@
 #ifdef AFF3CT_CHANNEL_MKL
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/MKL/Gaussian_noise_generator_MKL.hpp"
 #endif
-#include "Tools/Exception/exception.hpp"
 #include "Module/Channel/Rayleigh/Channel_Rayleigh_LLR.hpp"
 
 using namespace aff3ct;
@@ -37,7 +38,7 @@ Channel_Rayleigh_LLR<R>
 	{
 		std::stringstream message;
 		message << "'N' has to be divisible by 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (add_users)
@@ -68,7 +69,7 @@ tools::Gaussian_gen<R>* create_gaussian_generator(const tools::Gaussian_noise_ge
 		default:
 			std::stringstream message;
 			message << "Unsupported 'implem' ('implem' = " << (int)implem << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 }
 
@@ -92,7 +93,7 @@ Channel_Rayleigh_LLR<R>
 	{
 		std::stringstream message;
 		message << "'N' has to be divisible by 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (add_users)
@@ -112,7 +113,7 @@ template <typename R>
 void Channel_Rayleigh_LLR<R>
 ::deep_copy(const Channel_Rayleigh_LLR<R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.gaussian_generator != nullptr) this->gaussian_generator.reset(m.gaussian_generator->clone());
 }
 

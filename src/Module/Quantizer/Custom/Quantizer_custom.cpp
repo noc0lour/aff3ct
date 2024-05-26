@@ -2,8 +2,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Quantizer/Custom/Quantizer_custom.hpp"
 
 using namespace aff3ct;
@@ -67,7 +67,7 @@ Quantizer_custom<R,Q>
 		std::stringstream message;
 		message << "'saturation_pos' has to be equal or smaller than 'sizeof(Q)' * 8 ('saturation_pos' = "
 		        << saturation_pos << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -159,7 +159,7 @@ Quantizer_custom<R,Q>
 		std::stringstream message;
 		message << "'saturation_pos' has to be equal or smaller than 'sizeof(Q)' * 8 ('saturation_pos' = "
 		        << saturation_pos << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -194,7 +194,7 @@ void Quantizer_custom<R,Q>
 	}
 
 	for (unsigned i = 0; i < size; i++)
-		Y_N2[i] = (Q)tools::saturate(std::round(Y_N1[i] * delta_inv), (R)val_min, (R)val_max);
+		Y_N2[i] = (Q)spu::tools::saturate(std::round(Y_N1[i] * delta_inv), (R)val_min, (R)val_max);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -2,7 +2,7 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 #include "Module/Encoder/RA/Encoder_RA.hpp"
 
@@ -22,7 +22,7 @@ Encoder_RA<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be a multiple of 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)interleaver.get_core().get_size() != N)
@@ -30,7 +30,7 @@ Encoder_RA<B>
 		std::stringstream message;
 		message << "'interleaver.get_core().get_size()' has to be equal to 'N' ('interleaver.get_core().get_size()' = "
 		        << interleaver.get_core().get_size() << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto k = 0; k < this->K; k++)

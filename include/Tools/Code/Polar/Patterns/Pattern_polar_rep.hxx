@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r0.hpp"
 #include "Tools/Code/Polar/Patterns/Pattern_polar_rep.hpp"
 
@@ -16,7 +17,7 @@ Pattern_polar_rep
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -28,7 +29,7 @@ Pattern_polar_rep
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

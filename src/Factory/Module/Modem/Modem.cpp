@@ -2,7 +2,8 @@
 #include <utility>
 #include <memory>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Code/SCMA/modem_SCMA_functions.hpp"
 #include "Tools/Code/SCMA/Codebook.hpp"
@@ -134,7 +135,7 @@ void Modem
 			{
 				std::stringstream message;
 				message << "Unknown CPM standard ('cpm_std' = " << this->cpm_std << ").";
-				throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 	}
@@ -166,7 +167,7 @@ void Modem
 	{
 		cstl.reset(this->build_constellation<float>());
 	}
-	catch(tools::cannot_allocate &) {}
+	catch(spu::tools::cannot_allocate &) {}
 
 	if (cstl != nullptr && this->type == "USER")
 		this->bps = cstl->get_n_bits_per_symbol();
@@ -258,7 +259,7 @@ tools::Constellation<R>* Modem
 	if (this->type == "PSK" ) return new tools::Constellation_PSK <R>(this->bps);
 	if (this->type == "USER") return new tools::Constellation_user<R>(this->const_path);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q, tools::proto_max<Q> MAX, tools::proto_max_i<Q> MAXI>
@@ -277,7 +278,7 @@ module::Modem<B,R,Q>* Modem
 			return new module::Modem_generic     <B,R,Q,MAX     >(N, *cstl, this->no_sig2);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
@@ -289,7 +290,7 @@ module::Modem<B,R,Q>* Modem
 	if (this->psi == "PSI2") return new module::Modem_SCMA<B,R,Q,tools::psi_2<Q>>(this->N, this->codebook_path, this->no_sig2, this->n_ite);
 	if (this->psi == "PSI3") return new module::Modem_SCMA<B,R,Q,tools::psi_3<Q>>(this->N, this->codebook_path, this->no_sig2, this->n_ite);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
@@ -314,7 +315,7 @@ module::Modem<B,R,Q>* Modem
 		if (this->max == "MAXSS") return _build<B,R,Q,tools::max_star_safe<Q>,tools::max_star_safe_i<Q>>(cstl);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
@@ -354,7 +355,7 @@ int Modem
 	if (type == "SCMA") return module::Modem_SCMA<>::size_mod(N, bps                       );
 	if (type == "CPM" ) return module::Modem_CPM <>::size_mod(N, bps, cpm_L, cpm_p, cpm_upf);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 int Modem
@@ -373,7 +374,7 @@ int Modem
 	if (type == "SCMA") return module::Modem_SCMA<>::size_fil(N, bps              );
 	if (type == "CPM" ) return module::Modem_CPM <>::size_fil(N, bps, cpm_L, cpm_p);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 bool Modem
@@ -387,7 +388,7 @@ bool Modem
 	if (type == "SCMA") return module::Modem_SCMA<>::is_complex_mod();
 	if (type == "CPM" ) return module::Modem_CPM <>::is_complex_mod();
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 bool Modem
@@ -401,7 +402,7 @@ bool Modem
 	if (type == "SCMA") return module::Modem_SCMA<>::is_complex_fil();
 	if (type == "CPM" ) return module::Modem_CPM <>::is_complex_fil();
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

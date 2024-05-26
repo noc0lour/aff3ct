@@ -1,6 +1,6 @@
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
 #include "Module/Encoder/BCH/Encoder_BCH.hpp"
 #include "Module/Encoder/BCH/Encoder_BCH_inter.hpp"
 #include "Factory/Module/Encoder/BCH/Encoder_BCH.hpp"
@@ -68,12 +68,12 @@ module::Encoder_BCH<B>* Encoder_BCH
 		if (this->simd_strategy == "INTER")
 			return new module::Encoder_BCH_inter<B>(this->K, this->N_cw, GF);
 		else if (this->simd_strategy == "INTRA")
-			throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+			throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 		else
 			return new module::Encoder_BCH<B>(this->K, this->N_cw, GF);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

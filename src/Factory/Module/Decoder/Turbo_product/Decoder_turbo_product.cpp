@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/general_utils.h"
 #include "Module/Decoder/Turbo_product/Chase_pyndiah/Decoder_chase_pyndiah.hpp"
@@ -259,7 +260,7 @@ module::Decoder_SIHO<B,Q>* Decoder_turbo_product
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "CP")
 		{
@@ -268,7 +269,7 @@ module::Decoder_SIHO<B,Q>* Decoder_turbo_product
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -278,7 +279,7 @@ module::Decoder_SISO<B,Q>* Decoder_turbo_product
              const module::Interleaver<Q>             &itl,
                    module::Encoder<B>                 *encoder) const
 {
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

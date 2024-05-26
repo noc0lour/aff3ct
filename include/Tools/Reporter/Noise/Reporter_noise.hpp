@@ -5,15 +5,16 @@
 #ifndef REPORTER_NOISE_HPP_
 #define REPORTER_NOISE_HPP_
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Reporter/Reporter.hpp"
 
 namespace aff3ct
 {
 namespace tools
 {
 template <typename R = float>
-class Reporter_noise : public Reporter
+class Reporter_noise : public spu::tools::Reporter
 {
 protected:
 	const Noise<R>& noise;

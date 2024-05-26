@@ -1,6 +1,7 @@
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Factory/Module/Puncturer/Polar/Puncturer_polar.hpp"
 
 using namespace aff3ct;
@@ -54,7 +55,7 @@ module::Puncturer_polar_shortlast<B,Q>* Puncturer_polar
 {
 	if (this->type == "SHORTLAST") return new module::Puncturer_polar_shortlast<B,Q>(this->K, this->N, fb_generator);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

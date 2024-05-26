@@ -5,7 +5,8 @@
 
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Monitor/Monitor_reduction_MPI.hpp"
 
 namespace aff3ct
@@ -29,21 +30,21 @@ Monitor_reduction_MPI<M>
 	{
 		std::stringstream message;
 		message << "'MPI_Type_create_struct' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (auto ret = MPI_Type_commit(&MPI_monitor_vals))
 	{
 		std::stringstream message;
 		message << "'MPI_Type_commit' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (auto ret = MPI_Op_create(MPI_reduce_monitors, true, &MPI_Op_reduce_monitors))
 	{
 		std::stringstream message;
 		message << "'MPI_Op_create' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -75,7 +76,7 @@ bool Monitor_reduction_MPI<M>
 {
 	std::stringstream message;
 	message << "'is_done' method is not available in MPI, please use the static 'is_done_all' method instead.";
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__, message.str());
 }
 
 template <class M>
@@ -98,7 +99,7 @@ void Monitor_reduction_MPI<M>
 	{
 		std::stringstream message;
 		message << "'MPI_Allreduce' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	M::copy(mvals_recv);

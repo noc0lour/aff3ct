@@ -6,11 +6,11 @@
 #include <mpi.h>
 #endif
 
+#include <streampu.hpp>
+
 #include "Tools/Display/Terminal/Terminal.hpp"
 #include "Tools/general_utils.h"
-#include "Tools/system_functions.h"
 #include "Tools/Display/rang_format/rang_format.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Factory/Header.hpp"
 #include "Factory/Module/Source/Source.hpp"
 #include "Factory/Module/CRC/CRC.hpp"
@@ -68,10 +68,10 @@ int Launcher::read_arguments()
 	}
 	catch(const std::exception& e)
 	{
-		auto save = tools::exception::no_stacktrace;
-		tools::exception::no_stacktrace = true;
+		auto save = spu::tools::exception::no_stacktrace;
+		spu::tools::exception::no_stacktrace = true;
 		cmd_error.emplace_back(e.what());
-		tools::exception::no_stacktrace = save;
+		spu::tools::exception::no_stacktrace = save;
 	}
 
 #ifdef AFF3CT_MPI

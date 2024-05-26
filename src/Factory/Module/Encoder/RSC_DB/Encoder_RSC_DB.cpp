@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Factory/Module/Encoder/RSC_DB/Encoder_RSC_DB.hpp"
 
@@ -75,7 +76,7 @@ module::Encoder_RSC_DB<B>* Encoder_RSC_DB
 {
 	if (this->type == "RSC_DB") return new module::Encoder_RSC_DB<B>(this->K, this->N_cw, this->standard, this->buffered);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Source/AZCW/Source_AZCW.hpp"
 #include "Module/Source/Random/Source_random.hpp"
@@ -98,34 +99,34 @@ void Source
 }
 
 template <typename B>
-module::Source<B>* Source
+spu::module::Source<B>* Source
 ::build() const
 {
 	if (this->type == "RAND")
 	{
 		if (this->implem == "STD")
-			return new module::Source_random     <B>(this->K, this->seed);
+			return new spu::module::Source_random<B>(this->K, this->seed);
 		else if (this->implem == "FAST")
 			return new module::Source_random_fast<B>(this->K, this->seed);
 	}
 
-	if (this->type == "AZCW")  return new module::Source_AZCW<B>(this->K);
-	if (this->type == "USER")  return new module::Source_user<B>(this->K, this->path, this->start_idx);
+	if (this->type == "AZCW")  return new spu::module::Source_AZCW<B>(this->K);
+	if (this->type == "USER")  return new spu::module::Source_user<B>(this->K, this->path, this->start_idx);
 
 	if (this->type == "USER_BIN")
-		return new module::Source_user_binary<B>(this->K, this->path, this->auto_reset, this->fifo_mode);
+		return new spu::module::Source_user_binary<B>(this->K, this->path, this->auto_reset, this->fifo_mode);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation
 #include "Tools/types.h"
 #ifdef AFF3CT_MULTI_PREC
-template aff3ct::module::Source<B_8 >* aff3ct::factory::Source::build<B_8 >() const;
-template aff3ct::module::Source<B_16>* aff3ct::factory::Source::build<B_16>() const;
-template aff3ct::module::Source<B_32>* aff3ct::factory::Source::build<B_32>() const;
-template aff3ct::module::Source<B_64>* aff3ct::factory::Source::build<B_64>() const;
+template spu::module::Source<B_8 >* aff3ct::factory::Source::build<B_8 >() const;
+template spu::module::Source<B_16>* aff3ct::factory::Source::build<B_16>() const;
+template spu::module::Source<B_32>* aff3ct::factory::Source::build<B_32>() const;
+template spu::module::Source<B_64>* aff3ct::factory::Source::build<B_64>() const;
 #else
-template aff3ct::module::Source<B>* aff3ct::factory::Source::build<B>() const;
+template spu::module::Source<B>* aff3ct::factory::Source::build<B>() const;
 #endif
 // ==================================================================================== explicit template instantiation

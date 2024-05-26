@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/Turbo_product/Encoder_turbo_product.hpp"
 #include "Factory/Module/Encoder/Turbo_product/Encoder_turbo_product.hpp"
@@ -140,7 +141,7 @@ module::Encoder_turbo_product<B>* Encoder_turbo_product
 {
 	if (this->type == "TPC") return new module::Encoder_turbo_product<B>(enc_r, enc_c, itl);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

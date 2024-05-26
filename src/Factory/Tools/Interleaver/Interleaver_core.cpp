@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Interleaver/Random_column/Interleaver_core_random_column.hpp"
 #include "Tools/Interleaver/Row_column/Interleaver_core_row_column.hpp"
@@ -112,7 +113,7 @@ tools::Interleaver_core<T>* Interleaver_core
 	if (this->type == "USER"    ) return new tools::Interleaver_core_user         <T>(this->size, this->path                             );
 	if (this->type == "NO"      ) return new tools::Interleaver_core_NO           <T>(this->size                                         );
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

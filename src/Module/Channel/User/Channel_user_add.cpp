@@ -2,7 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Channel/User/Channel_user_add.hpp"
 
 using namespace aff3ct;

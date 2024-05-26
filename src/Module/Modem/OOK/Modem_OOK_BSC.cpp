@@ -2,7 +2,6 @@
 #include <string>
 
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/OOK/Modem_OOK_BSC.hpp"
 
 using namespace aff3ct;

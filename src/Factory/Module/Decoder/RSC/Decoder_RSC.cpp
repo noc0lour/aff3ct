@@ -4,7 +4,8 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_std.hpp"
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_scan.hpp"
@@ -160,7 +161,7 @@ module::Decoder_SISO<B,Q>* Decoder_RSC
 		if (this->implem == "SCAN"        ) return new module::Decoder_RSC_BCJR_seq_scan            <B,Q,QD          >(this->K, trellis,        this->buffered        );
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q, typename QD, tools::proto_max_i<Q> MAX>
@@ -208,7 +209,7 @@ module::Decoder_SISO<B,Q>* Decoder_RSC
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -233,7 +234,7 @@ module::Decoder_SISO<B,Q>* Decoder_RSC
 		if (this->max == "MAXL") return _build_siso_simd<B,Q,QD,tools::max_linear_i<Q>>(trellis, encoder);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -247,7 +248,7 @@ module::Decoder_SIHO<B,Q>* Decoder_RSC
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		return build_siso<B,Q>(trellis, stream, n_ite);
 	}

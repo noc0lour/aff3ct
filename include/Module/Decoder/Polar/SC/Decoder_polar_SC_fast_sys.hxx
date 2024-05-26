@@ -6,9 +6,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Math/utils.h"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Tools/Perf/Transpose/transpose_selector.h"
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r0.hpp"
@@ -146,11 +145,11 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 
 	static_assert(sizeof(B) == sizeof(R), "");
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -158,7 +157,7 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -167,7 +166,7 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -190,11 +189,11 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 
 	static_assert(sizeof(B) == sizeof(R), "");
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -202,7 +201,7 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -211,7 +210,7 @@ Decoder_polar_SC_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 	this->set_frozen_bits(frozen_bits);
 }
@@ -274,7 +273,7 @@ void Decoder_polar_SC_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'m' has to be equal or greater than 'static_level' ('m' = " << m << ", 'static_level' = "
 		        << static_level << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	int first_id = 0, off_l = 0, off_s = 0;
@@ -286,10 +285,10 @@ int Decoder_polar_SC_fast_sys<B,R,API_polar>
 ::_decode_siho(const R *Y_N, B *V_K, const size_t frame_id)
 {
 	if (!API_polar::isAligned(Y_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
 
 	if (!API_polar::isAligned(V_K))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'V_K' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'V_K' is misaligned memory.");
 
 //	auto t_load = std::chrono::steady_clock::now(); // ----------------------------------------------------------- LOAD
 	this->_load(Y_N);
@@ -316,10 +315,10 @@ int Decoder_polar_SC_fast_sys<B,R,API_polar>
 ::_decode_siho_cw(const R *Y_N, B *V_N, const size_t frame_id)
 {
 	if (!API_polar::isAligned(Y_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
 
 	if (!API_polar::isAligned(V_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'V_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'V_N' is misaligned memory.");
 
 //	auto t_load = std::chrono::steady_clock::now(); // ----------------------------------------------------------- LOAD
 	this->_load(Y_N);
@@ -438,10 +437,10 @@ void Decoder_polar_SC_fast_sys<B,R,API_polar>
 				           "('N' = " << this->N << "). "
 				           "To ensure the portability please do not compile with the -DAFF3CT_POLAR_BIT_PACKING "
 				           "definition.";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
-			tools::Bit_packer::unpack(this->s_bis.data(), (unsigned char*)this->s.data(), this->N, n_frames);
+			spu::tools::Bit_packer::unpack(this->s_bis.data(), (unsigned char*)this->s.data(), this->N, n_frames);
 		}
 #endif
 		if (!fast_deinterleave)
@@ -487,9 +486,9 @@ void Decoder_polar_SC_fast_sys<B,R,API_polar>
 				           "('N' = " << this->N << "). "
 				           "To ensure the portability please do not compile with the -DAFF3CT_POLAR_BIT_PACKING "
 				           "definition.";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
-			tools::Bit_packer::unpack(this->s_bis.data(), (unsigned char*)V_N, this->N, n_frames);
+			spu::tools::Bit_packer::unpack(this->s_bis.data(), (unsigned char*)V_N, this->N, n_frames);
 		}
 #endif
 		if (!fast_deinterleave)

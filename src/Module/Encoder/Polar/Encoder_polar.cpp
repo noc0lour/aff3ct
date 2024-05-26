@@ -3,7 +3,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Encoder/Polar/Encoder_polar.hpp"
 
@@ -23,7 +24,7 @@ Encoder_polar<B>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->set_frozen_bits(frozen_bits);

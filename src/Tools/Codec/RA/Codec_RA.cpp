@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Factory/Tools/Interleaver/Interleaver_core.hpp"
 #include "Factory/Module/Encoder/Encoder.hpp"
 #include "Factory/Module/Puncturer/Puncturer.hpp"
@@ -22,7 +23,7 @@ Codec_RA<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -30,7 +31,7 @@ Codec_RA<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------- allocations
@@ -47,7 +48,7 @@ Codec_RA<B,Q>
 	{
 		this->set_encoder(enc_params.build<B>(this->get_interleaver_bit()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}

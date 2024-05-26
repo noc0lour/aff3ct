@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/ARP/Interleaver_core_ARP_DVB_RCS2.hpp"
 
 using namespace aff3ct;
@@ -272,7 +273,7 @@ Interleaver_core_ARP_DVB_RCS2<T>
 		message << "There are no DVB-RCS2 parameters for 'size' = " << size << " (supported sizes are 56, 64, 152, "
 					"204, 220, 228, 236, 248, 276, 336, 340, 372, 384, 400, 432, 440, 460, 492, 520, 576, 652, 680, "
 					"700, 752, 776, 864, 1056, 1192, 1332, 1420, 1504, 1600, 1752, 1776, 2156 and 2396).";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		break;
 	}
 

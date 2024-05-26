@@ -1,7 +1,6 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Noise/Sigma.hpp"
 #include "Module/Channel/Channel.hpp"
 
@@ -11,30 +10,30 @@ namespace module
 {
 
 template <typename R>
-runtime::Task& Channel<R>
+spu::runtime::Task& Channel<R>
 ::operator[](const chn::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename R>
-runtime::Socket& Channel<R>
+spu::runtime::Socket& Channel<R>
 ::operator[](const chn::sck::add_noise s)
 {
-	return Module::operator[]((size_t)chn::tsk::add_noise)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)chn::tsk::add_noise)[(size_t)s];
 }
 
 template <typename R>
-runtime::Socket& Channel<R>
+spu::runtime::Socket& Channel<R>
 ::operator[](const chn::sck::add_noise_wg s)
 {
-	return Module::operator[]((size_t)chn::tsk::add_noise_wg)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)chn::tsk::add_noise_wg)[(size_t)s];
 }
 
 template <typename R>
 Channel<R>
 ::Channel(const int N)
-: Module(), N(N), noised_data(this->N * this->n_frames, 0)
+: spu::module::Module(), N(N), noised_data(this->N * this->n_frames, 0)
 {
 	const std::string name = "Channel";
 	this->set_name(name);
@@ -44,14 +43,15 @@ Channel<R>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p1 = this->create_task("add_noise");
 	auto p1s_CP  = this->template create_socket_in <float>(p1, "CP",        1);
 	auto p1s_X_N = this->template create_socket_in <R    >(p1, "X_N", this->N);
 	auto p1s_Y_N = this->template create_socket_out<R    >(p1, "Y_N", this->N);
-	this->create_codelet(p1, [p1s_CP, p1s_X_N, p1s_Y_N](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_CP, p1s_X_N, p1s_Y_N]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &chn = static_cast<Channel<R>&>(m);
 
@@ -60,7 +60,7 @@ Channel<R>
 		               static_cast<R    *>(t[p1s_Y_N].get_dataptr()),
 		               frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("add_noise_wg");
@@ -68,7 +68,8 @@ Channel<R>
 	auto p2s_X_N = this->template create_socket_in <R    >(p2, "X_N", this->N);
 	auto p2s_H_N = this->template create_socket_out<R    >(p2, "H_N", this->N);
 	auto p2s_Y_N = this->template create_socket_out<R    >(p2, "Y_N", this->N);
-	this->create_codelet(p2, [p2s_CP, p2s_X_N, p2s_H_N, p2s_Y_N](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_CP, p2s_X_N, p2s_H_N, p2s_Y_N]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &chn = static_cast<Channel<R>&>(m);
 
@@ -78,7 +79,7 @@ Channel<R>
 		                  static_cast<R    *>(t[p2s_Y_N].get_dataptr()),
 		                  frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 }
 
@@ -86,7 +87,7 @@ template <typename R>
 Channel<R>* Channel<R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -160,14 +161,14 @@ template <typename R>
 void Channel<R>
 ::_add_noise(const float *CP, const R *X_N, R *Y_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
 void Channel<R>
 ::_add_noise_wg(const float *CP, const R *X_N, R *H_N, R *Y_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template<typename R>
@@ -177,7 +178,7 @@ void Channel<R>
 	const auto old_n_frames = this->get_n_frames();
 	if (old_n_frames != n_frames)
 	{
-		Module::set_n_frames(n_frames);
+		spu::module::Module::set_n_frames(n_frames);
 
 		const auto old_noised_data_size = this->noised_data.size();
 		const auto new_noised_data_size = (old_noised_data_size / old_n_frames) * n_frames;

@@ -1,8 +1,9 @@
 #include <string>
 #include <type_traits>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/OOK/Modem_OOK_AWGN.hpp"
 
 using namespace aff3ct;
@@ -38,10 +39,10 @@ void Modem_OOK_AWGN<B,R,Q>
 	else
 	{
 		if (!std::is_same<R, Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 		if (!std::is_floating_point<Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 		if (*CP != this->last_channel_param)
 			this->sigma_factor = (R)2.0 * (*CP) * (*CP);
@@ -61,10 +62,10 @@ void Modem_OOK_AWGN<B,R,Q>
 	else
 	{
 		if (!std::is_same<R,Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 		if (!std::is_floating_point<Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 		if (*CP != this->last_channel_param)
 			this->sigma_factor = (R)2.0 * (*CP) * (*CP);

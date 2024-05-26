@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Monitor/BFER/Monitor_BFER.hpp"
 #include "Factory/Module/Monitor/BFER/Monitor_BFER.hpp"
@@ -83,7 +84,7 @@ module::Monitor_BFER<B>* Monitor_BFER
 {
 	if (this->type == "STD") return new module::Monitor_BFER<B>(this->K, this->n_frame_errors, this->max_frame, count_unknown_values);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

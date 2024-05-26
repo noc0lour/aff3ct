@@ -3,7 +3,8 @@
 #include <iomanip>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RSC/Encoder_RSC_generic_json_sys.hpp"
 
 using namespace aff3ct;
@@ -130,7 +131,7 @@ void Encoder_RSC_generic_json_sys<B>
 	{
 		std::stringstream message;
 		message << "'n_frames' has to be equal to 1 ('n_frames' = " << n_frames << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto old_n_frames = this->get_n_frames();

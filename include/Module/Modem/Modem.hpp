@@ -10,10 +10,9 @@
 #include <memory>
 #include <vector>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
 
 namespace aff3ct
 {
@@ -47,17 +46,17 @@ namespace module
  * Please use Modem for inheritance (instead of Modem)
  */
 template <typename B = int, typename R = float, typename Q = R>
-class Modem : public Module
+class Modem : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const mdm::tsk                 t);
-	inline runtime::Socket& operator[](const mdm::sck::modulate       s);
-	inline runtime::Socket& operator[](const mdm::sck::tmodulate      s);
-	inline runtime::Socket& operator[](const mdm::sck::filter         s);
-	inline runtime::Socket& operator[](const mdm::sck::demodulate     s);
-	inline runtime::Socket& operator[](const mdm::sck::tdemodulate    s);
-	inline runtime::Socket& operator[](const mdm::sck::demodulate_wg  s);
-	inline runtime::Socket& operator[](const mdm::sck::tdemodulate_wg s);
+	inline spu::runtime::Task&   operator[](const mdm::tsk                 t);
+	inline spu::runtime::Socket& operator[](const mdm::sck::modulate       s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::tmodulate      s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::filter         s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::demodulate     s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::tdemodulate    s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::demodulate_wg  s);
+	inline spu::runtime::Socket& operator[](const mdm::sck::tdemodulate_wg s);
 
 protected:
 	const int N;     /*!< Size of one frame (= number of bits in one frame) */

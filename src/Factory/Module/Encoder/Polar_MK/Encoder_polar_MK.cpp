@@ -1,4 +1,5 @@
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/Polar_MK/Encoder_polar_MK.hpp"
 #include "Module/Encoder/Polar_MK/Encoder_polar_MK_sys.hpp"
@@ -77,7 +78,7 @@ module::Encoder_polar_MK<B>* Encoder_polar_MK
 		else                  return new module::Encoder_polar_MK    <B>(this->K, this->N_cw, code, frozen_bits);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

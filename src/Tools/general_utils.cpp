@@ -5,8 +5,8 @@
 #include <cstdint>
 #include <algorithm>
 
-#include "Tools/Math/utils.h"
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 
 std::vector<std::string> aff3ct::tools::split(const std::string &s, char delim)
@@ -35,7 +35,7 @@ std::vector<std::string> aff3ct::tools::split(const std::string &s)
 void aff3ct::tools::getline(std::istream &file, std::string &line)
 {
 	if (file.eof() || file.fail() || file.bad())
-		throw runtime_error(__FILE__, __LINE__, __func__, "Something went wrong when getting a new line.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Something went wrong when getting a new line.");
 
 	while (std::getline(file, line))
 		if (line[0] != '#' && !std::all_of(line.begin(),line.end(),isspace))
@@ -49,14 +49,14 @@ R aff3ct::tools::sigma_to_esn0(const R sigma, const int upsample_factor)
 	{
 		std::stringstream message;
 		message << "'upsample_factor' has to be greater than 0 ('upsample_factor' = " << upsample_factor << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (sigma < (R)0)
 	{
 		std::stringstream message;
 		message << "'sigma' has to be greater than 0 ('sigma' = " << sigma << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (sigma == (R)0)
@@ -78,7 +78,7 @@ R aff3ct::tools::esn0_to_sigma(const R esn0, const int upsample_factor)
 	{
 		std::stringstream message;
 		message << "'upsample_factor' has to be greater than 0 ('upsample_factor' = " << upsample_factor << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto sigma = std::sqrt((R)upsample_factor / ((R)2 * std::pow((R)10, (esn0 / (R)10))));
@@ -92,14 +92,14 @@ R aff3ct::tools::esn0_to_ebn0(const R esn0, const R bit_rate, const int bps)
 	{
 		std::stringstream message;
 		message << "'bit_rate' has to be positive and smaller or equal to 1 ('bit_rate' = " << bit_rate << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (bps <= 0)
 	{
 		std::stringstream message;
 		message << "'bps' has to be greater than 0 ('bps' = " << bps << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto ebn0 = esn0 - (R)10 * std::log10(bit_rate * (R)bps);
@@ -113,14 +113,14 @@ R aff3ct::tools::ebn0_to_esn0(const R ebn0, const R bit_rate, const int bps)
 	{
 		std::stringstream message;
 		message << "'bit_rate' has to be positive and smaller or equal to 1 ('bit_rate' = " << bit_rate << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (bps <= 0)
 	{
 		std::stringstream message;
 		message << "'bps' has to be greater than 0 ('bps' = " << bps << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto esn0 = ebn0 + (R)10 * std::log10(bit_rate * (R)bps);
@@ -146,7 +146,7 @@ std::vector<R> aff3ct::tools::generate_range(const std::vector<std::vector<R>>& 
 		{
 			std::stringstream message;
 			message << "'s.size()' has to be 1, 2 or 3 ('s.size()' = " << s.size() << ").";
-			throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		int min  = (int)(s.front() * float_precision);
@@ -186,7 +186,7 @@ void aff3ct::tools::check_LUT(const std::vector<T> &LUT, const std::string &LUT_
 		std::stringstream message;
 		message << "'" + LUT_name + ".size()' has to be equal to '" << LUT_size << "' ('" << LUT_name << ".size()' = "
 		        << LUT.size() << ", 'LUT_size' = " << LUT_size << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (size_t i = 0; i < LUT.size(); i++)
@@ -198,7 +198,7 @@ void aff3ct::tools::check_LUT(const std::vector<T> &LUT, const std::string &LUT_
 			message << "The '" << LUT_name << "' vector is ill-formed, it sould not contain two or more times the same "
 			        << "value ('count_map[" << LUT[i] << "]' = " << count_map[LUT[i]] << ", "
 			        << "'LUT[" << i << "]' = " << LUT[i] << ").";
-			throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 }

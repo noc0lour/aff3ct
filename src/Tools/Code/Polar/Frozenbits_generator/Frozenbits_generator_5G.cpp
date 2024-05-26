@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cli.hpp>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_5G.hpp"
 
 using namespace aff3ct::tools;
@@ -19,7 +21,7 @@ Frozenbits_generator_5G
 {
 	std::string message = "5G frozen bits generation undefined for N > " + std::to_string(N_max);
 	if (N > N_max)
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.c_str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.c_str());
 }
 
 Frozenbits_generator_5G
@@ -40,7 +42,8 @@ void Frozenbits_generator_5G
 	std::vector<uint32_t> best_channels_mother(N_max);
 
 	if(!load_channels_file(filename, best_channels_mother))
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'" + filename + "' file does not exist.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__,
+		                                   "'" + filename + "' file does not exist.");
 
 	int j = 0;
 
@@ -49,5 +52,5 @@ void Frozenbits_generator_5G
 			this->best_channels[j++] = best_channels_mother[i];
 
 	if (j != this->N)
-		throw runtime_error(__FILE__, __LINE__, __func__, "Wrong size.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Wrong size.");
 }

@@ -1,4 +1,5 @@
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/NO/Decoder_NO.hpp"
 #include "Factory/Module/Decoder/NO/Decoder_NO.hpp"
 
@@ -51,7 +52,7 @@ module::Decoder_SISO<B,Q>* Decoder_NO
 {
 	if (this->type == "NONE" && this->implem == "HARD_DECISION") return new module::Decoder_NO<B,Q>(this->K);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -62,12 +63,12 @@ module::Decoder_SIHO<B,Q>* Decoder_NO
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "NONE" && this->implem == "HARD_DECISION") return new module::Decoder_NO<B,Q>(this->K);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

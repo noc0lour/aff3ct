@@ -7,15 +7,14 @@
 
 #include <mipp.h>
 
-#include "Tools/Interface/Interface_clone.hpp"
-#include "Tools/Interface/Interface_get_set_n_frames.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
 namespace tools
 {
 template <typename B = int, typename R = float>
-class Post_processing_SISO : public Interface_clone, public Interface_get_set_n_frames
+class Post_processing_SISO : public spu::tools::Interface_clone, public spu::tools::Interface_get_set_n_frames
 {
 protected:
 	size_t n_frames;

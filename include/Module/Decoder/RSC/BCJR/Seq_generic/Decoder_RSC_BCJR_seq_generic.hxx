@@ -4,7 +4,8 @@
 #include <cmath>
 #include <limits>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Seq_generic/Decoder_RSC_BCJR_seq_generic.hpp"
 
 namespace aff3ct
@@ -102,7 +103,7 @@ template <typename B, typename R>
 Decoder_RSC_BCJR_seq_generic<B,R>* Decoder_RSC_BCJR_seq_generic<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 // =================================================================================================== sys/par division
@@ -111,7 +112,7 @@ struct RSC_BCJR_seq_generic_div_or_not
 {
 	static R apply(R m)
 	{
-		return tools::div2<R>(m);
+		return spu::tools::div2<R>(m);
 	}
 };
 
@@ -141,7 +142,7 @@ struct RSC_BCJR_seq_generic_post <short, RD>
 	static short compute(const RD &post)
 	{
 		// (WW) work only for max-log-MAP !!!
-		return tools::div2<RD>(post);
+		return spu::tools::div2<RD>(post);
 	}
 };
 
@@ -150,7 +151,7 @@ struct RSC_BCJR_seq_generic_post <signed char, RD>
 {
 	static signed char compute(const RD &post)
 	{
-		return (signed char)tools::saturate<RD>(post, -63, 63);
+		return (signed char)spu::tools::saturate<RD>(post, -63, 63);
 	}
 };
 
@@ -203,7 +204,7 @@ struct RSC_BCJR_seq_generic_normalize <signed char>
 		// normalization & saturation
 		auto norm_val = metrics[0][i];
 		for (auto j = 0; j < n_states; j++)
-			metrics[j][i] = tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
+			metrics[j][i] = spu::tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
 	}
 
 	static void apply(signed char *metrics, const int &i, const int &n_states)
@@ -211,7 +212,7 @@ struct RSC_BCJR_seq_generic_normalize <signed char>
 		// normalization & saturation
 		auto norm_val = metrics[0];
 		for (auto j = 0; j < n_states; j++)
-			metrics[j] = tools::saturate<signed char>(metrics[j] - norm_val, -63, +63);
+			metrics[j] = spu::tools::saturate<signed char>(metrics[j] - norm_val, -63, +63);
 	}
 };
 }

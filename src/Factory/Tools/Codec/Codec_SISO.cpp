@@ -1,3 +1,5 @@
+#include <streampu.hpp>
+
 #include "Factory/Tools/Codec/LDPC/Codec_LDPC.hpp"
 #include "Factory/Tools/Codec/Polar/Codec_polar.hpp"
 #include "Factory/Tools/Codec/RSC/Codec_RSC.hpp"
@@ -35,7 +37,7 @@ tools::Codec_SISO<B,Q>* Codec_SISO
 	if (get_name() == Codec_uncoded_name      ) return dynamic_cast<const Codec_uncoded      &>(*this).template build<B,Q>(crc);
 	if (get_name() == Codec_turbo_product_name) return dynamic_cast<const Codec_turbo_product&>(*this).template build<B,Q>(crc);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

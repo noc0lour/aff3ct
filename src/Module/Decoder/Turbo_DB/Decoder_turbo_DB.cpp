@@ -2,8 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/Turbo_DB/Decoder_turbo_DB.hpp"
 
 using namespace aff3ct;
@@ -43,7 +43,7 @@ Decoder_turbo_DB<B,R>
 	{
 		std::stringstream message;
 		message << "'K' has to be a divisible by 2 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_K() != K)
@@ -51,7 +51,7 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'siso_n.get_K()' has to be equal to 'K' ('siso_n.get_K()' = " << siso_n.get_K()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_i.get_K() != K)
@@ -59,14 +59,14 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'siso_i.get_K()' has to be equal to 'K' ('siso_i.get_K()' = " << siso_i.get_K()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_ite <= 0)
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)pi.get_core().get_size() * 2 != K)
@@ -74,7 +74,7 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' * 2 has to be equal to 'K' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'K' = " << K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_n_frames() != siso_i.get_n_frames())
@@ -82,7 +82,7 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'siso_n.get_n_frames()' has to be equal to 'siso_i.get_n_frames()' ('siso_n.get_n_frames()' = "
 		        << siso_n.get_n_frames() << ", 'siso_i.get_n_frames()' = " << siso_i.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (pi.get_n_frames() != siso_n.get_n_frames())
@@ -90,7 +90,7 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'pi.get_n_frames()' has to be equal to 'siso_n.get_n_frames()' ('pi.get_n_frames()' = "
 		        << pi.get_n_frames() << ", 'siso_n.get_n_frames()' = " << siso_n.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_n_frames_per_wave() != 1)
@@ -98,7 +98,7 @@ Decoder_turbo_DB<B,R>
 		std::stringstream message;
 		message << "'siso_n.get_n_frames_per_wave()' has to be equal to 1 "
 		        << "('siso_n.get_n_frames_per_wave()' = " << siso_n.get_n_frames_per_wave() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_n_frames_per_wave() != siso_i.get_n_frames_per_wave())
@@ -107,7 +107,7 @@ Decoder_turbo_DB<B,R>
 		message << "'siso_n.get_n_frames_per_wave()' has to be equal to 'siso_i.get_n_frames_per_wave()' "
 		        << "('siso_n.get_n_frames_per_wave()' = " << siso_n.get_n_frames_per_wave()
 		        << ", 'siso_i.get_n_frames_per_wave()' = " << siso_i.get_n_frames_per_wave() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -124,7 +124,7 @@ template <typename B, typename R>
 void Decoder_turbo_DB<B,R>
 ::deep_copy(const Decoder_turbo_DB<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.siso_n != nullptr) this->siso_n.reset(m.siso_n->clone());
 	if (m.siso_i != nullptr) this->siso_i.reset(m.siso_i->clone());
 	if (m.pi     != nullptr) this->pi    .reset(m.pi    ->clone());
@@ -152,8 +152,8 @@ void Decoder_turbo_DB<B,R>
 	auto j = 0;
 	for (auto i = 0; i < this->K/2; i++)
 	{
-		R a = tools::div2(Y_N[j++]);
-		R b = tools::div2(Y_N[j++]);
+		R a = spu::tools::div2(Y_N[j++]);
+		R b = spu::tools::div2(Y_N[j++]);
 		this->l_sn[4*i + 0] =  a + b;
 		this->l_sn[4*i + 1] =  a - b;
 		this->l_sn[4*i + 2] = -a + b;
@@ -162,14 +162,14 @@ void Decoder_turbo_DB<B,R>
 
 	for (auto i = 0; i < this->K; i+=2)
 	{
-		this->l_pn[i] = tools::div2(Y_N[j++]);
-		this->l_pi[i] = tools::div2(Y_N[j++]);
+		this->l_pn[i] = spu::tools::div2(Y_N[j++]);
+		this->l_pi[i] = spu::tools::div2(Y_N[j++]);
 	}
 
 	for (auto i = 1; i < this->K; i+=2)
 	{
-		this->l_pn[i] = tools::div2(Y_N[j++]);
-		this->l_pi[i] = tools::div2(Y_N[j++]);
+		this->l_pn[i] = spu::tools::div2(Y_N[j++]);
+		this->l_pi[i] = spu::tools::div2(Y_N[j++]);
 	}
 
 	// make the interleaving to get l_si (2 steps interleaving)

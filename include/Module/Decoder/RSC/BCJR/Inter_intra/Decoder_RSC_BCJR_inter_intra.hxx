@@ -5,7 +5,8 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Module/Decoder/RSC/BCJR/Inter_intra/Decoder_RSC_BCJR_inter_intra.hpp"
 
@@ -40,14 +41,14 @@ Decoder_RSC_BCJR_inter_intra<B,R>
 
 	for (unsigned i = 0; i < req_trellis.size(); i++)
 		if (trellis[i] != req_trellis[i])
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
 }
 
 template <typename B, typename R>
 Decoder_RSC_BCJR_inter_intra<B,R>* Decoder_RSC_BCJR_inter_intra<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -82,7 +83,7 @@ void Decoder_RSC_BCJR_inter_intra<B,R>
 // 	{
 // 		std::stringstream message;
 // 		message << "'n_frames' has to be greater than 0 or equal to -1 ('n_frames' = " << n_frames << ").";
-// 		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+// 		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 // 	}
 
 // 	const int real_n_frames = (n_frames != -1) ? n_frames : this->get_n_frames();
@@ -92,7 +93,7 @@ void Decoder_RSC_BCJR_inter_intra<B,R>
 // 		std::stringstream message;
 // 		message << "'real_n_frames' has to be equal to 'simd_inter_frame_level_siso' ('real_n_frames' = "
 // 		        << real_n_frames << ", 'simd_inter_frame_level_siso' = " << this->simd_inter_frame_level_siso << ").";
-// 		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+// 		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 // 	}
 
 // 	const auto limit_size1 = (this->K + this->n_ff) * this->simd_inter_frame_level + mipp::nElReg<R>();
@@ -102,7 +103,7 @@ void Decoder_RSC_BCJR_inter_intra<B,R>
 // 		std::stringstream message;
 // 		message << "'sys.size()' has to be equal or greater than 'limit_size1' ('sys.size()' = " << sys.size()
 // 		        << ", 'limit_size1' = " << limit_size1 << ").";
-// 		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+// 		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 // 	}
 
 // 	if ((int)par.size() < limit_size1)
@@ -110,7 +111,7 @@ void Decoder_RSC_BCJR_inter_intra<B,R>
 // 		std::stringstream message;
 // 		message << "'par.size()' has to be equal or greater than 'limit_size1' ('par.size()' = " << par.size()
 // 		        << ", 'limit_size1' = " << limit_size1 << ").";
-// 		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+// 		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 // 	}
 
 // 	const auto limit_size2 = this->K * this->simd_inter_frame_level + mipp::nElReg<R>();
@@ -120,7 +121,7 @@ void Decoder_RSC_BCJR_inter_intra<B,R>
 // 		std::stringstream message;
 // 		message << "'ext.size()' has to be equal or greater than 'limit_size2' * 'real_n_frames' ('ext.size()' = "
 // 		        << ext.size() << ", 'limit_size2' = " << limit_size2 << ", 'real_n_frames' = " << real_n_frames << ").";
-// 		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+// 		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 // 	}
 
 // 	auto status = Decoder_SISO<R>::decode_siso(sys.data(), par.data(), ext.data(), real_n_frames);
@@ -132,13 +133,13 @@ int Decoder_RSC_BCJR_inter_intra<B,R>
 ::_decode_siso_alt(const R *sys, const R *par, R *ext, const size_t frame_id)
 {
 	if (!mipp::isAligned(sys))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
 
 	if (!mipp::isAligned(par))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
 
 	if (!mipp::isAligned(ext))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
 
 	this->compute_gamma   (sys, par);
 	this->compute_alpha   (        );

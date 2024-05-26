@@ -3,7 +3,6 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Module.hpp"
 #include "Module/Decoder/Decoder_SISO.hpp"
 
@@ -13,52 +12,52 @@ namespace module
 {
 
 template <typename B, typename R>
-runtime::Task& Decoder_SISO<B,R>
+spu::runtime::Task& Decoder_SISO<B,R>
 ::operator[](const dec::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_hiho s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_hiho)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_hiho)[(size_t)s];
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_hiho_cw s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_hiho_cw)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_hiho_cw)[(size_t)s];
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_siho s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_siho)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_siho)[(size_t)s];
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_siho_cw s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_siho_cw)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_siho_cw)[(size_t)s];
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_siso s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_siso)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_siso)[(size_t)s];
 }
 
 template <typename B, typename R>
-runtime::Socket& Decoder_SISO<B,R>
+spu::runtime::Socket& Decoder_SISO<B,R>
 ::operator[](const dec::sck::decode_siso_alt s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_siso_alt)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_siso_alt)[(size_t)s];
 }
 
 template <typename B, typename R>
@@ -73,7 +72,8 @@ Decoder_SISO<B,R>
 	auto p1s_Y_N1 = this->template create_socket_in <R     >(p1, "Y_N1", this->N);
 	auto p1s_CWD  = this->template create_socket_out<int8_t>(p1, "CWD",        1);
 	auto p1s_Y_N2 = this->template create_socket_out<R     >(p1, "Y_N2", this->N);
-	this->create_codelet(p1, [p1s_Y_N1, p1s_CWD, p1s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_Y_N1, p1s_CWD, p1s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &dec = static_cast<Decoder_SISO<B,R>&>(m);
 
@@ -93,7 +93,8 @@ Decoder_SISO<B,R>
 	auto p2s_par = this->template create_socket_in <R     >(p2, "par", this->K + this->tail_length() / 2);
 	auto p2s_CWD = this->template create_socket_out<int8_t>(p2, "CWD",       1);
 	auto p2s_ext = this->template create_socket_out<R     >(p2, "ext", this->K);
-	this->create_codelet(p2, [p2s_sys, p2s_par, p2s_CWD, p2s_ext](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_sys, p2s_par, p2s_CWD, p2s_ext]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &dec = static_cast<Decoder_SISO<B,R>&>(m);
 
@@ -114,7 +115,7 @@ template <typename B, typename R>
 Decoder_SISO<B,R>* Decoder_SISO<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -244,7 +245,7 @@ template <typename B, typename R>
 int Decoder_SISO<B,R>
 ::_decode_siso(const R *Y_N1, R *Y_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -260,7 +261,7 @@ template <typename B, typename R>
 int Decoder_SISO<B,R>
 ::_decode_siso_alt(const R *sys, const R *par, R *ext, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 }

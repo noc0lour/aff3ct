@@ -9,7 +9,8 @@
 #endif
 #include <mipp.h>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_inter.h"
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_inter_8bit_bitpacking.h"
 
@@ -31,7 +32,7 @@ void g_inter_8bit_bitpacking<B,R,GI,N_ELMTS>
 
 	const auto r_sat = API_polar_inter_intra_saturate<R>::init();
 
-	const auto r_mask = mipp::set1<B>(bit_init<B>());
+	const auto r_mask = mipp::set1<B>(spu::tools::bit_init<B>());
 	auto k = 0;
 	for (auto i = 0; i < _n_elmts; i += stride)
 	{
@@ -60,7 +61,7 @@ void g_inter_8bit_bitpacking<B,R,GI,0>
 
 	const auto r_sat = API_polar_inter_intra_saturate<R>::init();
 
-	const auto r_mask = mipp::set1<B>(bit_init<B>());
+	const auto r_mask = mipp::set1<B>(spu::tools::bit_init<B>());
 	auto k = 0;
 	for (auto i = 0; i < _n_elmts; i += stride)
 	{
@@ -84,7 +85,7 @@ void g_inter_8bit_bitpacking<B,R,GI,4>
 ::apply(const R *__restrict l_a, const R *__restrict l_b, const B *__restrict s_a, R *__restrict l_c,
         const int init_shift, const int n_elmts)
 {
-	const auto r_mask     = mipp::set1<B>(bit_init<B>());
+	const auto r_mask     = mipp::set1<B>(spu::tools::bit_init<B>());
 	const auto r_u_packed = mipp::load<B>(s_a);
 
 	const auto r_sat = API_polar_inter_intra_saturate<R>::init();
@@ -107,7 +108,7 @@ void g_inter_8bit_bitpacking<B,R,GI,2>
 ::apply(const R *__restrict l_a, const R *__restrict l_b, const B *__restrict s_a, R *__restrict l_c,
         const int init_shift, const int n_elmts)
 {
-	const auto r_mask     = mipp::set1<B>(bit_init<B>());
+	const auto r_mask     = mipp::set1<B>(spu::tools::bit_init<B>());
 	const auto r_u_packed = mipp::load<B>(s_a);
 
 	const auto r_sat = API_polar_inter_intra_saturate<R>::init();
@@ -130,7 +131,7 @@ void g_inter_8bit_bitpacking<B,R,GI,1>
 ::apply(const R *__restrict l_a, const R *__restrict l_b, const B *__restrict s_a, R *__restrict l_c,
         const int init_shift, const int n_elmts)
 {
-	const auto r_mask        = mipp::set1<B>(bit_init<B>());
+	const auto r_mask        = mipp::set1<B>(spu::tools::bit_init<B>());
 	const auto r_u_packed    = mipp::load<B>(s_a);
 	const auto r_lambda_a0   = mipp::load<R>(l_a + 0 * mipp::nElmtsPerRegister<R>());
 	const auto r_lambda_b0   = mipp::load<R>(l_b + 0 * mipp::nElmtsPerRegister<R>());
@@ -154,7 +155,7 @@ void gr_inter_8bit_bitpacking<B,R,GI,N_ELMTS>
 	constexpr auto stride   = mipp::nElmtsPerRegister<R>();
 	constexpr auto _n_elmts = N_ELMTS * mipp::nElReg<R>();
 
-	const auto mask         = mipp::set1<B>(bit_init<B>());
+	const auto mask         = mipp::set1<B>(spu::tools::bit_init<B>());
 	const auto r_u          = mipp::load<B>(s_a);
 	const auto r_u_unpacked = mipp::andb<B>(mipp::lshift<B>(r_u, (sizeof(B) * 8 -1) - init_shift), mask);
 
@@ -178,7 +179,7 @@ void gr_inter_8bit_bitpacking<B,R,GI,0>
 	constexpr auto stride   = mipp::nElmtsPerRegister<R>();
 	const     auto _n_elmts = n_elmts * mipp::nElReg<R>();
 
-	const auto mask         = mipp::set1<B>(bit_init<B>());
+	const auto mask         = mipp::set1<B>(spu::tools::bit_init<B>());
 	const auto r_u          = mipp::load<B>(s_a);
 	const auto r_u_unpacked = mipp::andb<B>(mipp::lshift<B>(r_u, (sizeof(B) * 8 -1) - init_shift), mask);
 

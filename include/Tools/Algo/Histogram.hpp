@@ -12,7 +12,7 @@
 #include <vector>
 #include <map>
 
-#include "Tools/Interface/Interface_reset.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -20,7 +20,7 @@ namespace tools
 {
 
 template <typename R>
-class Histogram : public Interface_reset
+class Histogram : public spu::tools::Interface_reset
 {
 protected:
 	size_t n_values = 0;

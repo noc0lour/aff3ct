@@ -1,4 +1,4 @@
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
 
 #include "Tools/Code/Turbo/Post_processing_SISO/Self_corrected/Self_corrected.hpp"
 
@@ -86,8 +86,8 @@ inline void Self_corrected<B,R>
 	B sgn_cur, sgn_prev;
 	for (auto idx = 0; idx < (int)osc.size(); idx++)
 	{
-		sgn_cur  = sgn<B,R>(ext_hist[ite-1][idx]);
-		sgn_prev = sgn<B,R>(ext_hist[ite-2][idx]);
+		sgn_cur  = spu::tools::sgn<B,R>(ext_hist[ite-1][idx]);
+		sgn_prev = spu::tools::sgn<B,R>(ext_hist[ite-2][idx]);
 		osc[idx] = sgn_cur != sgn_prev;
 	}
 }

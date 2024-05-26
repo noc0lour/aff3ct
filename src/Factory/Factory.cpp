@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Factory/Factory.hpp"
 
 using namespace aff3ct;
@@ -96,7 +97,7 @@ cli::Argument_map_group Factory
 			std::stringstream message;
 			message << "'prefixes.size()' has to be equal to 'short_names.size()' ('prefixes.size()' = "
 			        << prefixes.size() << ", 'short_names.size()' = " << short_names.size() << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (size_t i = 0; i < prefixes.size(); i++)

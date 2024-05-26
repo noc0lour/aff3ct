@@ -2,7 +2,8 @@
 #include <string>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter_fast.hpp"
 
 namespace aff3ct
@@ -254,13 +255,13 @@ int Decoder_RSC_BCJR_inter_fast<B,R,MAX>
 ::_decode_siso_alt(const R *sys, const R *par, R *ext, const size_t frame_id)
 {
 	if (!mipp::isAligned(sys))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
 
 	if (!mipp::isAligned(par))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
 
 	if (!mipp::isAligned(ext))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
 
 	this->compute_gamma(sys, par);
 	this->compute_alpha(        );

@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <cassert>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Tools/Math/interpolation.h"
 
@@ -20,13 +21,13 @@ T linear_interpolation(const T* x_data, const T* y_data, const unsigned l_data, 
 
 	auto y_above = y_data + (x_above - x_data); // get the position of the matching value y of x_above
 
-	if (x_above == x_data || comp_equal(x_val, *x_above)) // if first or x_above == x_val
+	if (x_above == x_data || spu::tools::comp_equal(x_val, *x_above)) // if first or x_above == x_val
 		return *y_above; // good x so take y directly
 
 	auto x_below = x_above - 1; // get the position of value just below or equal to x_val
 	auto y_below = y_above - 1; // get the position of the matching value y of x_below
 
-	if ((x_above == (x_data + l_data)) || comp_equal(x_val, *x_below)) // if last or x_below == x_val
+	if ((x_above == (x_data + l_data)) || spu::tools::comp_equal(x_val, *x_below)) // if last or x_below == x_val
 		return *y_below; // good x so take y directly
 
 	// compute the interpolation	 y = y0 + (y1-y0)*(x-x0)/(x1-x0);

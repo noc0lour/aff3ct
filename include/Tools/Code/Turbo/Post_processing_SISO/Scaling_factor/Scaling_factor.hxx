@@ -14,7 +14,7 @@ template <typename B, typename R>
 Scaling_factor<B,R>* Scaling_factor<B,R>
 ::clone() const
 {
-	throw unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 }

@@ -7,8 +7,8 @@
 #include <cmath>
 #include <tuple>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Decoder/Polar/SCL/Decoder_polar_SCL_naive.hpp"
 
@@ -29,11 +29,11 @@ Decoder_polar_SCL_naive<B,R,F,G>
 	const std::string name = "Decoder_polar_SCL_naive";
 	this->set_name(name);
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -41,14 +41,14 @@ Decoder_polar_SCL_naive<B,R,F,G>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
-	if (this->L <= 0 || !tools::is_power_of_2(this->L))
+	if (this->L <= 0 || !spu::tools::is_power_of_2(this->L))
 	{
 		std::stringstream message;
 		message << "'L' has to be a positive power of 2 ('L' = " << L << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -57,7 +57,7 @@ Decoder_polar_SCL_naive<B,R,F,G>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->active_paths.insert(0);
@@ -91,7 +91,7 @@ template <typename B, typename R, tools::proto_f<R> F, tools::proto_g<B,R> G>
 void Decoder_polar_SCL_naive<B,R,F,G>
 ::deep_copy(const Decoder_polar_SCL_naive<B,R,F,G> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	this->leaves_array.clear();
 	for (auto i = 0; i < L; i++)
 	{
@@ -196,10 +196,10 @@ void Decoder_polar_SCL_naive<B,R,F,G>
 			for (auto path : active_paths)
 			{
 				auto cur_leaf = leaves_array[path][leaf_index];
-				R phi0 = tools::phi<B,R>(polar_trees[path].get_path_metric(), cur_leaf->get_c()->lambda[0],                 (B)0);
-				R phi1 = tools::phi<B,R>(polar_trees[path].get_path_metric(), cur_leaf->get_c()->lambda[0], tools::bit_init<B>());
-				metrics_vec.push_back(std::make_tuple(path,                 (B)0, phi0));
-				metrics_vec.push_back(std::make_tuple(path, tools::bit_init<B>(), phi1));
+				R phi0 = tools::phi<B,R>(polar_trees[path].get_path_metric(), cur_leaf->get_c()->lambda[0],                      (B)0);
+				R phi1 = tools::phi<B,R>(polar_trees[path].get_path_metric(), cur_leaf->get_c()->lambda[0], spu::tools::bit_init<B>());
+				metrics_vec.push_back(std::make_tuple(path,                      (B)0, phi0));
+				metrics_vec.push_back(std::make_tuple(path, spu::tools::bit_init<B>(), phi1));
 
 				min_phi = std::min<R>(min_phi, phi0);
 				min_phi = std::min<R>(min_phi, phi1);
@@ -409,10 +409,10 @@ void Decoder_polar_SCL_naive<B,R,F,G>
 	if (leaf_index < this->N - 1)
 		recursive_duplicate_tree_llr(leaves_array[path][leaf_index + 1], leaves_array[newpath][leaf_index + 1]);
 
-	leaves_array[newpath][leaf_index]->get_c()->s[0] = tools::bit_init<B>();
+	leaves_array[newpath][leaf_index]->get_c()->s[0] = spu::tools::bit_init<B>();
 	polar_trees[newpath].set_path_metric(tools::phi<B,R>(polar_trees[path].get_path_metric(),
 	                                                     leaves_array[path][leaf_index]->get_c()->lambda[0],
-	                                                     tools::bit_init<B>()));
+	                                                     spu::tools::bit_init<B>()));
 
 	leaves_array[path][leaf_index]->get_c()->s[0] = 0;
 	polar_trees[path].set_path_metric(tools::phi<B,R>(polar_trees[path].get_path_metric(),

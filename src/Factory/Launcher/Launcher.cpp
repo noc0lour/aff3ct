@@ -7,8 +7,9 @@
 #include <cli.hpp>
 #include <date.h>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Documentation/documentation.h"
 #include "Tools/types.h"
 #include "Tools/version.h"
@@ -136,7 +137,7 @@ void Launcher
 	if(vals.exist({p+"-prec", "p"})) this->sim_prec = vals.to_int({p+"-prec", "p"});
 #endif
 
-	tools::exception::no_stacktrace = vals.exist({"except-no-bt"});
+	spu::tools::exception::no_stacktrace = vals.exist({"except-no-bt"});
 
 #ifdef AFF3CT_CORE_COLORS
 	if (vals.exist({"no-colors"}))
@@ -197,7 +198,7 @@ void Launcher
 		default :
 			std::stringstream message;
 			message << "Unsupported bit precision: " << this->sim_prec << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		break;
 	}
 #else
@@ -297,7 +298,7 @@ launcher::Launcher* Launcher
 
 	std::stringstream message;
 	message << "Invalid code type ('" << this->cde_type << "') or simulation type ('" << this->sim_type << "').";
-	throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 }
 
 // ==================================================================================== explicit template instantiation

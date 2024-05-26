@@ -3,7 +3,8 @@
 #include <string>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/LDPC/BF/OMWBF/Decoder_LDPC_bit_flipping_OMWBF.hpp"
 
 using namespace aff3ct;
@@ -29,7 +30,7 @@ Decoder_LDPC_bit_flipping_OMWBF<B,R>
 	{
 		std::stringstream message;
 		message << "This decoder does not work in 8-bit fixed-point (try in 16-bit).";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

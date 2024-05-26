@@ -10,9 +10,9 @@
 #include <map>
 #include <cli.hpp>
 
+#include <streampu.hpp>
+
 #include "Tools/Factory/Header.hpp"
-#include "Tools/Display/Terminal/Terminal.hpp"
-#include "Tools/Reporter/Reporter.hpp"
 #include "Factory/Factory.hpp"
 
 namespace aff3ct
@@ -41,7 +41,7 @@ public:
 	virtual void get_headers    (std::map<std::string,tools::header_list>& headers, const bool full = true) const;
 
 	// builder
-	tools::Terminal* build(const std::vector<std::unique_ptr<tools::Reporter>> &reporters) const;
+	spu::tools::Terminal* build(const std::vector<std::unique_ptr<spu::tools::Reporter>> &reporters) const;
 
 protected:
 	Terminal(const std::string &n, const std::string &p);

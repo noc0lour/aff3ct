@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Quantizer/Pow2/Quantizer_pow2.hpp"
 #include "Module/Quantizer/Pow2/Quantizer_pow2_fast.hpp"
@@ -91,7 +92,7 @@ module::Quantizer<R,Q>* Quantizer
 	if (this->type == "CUSTOM" && this->implem == "STD" ) return new module::Quantizer_custom   <R,Q>(this->size, this->range,      this->n_bits);
 	if (this->type == "NO"                              ) return new module::Quantizer_NO       <R,Q>(this->size                                );
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

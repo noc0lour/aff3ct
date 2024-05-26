@@ -7,7 +7,8 @@
 #include <sstream>
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/matrix.h"
 #include "Tools/Math/numerical_integration.h"
 #include "Tools/Noise/Noise.hpp"
@@ -67,7 +68,7 @@ Modem_CPM<B,R,Q,MAX>
 		std::stringstream message;
 		message << "'bits_per_symbol' has to be a multiple of 'N' ('bits_per_symbol' = " << bits_per_symbol
 		        << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// initialize CPM
@@ -213,7 +214,7 @@ void Modem_CPM<B,R,Q,MAX>
 		message << "'baseband.size()' has to be equal to 'cpm->max_wa_id' * 'cpm->s_factor' * 2 ('baseband.size()' = "
 		        << baseband.size() << ", 'cpm->max_wa_id' = " << cpm->max_wa_id
 		        << ", 'cpm->s_factor' = " << cpm->s_factor << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<R> phase_response(cpm->L*cpm->s_factor);
@@ -274,7 +275,7 @@ public:
 		const R minus  = (x - (R)0.5) * factor;
 		const R plus   = (x + (R)0.5) * factor;
 
-		return tools::div4(std::erf(plus) - std::erf(minus));
+		return spu::tools::div4(std::erf(plus) - std::erf(minus));
 	}
 
 	R operator()(const R& t) const
@@ -302,7 +303,7 @@ R Modem_CPM<B,R,Q,MAX>
 	else
 	{
 		std::string message = "Unknown CPM wave shape ('cpm->wave_shape' = " + cpm->wave_shape + ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, std::move(message));
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, std::move(message));
 	}
 }
 
@@ -315,7 +316,7 @@ void Modem_CPM<B,R,Q,MAX>
 		std::stringstream message;
 		message << "'projection.size()' and 'baseband.size()' have to be equal ('projection.size()' = "
 		        << projection.size() << ", 'baseband.size()' = " << baseband.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (cpm->filters_type == "TOTAL")
@@ -331,7 +332,7 @@ void Modem_CPM<B,R,Q,MAX>
 	else
 	{
 		std::string message = "Unknown CPM filter bank type ('cpm->filters_type' = " + cpm->filters_type + ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, std::move(message));
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, std::move(message));
 	}
 }
 }

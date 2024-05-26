@@ -3,7 +3,8 @@
 #include <string>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/CRC/Polynomial/CRC_polynomial_inter.hpp"
 
 using namespace aff3ct;
@@ -61,7 +62,7 @@ template <typename B>
 bool CRC_polynomial_inter<B>
 ::_check_packed(const B *V_K, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>

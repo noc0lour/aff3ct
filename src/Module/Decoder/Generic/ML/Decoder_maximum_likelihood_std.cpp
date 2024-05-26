@@ -3,8 +3,8 @@
 #include <limits>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Module/Decoder/Generic/ML/Decoder_maximum_likelihood_std.hpp"
 
@@ -27,7 +27,7 @@ Decoder_maximum_likelihood_std<B,R>
 	{
 		std::stringstream message;
 		message << "'K' has to be smaller or equal to 64 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// determine the maximum sequence 'u' of information bits
@@ -78,7 +78,7 @@ int Decoder_maximum_likelihood_std<B,R>
 			std::fill(this->U_K.begin(), this->U_K.end(), (B)0);
 			auto data = (uint64_t*)this->U_K.data();
 			data[0] = u;
-			tools::Bit_packer::unpack(this->U_K.data(), this->K);
+			spu::tools::Bit_packer::unpack(this->U_K.data(), this->K);
 			this->encoder->encode(this->U_K.data(), this->X_N.data(), 0);
 
 			// compute the Euclidean distance between the input LLR and the current codeword
@@ -123,7 +123,7 @@ int Decoder_maximum_likelihood_std<B,R>
 		std::fill(this->U_K.begin(), this->U_K.end(), (B)0);
 		auto data = (uint64_t*)this->U_K.data();
 		data[0] = u;
-		tools::Bit_packer::unpack(this->U_K.data(), this->K);
+		spu::tools::Bit_packer::unpack(this->U_K.data(), this->K);
 		this->encoder->encode(this->U_K.data(), this->X_N.data(), 0);
 
 		// compute the Hamming distance between the input bits and the current codeword

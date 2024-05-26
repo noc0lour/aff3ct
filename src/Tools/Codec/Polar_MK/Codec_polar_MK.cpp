@@ -2,8 +2,9 @@
 #include <sstream>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Module/Extractor/Polar/Extractor_polar.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Noise/Sigma.hpp"
 #include "Tools/Noise/Event_probability.hpp"
 #include "Factory/Module/Encoder/Encoder.hpp"
@@ -33,7 +34,7 @@ Codec_polar_MK<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -41,7 +42,7 @@ Codec_polar_MK<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -67,7 +68,7 @@ Codec_polar_MK<B,Q>
 		this->set_encoder(enc_params.build<B>(*code.get(), *frozen_bits));
 		fb_encoder = dynamic_cast<Interface_get_set_frozen_bits*>(&this->get_encoder());
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -156,7 +157,7 @@ void Codec_polar_MK<B,Q>
 		std::stringstream message;
 		message << "Incompatible noise type, expected noise types are SIGMA or EP ('noise->get_type()' = "
 		        << Noise<>::type_to_str(this->noise->get_type()) << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -189,7 +190,7 @@ const Frozenbits_generator& Codec_polar_MK<B,Q>
 	{
 		std::stringstream message;
 		message << "'fb_generator' can't be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->fb_generator.get();

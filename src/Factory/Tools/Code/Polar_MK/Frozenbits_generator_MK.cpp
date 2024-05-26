@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_file.hpp"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_GA.hpp"
@@ -87,5 +88,5 @@ tools::Frozenbits_generator* Frozenbits_generator_MK
 	if (this->type == "GA"                             ) return new tools::Frozenbits_generator_GA       (this->K, this->N_cw, pc, this->dump_channels_path);
 	if (this->type == "FILE"                           ) return new tools::Frozenbits_generator_file     (this->K, this->N_cw,     this->path_fb           );
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }

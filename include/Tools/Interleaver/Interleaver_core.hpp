@@ -9,10 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "Tools/Interface/Interface_set_seed.hpp"
-#include "Tools/Interface/Interface_get_set_n_frames.hpp"
 #ifndef _MSC_VER
-#include "Tools/Interface/Interface_clone.hpp"
+#include <streampu.hpp>
 #endif
 
 namespace aff3ct
@@ -21,9 +19,10 @@ namespace tools
 {
 template <typename T = uint32_t>
 #ifdef _MSC_VER
-class Interleaver_core : public Interface_set_seed, public Interface_get_set_n_frames
+class Interleaver_core : public spu::tools::Interface_set_seed, public spu::tools::Interface_get_set_n_frames
 #else
-class Interleaver_core : public Interface_set_seed, public Interface_get_set_n_frames, public Interface_clone
+class Interleaver_core : public spu::tools::Interface_set_seed, public spu::tools::Interface_get_set_n_frames,
+                         public spu::tools::Interface_clone
 #endif
 {
 protected:

@@ -4,7 +4,8 @@
 #include <vector>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Monitor/EXIT/Monitor_EXIT.hpp"
 
 using namespace aff3ct;
@@ -23,7 +24,8 @@ Monitor_EXIT<B,R>
 	auto ps_bits   = this->template create_socket_in<B>(p, "bits",   get_N());
 	auto ps_llrs_a = this->template create_socket_in<R>(p, "llrs_a", get_N());
 	auto ps_llrs_e = this->template create_socket_in<R>(p, "llrs_e", get_N());
-	this->create_codelet(p, [ps_bits, ps_llrs_a, ps_llrs_e](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p, [ps_bits, ps_llrs_a, ps_llrs_e]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mnt = static_cast<Monitor_EXIT<B,R>&>(m);
 
@@ -32,7 +34,7 @@ Monitor_EXIT<B,R>
 		                       static_cast<R*>(t[ps_llrs_e].get_dataptr()),
 		                       frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	reset();
@@ -47,7 +49,7 @@ Monitor_EXIT<B,R>* Monitor_EXIT<B,R>
 		std::stringstream message;
 		message << "'callback_measure.size()' has to be equal to 0 ('callback_measure.size()' = "
 		        << this->callback_measure.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto m = new Monitor_EXIT(*this);
@@ -67,7 +69,7 @@ bool Monitor_EXIT<B,R>
 		std::stringstream message;
 		message << "'get_N()' is different than 'm.get_N()' ('get_N()' = " << get_N() << ", 'm.get_N()' = "
 		        << m.get_N() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (get_max_n_trials() != m.get_max_n_trials())
@@ -78,7 +80,7 @@ bool Monitor_EXIT<B,R>
 		std::stringstream message;
 		message << "'get_max_n_trials()' is different than 'm.get_max_n_trials()' ('get_max_n_trials()' = "
 		        << get_max_n_trials() << ", 'm.get_max_n_trials()' = " << m.get_max_n_trials() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return true;

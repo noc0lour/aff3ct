@@ -3,7 +3,6 @@
 #include <numeric>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Encoder/Encoder.hpp"
 
 namespace aff3ct
@@ -12,23 +11,23 @@ namespace module
 {
 
 template <typename B>
-runtime::Task& Encoder<B>
+spu::runtime::Task& Encoder<B>
 ::operator[](const enc::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B>
-runtime::Socket& Encoder<B>
+spu::runtime::Socket& Encoder<B>
 ::operator[](const enc::sck::encode s)
 {
-	return Module::operator[]((size_t)enc::tsk::encode)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)enc::tsk::encode)[(size_t)s];
 }
 
 template <typename B>
 Encoder<B>
 ::Encoder(const int K, const int N)
-: Module(),
+: spu::module::Module(),
   K(K),
   N(N),
   sys(true),
@@ -45,27 +44,28 @@ Encoder<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N <= 0)
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K > N)
 	{
 		std::stringstream message;
 		message << "'K' has to be smaller or equal to 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p = this->create_task("encode");
 	auto ps_U_K = this->template create_socket_in <B>(p, "U_K", this->K);
 	auto ps_X_N = this->template create_socket_out<B>(p, "X_N", this->N);
-	this->create_codelet(p, [ps_U_K, ps_X_N](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p, [ps_U_K, ps_X_N]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &enc = static_cast<Encoder<B>&>(m);
 		if (enc.is_memorizing())
@@ -84,7 +84,7 @@ Encoder<B>
 				          static_cast<B*>(t[ps_X_N].get_dataptr()) + (f +1) * enc.N,
 				          enc.X_N_mem[frame_id + f].begin());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	std::iota(info_bits_pos.begin(), info_bits_pos.end(), 0);
@@ -94,7 +94,7 @@ template <typename B>
 Encoder<B>* Encoder<B>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
@@ -195,7 +195,7 @@ bool Encoder<B>
 		std::stringstream message;
 		message << "'X_N.size()' has to be equal to 'N' ('X_N.size()' = " << X_N.size()
 		        << ", 'N' = " << this->N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return this->is_codeword(X_N.data());
@@ -205,7 +205,7 @@ template <typename B>
 bool Encoder<B>
 ::is_codeword(const B *X_N)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
@@ -226,7 +226,7 @@ template <typename B>
 void Encoder<B>
 ::_encode(const B *U_K, B *X_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>

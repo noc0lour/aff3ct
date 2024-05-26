@@ -1,8 +1,8 @@
 #include <sstream>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 
 #ifdef _MSC_VER
@@ -22,7 +22,7 @@ void Reorderer<T>
 
 	int start_seq_loop = 0;
 
-	if (is_power_of_2((int)in_data.size()) && (int)in_data.size() >= 2 && (int)in_data.size() <= mipp::nElReg<T>())
+	if (spu::tools::is_power_of_2((int)in_data.size()) && (int)in_data.size() >= 2 && (int)in_data.size() <= mipp::nElReg<T>())
 	{
 		mipp::reg regs_inter[mipp::nElReg<T>()];
 
@@ -141,14 +141,14 @@ void Reorderer_static<T,N_FRAMES>
 		std::stringstream message;
 		message << "'in_data.size()' has to be equal to 'N_FRAMES' ('in_data.size()' = " << in_data.size()
 		        << ", 'N_FRAMES' = " << N_FRAMES << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	constexpr int n_fra = N_FRAMES;
 
 	int start_seq_loop = 0;
 
-	if (is_power_of_2((int)in_data.size()) && (int)in_data.size() >= 2 && (int)in_data.size() <= mipp::nElReg<T>())
+	if (spu::tools::is_power_of_2((int)in_data.size()) && (int)in_data.size() >= 2 && (int)in_data.size() <= mipp::nElReg<T>())
 	{
 #ifndef _MSC_VER
 		mipp::reg regs_inter[n_fra];
@@ -207,7 +207,7 @@ void Reorderer<T>
 
 	int start_seq_loop = 0;
 
-	if (is_power_of_2((int)out_data.size()) && (int)out_data.size() >= 2 && (int)out_data.size() <= mipp::nElReg<T>())
+	if (spu::tools::is_power_of_2((int)out_data.size()) && (int)out_data.size() >= 2 && (int)out_data.size() <= mipp::nElReg<T>())
 	{
 		mipp::reg regs_inter[mipp::nElReg<T>()];
 
@@ -382,7 +382,7 @@ void Reorderer_static<T,N_FRAMES>
 		std::stringstream message;
 		message << "'out_data.size()' has to be equal to 'N_FRAMES' ('out_data.size()' = " << out_data.size()
 		        << ", 'N_FRAMES' = " << N_FRAMES << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	constexpr int n_fra   = N_FRAMES;
@@ -390,7 +390,7 @@ void Reorderer_static<T,N_FRAMES>
 
 	int start_seq_loop = 0;
 
-	if (is_power_of_2((int)out_data.size()) && (int)out_data.size() >= 2 && (int)out_data.size() <= mipp::nElReg<T>())
+	if (spu::tools::is_power_of_2((int)out_data.size()) && (int)out_data.size() >= 2 && (int)out_data.size() <= mipp::nElReg<T>())
 	{
 		mipp::reg regs_inter[mipp::nElReg<T>()];
 

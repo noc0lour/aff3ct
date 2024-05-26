@@ -4,7 +4,8 @@
 #include <cmath>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/RSC/Encoder_RSC_generic_sys.hpp"
 #include "Module/Encoder/RSC/Encoder_RSC_generic_json_sys.hpp"
@@ -117,7 +118,7 @@ module::Encoder_RSC_sys<B>* Encoder_RSC
 	if (this->type == "RSC_JSON") return new module::Encoder_RSC_generic_json_sys<B>(this->K, this->N_cw, this->buffered, this->poly, stream);
 	if (this->type == "RSC"     ) return new module::Encoder_RSC_generic_sys     <B>(this->K, this->N_cw, this->buffered, this->poly        );
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

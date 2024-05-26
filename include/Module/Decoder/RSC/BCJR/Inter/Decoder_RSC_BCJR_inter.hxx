@@ -2,7 +2,8 @@
 #include <limits>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Inter/Decoder_RSC_BCJR_inter.hpp"
 
 namespace aff3ct
@@ -121,7 +122,7 @@ Decoder_RSC_BCJR_inter<B,R>
 
 	for (unsigned i = 0; i < req_trellis.size(); i++)
 		if (trellis[i] != req_trellis[i])
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
 
 	for (auto i = 0; i < 8; i++) alpha[i].resize((K +4) * mipp::nElmtsPerRegister<R>());
 	for (auto i = 0; i < 8; i++) beta [i].resize((K +4) * mipp::nElmtsPerRegister<R>());
@@ -134,7 +135,7 @@ template <typename B, typename R>
 Decoder_RSC_BCJR_inter<B,R>* Decoder_RSC_BCJR_inter<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

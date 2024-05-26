@@ -7,7 +7,8 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Module/Decoder/RSC/BCJR/Decoder_RSC_BCJR.hpp"
 
@@ -33,11 +34,11 @@ Decoder_RSC_BCJR<B,R>
 	const std::string name = "Decoder_RSC_BCJR";
 	this->set_name(name);
 
-	if (!tools::is_power_of_2(n_states))
+	if (!spu::tools::is_power_of_2(n_states))
 	{
 		std::stringstream message;
 		message << "'n_states' has to be a power of 2 ('n_states' = " << n_states << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -61,7 +62,7 @@ template <typename B, typename R>
 Decoder_RSC_BCJR<B,R>* Decoder_RSC_BCJR<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

@@ -5,8 +5,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Constellation/Constellation.hpp"
 
 namespace aff3ct
@@ -39,7 +39,7 @@ Constellation<R>
 		std::stringstream message;
 		message << "'symbols.size()' has to be a power of 2 ('symbols.size()' = "
 		        << symbols.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -124,7 +124,7 @@ template <typename R>
 typename Constellation<R>::S Constellation<R>
 ::bits_to_symbol(const uint8_t bits[]) const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -142,7 +142,7 @@ void Constellation<R>
 			this->constellation[j] = this->bits_to_symbol(bits.data());
 		}
 	}
-	catch(tools::unimplemented_error&)
+	catch(spu::tools::unimplemented_error&)
 	{} // constellation has been filled by another way
 
 	is_cplx = has_complex_symbols(*this);

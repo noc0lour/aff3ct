@@ -1,7 +1,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RSC_DB/Encoder_RSC_DB.hpp"
 
 using namespace aff3ct;
@@ -24,7 +25,7 @@ Encoder_RSC_DB<B>
 	{
 		std::stringstream message;
 		message << "'N' has to be equal to 2 * 'K' ('N' = " << N << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// poly: A,B,Y,W,Feed : all in binary
@@ -69,14 +70,14 @@ Encoder_RSC_DB<B>
 	{
 		std::stringstream message;
 		message << "'standard' has to be equal to DVB-RCS1 or DVB-RCS2 ('standard' = " << standard << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly.size() != 5)
 	{
 		std::stringstream message;
 		message << "'poly.size()' has to be equal to 5 ('poly.size()' = " << poly.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly[0].size() != n_ff)
@@ -84,7 +85,7 @@ Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'poly[0].size()' has to be equal to 'n_ff' ('poly[0].size()' = " << poly[0].size()
 		        << ", 'n_ff' = " << n_ff << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly[1].size() != n_ff)
@@ -92,7 +93,7 @@ Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'poly[1].size()' has to be equal to 'n_ff' ('poly[1].size()' = " << poly[1].size()
 		        << ", 'n_ff' = " << n_ff << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly[2].size() != n_ff+1)
@@ -100,7 +101,7 @@ Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'poly[2].size()' has to be equal to 'n_ff+1' ('poly[2].size()' = " << poly[2].size()
 		        << ", 'n_ff+1' = " << (n_ff+1) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly[3].size() != n_ff+1)
@@ -108,7 +109,7 @@ Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'poly[3].size()' has to be equal to 'n_ff+1' ('poly[3].size()' = " << poly[3].size()
 		        << ", 'n_ff+1' = " << (n_ff+1) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)poly[4].size() != n_ff)
@@ -116,14 +117,14 @@ Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'poly[4].size()' has to be equal to 'n_ff' ('poly[4].size()' = " << poly[4].size()
 		        << ", 'n_ff' = " << n_ff << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K % 2)
 	{
 		std::stringstream message;
 		message << "'K' has to be even ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	int p0, p1, p2, p3;
@@ -253,7 +254,7 @@ void Encoder_RSC_DB<B>
 		std::stringstream message;
 		message << "'end_state' should match 'init_state' ('end_state' = " << end_state
 		        << ", 'init_state' = " << init_state << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

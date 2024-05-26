@@ -1,6 +1,5 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Documentation/documentation.h"
 #include "Simulation/BFER/Iterative/Simulation_BFER_ite.hpp"
 #include "Factory/Simulation/BFER/BFER_ite.hpp"

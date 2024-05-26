@@ -2,8 +2,9 @@
 #include <utility>
 #include <thread>
 
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
-#include "Tools/Math/utils.h"
 #include "Factory/Simulation/BFER/BFER.hpp"
 
 using namespace aff3ct;
@@ -222,7 +223,7 @@ void BFER
 	{
 		const auto bit_rate = (float)this->src->K / (float)this->cdc->N;
 		// find the greatest common divisor of K and N
-		auto gcd = tools::greatest_common_divisor(this->src->K, this->cdc->N);
+		auto gcd = spu::tools::greatest_common_divisor(this->src->K, this->cdc->N);
 		std::stringstream br_str;
 		br_str << bit_rate << " (" << this->src->K/gcd << "/" << this->cdc->N/gcd << ")";
 

@@ -2,7 +2,8 @@
 #include <numeric>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/numerical_integration.h"
 #include "Tools/Math/interpolation.h"
 #include "Tools/general_utils.h"
@@ -61,7 +62,7 @@ void Distribution<R>
 	{
 		std::stringstream message;
 		message << "'pdf_x' can't be empty.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (unsigned k = 0; k < this->pdf_y.size(); k++)
@@ -71,7 +72,7 @@ void Distribution<R>
 			std::stringstream message;
 			message << "'pdf_x.size()' has to be equal to 'pdf_y[" << k << "].size()' ('pdf_x.size()' = " << pdf_x.size()
 			        << " and 'pdf_y[" << k << "].size()' = " << pdf_y[k].size() << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 
@@ -106,7 +107,7 @@ void Distribution<R>
 		{
 			std::stringstream message;
 			message << "The sum of pdf_y[" << k << "] is null.";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		// keep the parts of the cdf not parallel to the X axis -> pdf_y not null
@@ -137,7 +138,7 @@ void Distribution<R>
 		{
 			std::stringstream message;
 			message << "The integral of pdf_y[" << k << "] along pdf_x is null.";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		// divide all elements by 'integ'
@@ -178,7 +179,7 @@ void Distribution<R>
 		// keep the parts of the cdf not parallel to the X axis
 		for (unsigned i = 1; i < cumul_y.size(); i++) // keep the first index
 //			if (cumul_y[i] != cumul_y[i-1]) // == means parallel to the X axis
-			if (!tools::comp_equal(cumul_y[i] - cumul_y[i-1], (R)0)) // == means parallel to the X axis
+			if (!spu::tools::comp_equal(cumul_y[i] - cumul_y[i-1], (R)0)) // == means parallel to the X axis
 			{
 				this->cdf_x[k].push_back(interp_x[i]);
 				this->cdf_y[k].push_back(cumul_y [i]);

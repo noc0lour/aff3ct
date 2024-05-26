@@ -2,7 +2,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/compute_parity.h"
 #include "Module/Encoder/Turbo_product/Encoder_turbo_product.hpp"
 
@@ -34,7 +35,7 @@ Encoder_turbo_product<B>
 		        << this->N << ", 'enc_r.get_N()' = " << enc_r.get_N()
 		        << ", 'enc_c.get_N()' = " << enc_c.get_N()
 		        << " and 'parity_extended' = " << parity_extended << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->K != enc_r.get_K() * enc_c.get_K())
@@ -43,7 +44,7 @@ Encoder_turbo_product<B>
 		message << "'K' has to be equal to 'enc_r.get_K()' * 'enc_c.get_K()' ('K' = "
 		        << this->K << ", 'enc_r.get_K()' = " << enc_r.get_K()
 		        << ", 'enc_c.get_K()' = " << enc_c.get_K() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)pi.get_core().get_size())
@@ -51,7 +52,7 @@ Encoder_turbo_product<B>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' has to be equal to 'N' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'N' = " << this->N << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	int par = this->parity_extended ? 1 : 0;
@@ -62,7 +63,7 @@ Encoder_turbo_product<B>
 		message << "'enc_r.get_K() + par' has to be equal to 'enc_c.get_n_frames()' ('enc_r.get_K()' = "
 		        << enc_r.get_K() << ", 'enc_c.get_n_frames()' = " << enc_c.get_n_frames()
 		        << ", 'parity_extended' = " << this->parity_extended << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((size_t)(enc_c.get_N() + par) != enc_r.get_n_frames())
@@ -71,7 +72,7 @@ Encoder_turbo_product<B>
 		message << "'enc_c.get_K() + par' has to be equal to 'enc_r.get_n_frames()' ('enc_c.get_K()' = "
 		        << enc_c.get_K() << ", 'enc_r.get_n_frames()' = " << enc_r.get_n_frames()
 		        << ", 'parity_extended' = " << this->parity_extended << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -88,7 +89,7 @@ template <typename B>
 void Encoder_turbo_product<B>
 ::deep_copy(const Encoder_turbo_product<B> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.enc_r != nullptr) this->enc_r.reset(m.enc_r->clone());
 	if (m.enc_c != nullptr) this->enc_c.reset(m.enc_c->clone());
 	if (m.pi    != nullptr) this->pi   .reset(m.pi   ->clone());

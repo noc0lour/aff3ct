@@ -10,10 +10,7 @@
 #include <memory>
 #include <vector>
 
-#include "Tools/Interface/Interface_set_seed.hpp"
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -39,11 +36,11 @@ namespace module
  * Please use Encoder for inheritance (instead of Encoder)
  */
 template <typename B = int>
-class Encoder : public Module, public tools::Interface_set_seed
+class Encoder : public spu::module::Module, public spu::tools::Interface_set_seed
 {
 public:
-	inline runtime::Task&   operator[](const enc::tsk         t);
-	inline runtime::Socket& operator[](const enc::sck::encode s);
+	inline spu::runtime::Task&   operator[](const enc::tsk         t);
+	inline spu::runtime::Socket& operator[](const enc::sck::encode s);
 
 protected:
 	const int             K;             /*!< Number of information bits in one frame */

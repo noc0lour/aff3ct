@@ -1,7 +1,8 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Fast/Gaussian_noise_generator_fast.hpp"
 
 using namespace aff3ct::tools;
@@ -39,14 +40,16 @@ template <typename R>
 mipp::Reg<R> Gaussian_noise_generator_fast<R>
 ::get_random_simd()
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The MT19937 random generator does not support this type.");
 }
 
 template <typename R>
 R Gaussian_noise_generator_fast<R>
 ::get_random()
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The MT19937 random generator does not support this type.");
 }
 
 namespace aff3ct
@@ -82,7 +85,7 @@ void Gaussian_noise_generator_fast<R>
 ::generate(R *noise, const unsigned length, const R sigma, const R mu) //TODO: integrate mu in the computation
 {
 	if (!mipp::isAligned(noise))
-		throw runtime_error(__FILE__, __LINE__, __func__, "'noise' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'noise' is misaligned memory.");
 
 	const auto twopi = (R)(2.0 * 3.14159265358979323846);
 

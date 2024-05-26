@@ -9,9 +9,7 @@
 #include <memory>
 #include <vector>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -39,12 +37,12 @@ namespace module
  * Please use Puncturer for inheritance (instead of Puncturer)
  */
 template <typename B = int, typename Q = float>
-class Puncturer : public Module
+class Puncturer : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const pct::tsk             t);
-	inline runtime::Socket& operator[](const pct::sck::puncture   s);
-	inline runtime::Socket& operator[](const pct::sck::depuncture s);
+	inline spu::runtime::Task&   operator[](const pct::tsk             t);
+	inline spu::runtime::Socket& operator[](const pct::sck::puncture   s);
+	inline spu::runtime::Socket& operator[](const pct::sck::depuncture s);
 
 protected:
 	const int K;    /*!< Number of information bits in one frame */

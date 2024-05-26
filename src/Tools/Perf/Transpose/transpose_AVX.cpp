@@ -4,7 +4,8 @@
 #include <smmintrin.h>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Transpose/transpose_AVX.h"
 
 inline void _MM_TRANSPOSE8_PS(__m256 &row0, __m256 &row1, __m256 &row2, __m256 &row3, __m256 &row4, __m256 &row5,
@@ -108,7 +109,7 @@ void aff3ct::tools::uchar_transpose_avx(const __m256i *src, __m256i *dst, int n)
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 32 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int constN = n / 32; // NOMBRE DE PAQUET (256 bits) PAR TRAME
@@ -396,7 +397,7 @@ void aff3ct::tools::uchar_itranspose_avx(const __m256i *src, __m256i *dst, int n
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 32 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int constN = n /32; // NOMBRE DE PAQUET (128 bits) PAR TRAME

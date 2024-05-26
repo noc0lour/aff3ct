@@ -2,6 +2,8 @@
 #include <sstream>
 #include <vector>
 
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/Random_column/Interleaver_core_random_column.hpp"
 
 using namespace aff3ct;
@@ -18,7 +20,7 @@ Interleaver_core_random_column<T>
 		std::stringstream message;
 		message << "'size' has to be equal to 'n_cols' * 'col_size' ('size' = " << size
 		        << ", 'n_cols' = " << n_cols << ", 'col_size' = " << col_size << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	rd_engine.seed(seed);

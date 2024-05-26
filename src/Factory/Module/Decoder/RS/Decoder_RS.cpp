@@ -2,7 +2,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/RS/Standard/Decoder_RS_std.hpp"
 #include "Module/Decoder/RS/Genius/Decoder_RS_genius.hpp"
@@ -57,7 +58,7 @@ void Decoder_RS
 	{
 		std::stringstream message;
 		message << "The Galois Field order is null (because N_cw = " << this->N_cw << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (vals.exist({p+"-corr-pow", "T"}))
@@ -95,7 +96,7 @@ module::Decoder_SIHO<B,Q>* Decoder_RS
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "ALGEBRAIC")
 		{
@@ -108,7 +109,7 @@ module::Decoder_SIHO<B,Q>* Decoder_RS
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -3,7 +3,8 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/GSL/User_pdf_noise_generator_GSL.hpp"
 
 using namespace aff3ct;
@@ -71,7 +72,7 @@ template <typename R>
 void User_pdf_noise_generator_GSL<R>
 ::generate(R *draw, const unsigned length, const R noise_power)
 {
-	throw unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Perf/common/hard_decide.h"
+#include <streampu.hpp>
 
+#include "Tools/Perf/common/hard_decide.h"
 #include "Module/Decoder/Generic/Chase/Decoder_chase_std.hpp"
 
 using namespace aff3ct;
@@ -31,14 +31,14 @@ Decoder_chase_std<B,R>
 		std::stringstream message;
 		message << "'max_flips' has to be smaller than 'N' ('max_flips' = " << max_flips
 		        << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (max_flips > 31)
 	{
 		std::stringstream message;
 		message << "'max_flips' has to be smaller or equal to 31 ('max_flips' = " << max_flips << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -55,7 +55,7 @@ template <typename B, typename R>
 void Decoder_chase_std<B,R>
 ::deep_copy(const Decoder_chase_std<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.encoder != nullptr) this->encoder.reset(m.encoder->clone());
 }
 
@@ -67,7 +67,7 @@ int Decoder_chase_std<B,R>
 	{
 		std::stringstream message;
 		message << "'encoder->is_sys()' has to be true.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto status = this->_decode_siho_cw(Y_N, this->best_X_N.data(), frame_id);

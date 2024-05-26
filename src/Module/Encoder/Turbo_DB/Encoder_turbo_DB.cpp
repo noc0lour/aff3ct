@@ -3,7 +3,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Turbo_DB/Encoder_turbo_DB.hpp"
 
 using namespace aff3ct;
@@ -30,14 +31,14 @@ Encoder_turbo_DB<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be a divisible by 2 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != 3 * K)
 	{
 		std::stringstream message;
 		message << "'N' has to be equal to 3 * 'K' ('N' = " << N << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)pi.get_core().get_size() * 2 != K)
@@ -45,7 +46,7 @@ Encoder_turbo_DB<B>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' * 2 has to be equal to 'K' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'K' = " << K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (!enco_n.is_buffered() || !enco_i.is_buffered())
@@ -53,7 +54,7 @@ Encoder_turbo_DB<B>
 		std::stringstream message;
 		message << "Both 'enco_n.is_buffered()' and 'enco_i.is_buffered()' have to be true ('enco_n.is_buffered()' = "
 		        << enco_n.is_buffered() << ", 'enco_i.is_buffered()' = " << enco_i.is_buffered() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enco_n.get_n_frames() != enco_i.get_n_frames())
@@ -61,7 +62,7 @@ Encoder_turbo_DB<B>
 		std::stringstream message;
 		message << "'enco_n.get_n_frames()' has to be equal to 'enco_i.get_n_frames()' ('enco_n.get_n_frames()' = "
 		        << enco_n.get_n_frames() << ", 'enco_i.get_n_frames()' = " << enco_i.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enco_n.get_n_frames() != pi.get_n_frames())
@@ -69,7 +70,7 @@ Encoder_turbo_DB<B>
 		std::stringstream message;
 		message << "'enco_n.get_n_frames()' has to be equal to 'pi.get_n_frames()' ('enco_n.get_n_frames()' = "
 		        << enco_n.get_n_frames() << ", 'pi.get_n_frames()' = " << pi.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->set_n_frames(enco_n.get_n_frames());
@@ -88,7 +89,7 @@ template <typename B>
 void Encoder_turbo_DB<B>
 ::deep_copy(const Encoder_turbo_DB<B> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.enco_n != nullptr) this->enco_n.reset(m.enco_n->clone());
 	if (m.enco_i != nullptr) this->enco_i.reset(m.enco_i->clone());
 	if (m.pi     != nullptr) this->pi    .reset(m.pi    ->clone());

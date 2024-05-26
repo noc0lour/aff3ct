@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/AZCW/Encoder_AZCW.hpp"
 #include "Module/Encoder/Coset/Encoder_coset.hpp"
@@ -98,7 +99,7 @@ module::Encoder<B>* Encoder
 	if (this->type == "COSET") return new module::Encoder_coset<B>(this->K, this->N_cw, this->seed);
 	if (this->type == "USER" ) return new module::Encoder_user <B>(this->K, this->N_cw, this->path, this->start_idx);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

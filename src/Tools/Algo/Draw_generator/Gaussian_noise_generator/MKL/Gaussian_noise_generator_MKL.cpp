@@ -2,7 +2,8 @@
 
 #include <mkl_vsl.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/MKL/Gaussian_noise_generator_MKL.hpp"
 
 using namespace aff3ct::tools;
@@ -51,7 +52,8 @@ template <typename R>
 void Gaussian_noise_generator_MKL<R>
 ::generate(R *noise, const unsigned length, const R sigma, const R mu)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "Adding white Gaussian noise is impossible on this data type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "Adding white Gaussian noise is impossible on this data type.");
 }
 
 namespace aff3ct

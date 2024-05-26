@@ -5,13 +5,12 @@
 #include <memory>
 #include <chrono>
 
+#include <streampu.hpp>
+
 #include "Module/Monitor/MI/Monitor_MI.hpp"
 #include "Module/Monitor/BFER/Monitor_BFER.hpp"
-#include "Runtime/Sequence/Sequence.hpp"
 #include "Tools/Constellation/Constellation.hpp"
 #include "Tools/Math/Distribution/Distributions.hpp"
-#include "Tools/Reporter/Reporter.hpp"
-#include "Tools/Display/Terminal/Terminal.hpp"
 #include "Tools/Display/Dumper/Dumper.hpp"
 #include "Tools/Display/Dumper/Dumper_reduction.hpp"
 #include "Tools/Monitor/Monitor_reduction.hpp"
@@ -43,10 +42,10 @@ protected:
 	// communication sequence
 	std::unique_ptr<module::Monitor_BFER<B    >> monitor_er;
 	std::unique_ptr<module::Monitor_MI  <B,R  >> monitor_mi;
-	std::unique_ptr<runtime::Sequence          > sequence;
+	std::unique_ptr<spu::runtime::Sequence     > sequence;
 
-	std::vector<std::unique_ptr<tools::Reporter>> reporters;
-	std::unique_ptr<tools::Terminal> terminal;
+	std::vector<std::unique_ptr<spu::tools::Reporter>> reporters;
+	std::unique_ptr<spu::tools::Terminal> terminal;
 
 #ifdef AFF3CT_MPI
 	std::unique_ptr<tools::Monitor_reduction_MPI<module::Monitor_BFER<B>>> monitor_er_red;
@@ -72,10 +71,10 @@ public:
 protected:
 	std::unique_ptr<module::Monitor_MI<B,R>> build_monitor_mi();
 	std::unique_ptr<module::Monitor_BFER<B>> build_monitor_er();
-	std::unique_ptr<tools ::Terminal> build_terminal(const std::vector<std::unique_ptr<tools::Reporter>> &reporters);
-	std::vector<std::unique_ptr<tools::Reporter>> build_reporters(const tools ::Noise       < > *noise,
-	                                                              const module::Monitor_BFER<B> *monitor_er,
-	                                                              const module::Monitor_MI<B,R> *monitor_mi);
+	std::unique_ptr<spu::tools::Terminal> build_terminal(const std::vector<std::unique_ptr<spu::tools::Reporter>> &reporters);
+	std::vector<std::unique_ptr<spu::tools::Reporter>> build_reporters(const tools ::Noise       < > *noise,
+	                                                                   const module::Monitor_BFER<B> *monitor_er,
+	                                                                   const module::Monitor_MI<B,R> *monitor_mi);
 
 	virtual void create_modules();
 	virtual void bind_sockets() = 0;

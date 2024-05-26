@@ -2,8 +2,9 @@
 #include <string>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/RA/Decoder_RA.hpp"
 
 using namespace aff3ct;
@@ -33,14 +34,14 @@ Decoder_RA<B, R>
 	{
 		std::stringstream message;
 		message << "'max_iter' has to be greater than 0 ('max_iter' = " << max_iter << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N % K)
 	{
 		std::stringstream message;
 		message << "'K' has to be a multiple of 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)interleaver.get_core().get_size() != N)
@@ -48,7 +49,7 @@ Decoder_RA<B, R>
 		std::stringstream message;
 		message << "'interleaver.get_core().get_size()' has to be equal to 'N' ('interleaver.get_core().get_size()' = "
 		        << interleaver.get_core().get_size() << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Xd[0].resize(N);

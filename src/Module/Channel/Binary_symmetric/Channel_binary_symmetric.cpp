@@ -3,6 +3,8 @@
 #include <string>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Algo/Draw_generator/Event_generator/Standard/Event_generator_std.hpp"
 #include "Tools/Algo/Draw_generator/Event_generator/Fast/Event_generator_fast.hpp"
@@ -52,7 +54,7 @@ tools::Event_generator<R>* create_event_generator(const tools::Event_generator_i
 		default:
 			std::stringstream message;
 			message << "Unsupported 'implem' ('implem' = " << (int)implem << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 }
 
@@ -81,7 +83,7 @@ template <typename R>
 void Channel_binary_symmetric<R>
 ::deep_copy(const Channel_binary_symmetric<R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.event_generator != nullptr) this->event_generator.reset(m.event_generator->clone());
 }
 

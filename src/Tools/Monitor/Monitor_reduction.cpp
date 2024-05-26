@@ -4,7 +4,8 @@
 #include <mpi.h>
 #endif
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Monitor/Monitor_reduction.hpp"
 
 using namespace aff3ct;
@@ -99,7 +100,7 @@ void Monitor_reduction_static
 	{
 		std::stringstream message;
 		message << "'MPI_Allreduce' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	int np;
@@ -107,7 +108,7 @@ void Monitor_reduction_static
 	{
 		std::stringstream message;
 		message << "'MPI_Comm_size' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	int pow_np = std::pow(n_monitor_send, np);
@@ -118,14 +119,14 @@ void Monitor_reduction_static
 		{
 			std::stringstream message;
 			message << "'MPI_Comm_rank' returned '" << ret << "' error code.";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		std::stringstream message;
 		message << "The number of monitors to reduce (" << n_monitor_send << " monitors) with MPI on the process "
 		        << mpi_rank << " is different than for others processes. ('n_monitor_recv' = " << n_monitor_recv
 		        << ", and 'pow_np' = " << pow_np << ").";
-		throw tools::logic_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::logic_error(__FILE__, __LINE__, __func__, message.str());
 	}
 #endif
 }
@@ -139,7 +140,7 @@ bool Monitor_reduction_static
 	{
 		std::stringstream message;
 		message << "'MPI_Allreduce' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_stop_recv > 0)
@@ -150,7 +151,7 @@ bool Monitor_reduction_static
 	{
 		std::stringstream message;
 		message << "'MPI_Comm_size' returned '" << ret << "' error code.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return n_stop_recv == np;

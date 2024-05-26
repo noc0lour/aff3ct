@@ -1,6 +1,8 @@
 #include <type_traits>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/Display/rang_format/rang_format.h"
 #include "Factory/Module/Monitor/BFER/Monitor_BFER.hpp"
 #include "Factory/Module/Monitor/MI/Monitor_MI.hpp"

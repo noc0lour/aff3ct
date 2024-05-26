@@ -2,6 +2,8 @@
 #include <sstream>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Module/Decoder/Polar_MK/SC/Decoder_polar_MK_SC_naive_sys.hpp"
 
 using namespace aff3ct;
@@ -24,9 +26,8 @@ Decoder_polar_MK_SC_naive_sys<B,R>
     {
         std::stringstream message;
         message << "This polar code does not support systematic encoding.";
-        throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+        throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
     }
-
 }
 
 template <typename B, typename R>

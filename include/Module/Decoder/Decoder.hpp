@@ -8,8 +8,8 @@
 #include <cstdint>
 #include <cstddef>
 
-#include "Tools/Interface/Interface_set_seed.hpp"
-#include "Tools/Interface/Interface_reset.hpp"
+#include <streampu.hpp>
+
 #include "Module/Module.hpp"
 
 namespace aff3ct
@@ -39,7 +39,7 @@ namespace module
 		}
 	}
 
-class Decoder : public Module, public tools::Interface_set_seed, public tools::Interface_reset
+class Decoder : public spu::module::Module, public spu::tools::Interface_set_seed, public spu::tools::Interface_reset
 {
 protected:
 	const int           K;          /*!< Number of information bits in one frame */

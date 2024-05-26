@@ -75,7 +75,7 @@ module::Puncturer<B,Q>* Puncturer
 {
 	if (this->type == "NO") return new module::Puncturer_NO<B,Q>(this->K, this->N);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

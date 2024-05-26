@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Code/Polar/decoder_polar_functions.h"
 #include "Module/Decoder/Polar_MK/SC/Decoder_polar_MK_SC_naive.hpp"
@@ -92,7 +93,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar_MK
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		std::vector<std::vector<std::function<Q(const std::vector<Q> &LLRs,
 		                                        const std::vector<B> &bits)>>> lambdas(code.get_kernel_matrices().size());
@@ -101,7 +102,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar_MK
 		{
 			if (tools::Polar_lambdas<B,Q>::functions.find(code.get_kernel_matrices()[l]) ==
 			    tools::Polar_lambdas<B,Q>::functions.end())
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
 
 			if (this->node_type == "MS")
 				lambdas[l] = tools::Polar_lambdas<B,Q,tools::square_plus_MS<Q>>::functions[code.get_kernel_matrices()[l]];
@@ -137,7 +138,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar_MK
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

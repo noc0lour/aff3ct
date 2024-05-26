@@ -4,7 +4,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_i.hpp"
 
 namespace aff3ct
@@ -33,17 +34,17 @@ Pattern_polar_i
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (node == nullptr)
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'node' can't be null.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'node' can't be null.");
 
 	if (min_level < 0)
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 0 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (max_level != -1 && (max_level < 0 || max_level < min_level))
@@ -51,7 +52,7 @@ Pattern_polar_i
 		std::stringstream message;
 		message << "'max_level' has to be equal or greater than 'min_level' ('max_level' = " << max_level
 		        << ", 'min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int *p_size = &size;
@@ -76,7 +77,7 @@ Pattern_polar_i
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 0 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (max_level != -1 && (max_level < 0 || max_level < min_level))
@@ -84,7 +85,7 @@ Pattern_polar_i
 		std::stringstream message;
 		message << "'max_level' has to be equal or greater than 'min_level' ('max_level' = " << max_level
 		        << ", 'min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -187,11 +188,11 @@ int Pattern_polar_i
 		std::stringstream message;
 		message << "'reverse_graph_depth' has to be greater than 0 ('reverse_graph_depth' = "
 		        << reverse_graph_depth << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (node_curr == nullptr)
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'node_curr' can't be null.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'node_curr' can't be null.");
 
 	if ((reverse_graph_depth >= min_level) && (max_level == -1 || reverse_graph_depth <= max_level))
 		return _match(reverse_graph_depth, node_curr);

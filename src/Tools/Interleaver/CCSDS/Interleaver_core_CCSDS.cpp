@@ -1,7 +1,8 @@
 #include <map>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/CCSDS/Interleaver_core_CCSDS.hpp"
 
 using namespace aff3ct;
@@ -45,7 +46,7 @@ void Interleaver_core_CCSDS<T>
 		std::stringstream message;
 		message << "There is no CCSDS k_1 and k_2 parameters for 'size' = " << size
 		        << " (supported sizes are 1784, 3568, 7136 and 8920).";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

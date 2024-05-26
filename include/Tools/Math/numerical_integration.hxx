@@ -1,6 +1,7 @@
 #include <mipp.h>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Math/numerical_integration.h"
 
 namespace aff3ct
@@ -89,7 +90,7 @@ R trapz_integral_seq(const R* y, const R step, int size)
 	for (auto i = 1; i < size; i++)
 		area += y[i];
 
-	area += div2(y[size]);
+	area += spu::tools::div2(y[size]);
 
 	return area * step;
 }
@@ -139,7 +140,7 @@ R trapz_integral_seq(const R* x, const R* y, int size)
 	R area = 0;
 
 	for (auto i = 0; i < size; i++)
-		area += div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
+		area += spu::tools::div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
 
 	return area;
 }
@@ -168,7 +169,7 @@ void cumtrapz_integral_seq(const R* x, const R* y, R* cumul, int size)
 	for (auto i = 0; i < size; i++)
 	{
 		cumul[i] = area;
-		area += div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
+		area += spu::tools::div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
 	}
 
 	cumul[size] = area;
@@ -188,7 +189,7 @@ R trapz_integral_seq(Function f, const R min, const R max, const int number_step
 	for (R i = min + step ; i <= stop ; i += step)
 		area += f(i);
 
-	area += div2(f(max) + f(min));
+	area += spu::tools::div2(f(max) + f(min));
 
 	return area * step;
 }
@@ -277,7 +278,7 @@ R mid_rect_integral_seq(const R* x, const R* y, int size)
 	R area = 0;
 
 	for (auto i = 0; i < size; i++)
-		area += div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
+		area += spu::tools::div2((y[i+1] + y[i])) * (x[i+1] - x[i]);
 
 	return area;
 }
@@ -334,7 +335,7 @@ R simps_integral_seq(Function f, const R min, const R max, const int number_step
 	R area = (R)0;
 
 	for (R i = min ; i < max ; i += step)
-		area += f(i) + 4*f(i+div2(step)) + f(i+step);
+		area += f(i) + 4*f(i+spu::tools::div2(step)) + f(i+step);
 
 	return area * step / (R)6;
 }

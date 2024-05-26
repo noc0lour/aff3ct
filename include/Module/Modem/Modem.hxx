@@ -2,7 +2,6 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/Modem.hpp"
 
 namespace aff3ct
@@ -11,65 +10,65 @@ namespace module
 {
 
 template <typename B, typename R, typename Q>
-runtime::Task& Modem<B,R,Q>
+spu::runtime::Task& Modem<B,R,Q>
 ::operator[](const mdm::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::modulate s)
 {
-	return Module::operator[]((size_t)mdm::tsk::modulate)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::modulate)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::tmodulate s)
 {
-	return Module::operator[]((size_t)mdm::tsk::tmodulate)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::tmodulate)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::filter s)
 {
-	return Module::operator[]((size_t)mdm::tsk::filter)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::filter)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::demodulate s)
 {
-	return Module::operator[]((size_t)mdm::tsk::demodulate)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::demodulate)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::tdemodulate s)
 {
-	return Module::operator[]((size_t)mdm::tsk::tdemodulate)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::tdemodulate)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::demodulate_wg s)
 {
-	return Module::operator[]((size_t)mdm::tsk::demodulate_wg)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::demodulate_wg)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
-runtime::Socket& Modem<B,R,Q>
+spu::runtime::Socket& Modem<B,R,Q>
 ::operator[](const mdm::sck::tdemodulate_wg s)
 {
-	return Module::operator[]((size_t)mdm::tsk::tdemodulate_wg)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mdm::tsk::tdemodulate_wg)[(size_t)s];
 }
 
 template <typename B, typename R, typename Q>
 Modem<B,R,Q>
 ::Modem(const int N, const int N_mod, const int N_fil)
-: Module(),
+: spu::module::Module(),
   N(N),
   N_mod(N_mod),
   N_fil(N_fil),
@@ -85,21 +84,21 @@ Modem<B,R,Q>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N_mod <= 0)
 	{
 		std::stringstream message;
 		message << "'N_mod' has to be greater than 0 ('N_mod' = " << N_mod  << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N_fil <= 0)
 	{
 		std::stringstream message;
 		message << "'N_fil' has to be greater than 0 ('N_fil' = " << N_fil << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->init_processes();
@@ -124,14 +123,14 @@ Modem<B,R,Q>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N_mod <= 0)
 	{
 		std::stringstream message;
 		message << "'N_mod' has to be greater than 0 ('N_mod' = " << N_mod  << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->init_processes();
@@ -156,7 +155,7 @@ Modem<B,R,Q>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->init_processes();
@@ -166,7 +165,7 @@ template <typename B, typename R, typename Q>
 Modem<B,R,Q>* Modem<B,R,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
@@ -176,7 +175,8 @@ void Modem<B,R,Q>
 	auto &p1 = this->create_task("modulate");
 	auto p1s_X_N1 = this->template create_socket_in <B>(p1, "X_N1", this->N    );
 	auto p1s_X_N2 = this->template create_socket_out<R>(p1, "X_N2", this->N_mod);
-	this->create_codelet(p1, [p1s_X_N1, p1s_X_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_X_N1, p1s_X_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -184,13 +184,14 @@ void Modem<B,R,Q>
 		              static_cast<R*>(t[p1s_X_N2].get_dataptr()),
 		              frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p7 = this->create_task("tmodulate");
 	auto p7s_X_N1 = this->template create_socket_in <Q>(p7, "X_N1", this->N    );
 	auto p7s_X_N2 = this->template create_socket_out<R>(p7, "X_N2", this->N_mod);
-	this->create_codelet(p7, [p7s_X_N1, p7s_X_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p7, [p7s_X_N1, p7s_X_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -198,14 +199,15 @@ void Modem<B,R,Q>
 		               static_cast<R*>(t[p7s_X_N2].get_dataptr()),
 		               frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("filter");
 	auto p2s_CP   = this->template create_socket_in <float>(p2, "CP",             1);
 	auto p2s_Y_N1 = this->template create_socket_in <R    >(p2, "Y_N1", this->N_mod);
 	auto p2s_Y_N2 = this->template create_socket_out<R    >(p2, "Y_N2", this->N_fil);
-	this->create_codelet(p2, [p2s_CP, p2s_Y_N1, p2s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_CP, p2s_Y_N1, p2s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -216,14 +218,15 @@ void Modem<B,R,Q>
 
 		mdm.last_channel_param = *static_cast<float*>(t[p2s_CP].get_dataptr());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p3 = this->create_task("demodulate");
 	auto p3s_CP   = this->template create_socket_in <float>(p3, "CP",             1);
 	auto p3s_Y_N1 = this->template create_socket_in <Q    >(p3, "Y_N1", this->N_fil);
 	auto p3s_Y_N2 = this->template create_socket_out<Q    >(p3, "Y_N2", this->N    );
-	this->create_codelet(p3, [p3s_CP, p3s_Y_N1, p3s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p3, [p3s_CP, p3s_Y_N1, p3s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -234,7 +237,7 @@ void Modem<B,R,Q>
 
 		mdm.last_channel_param = *static_cast<float*>(t[p3s_CP].get_dataptr());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p4 = this->create_task("tdemodulate");
@@ -242,7 +245,8 @@ void Modem<B,R,Q>
 	auto p4s_Y_N1 = this->template create_socket_in <Q    >(p4, "Y_N1", this->N_fil);
 	auto p4s_Y_N2 = this->template create_socket_in <Q    >(p4, "Y_N2", this->N    );
 	auto p4s_Y_N3 = this->template create_socket_out<Q    >(p4, "Y_N3", this->N    );
-	this->create_codelet(p4, [p4s_CP, p4s_Y_N1, p4s_Y_N2, p4s_Y_N3](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p4, [p4s_CP, p4s_Y_N1, p4s_Y_N2, p4s_Y_N3]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -254,7 +258,7 @@ void Modem<B,R,Q>
 
 		mdm.last_channel_param = *static_cast<float*>(t[p4s_CP].get_dataptr());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p5 = this->create_task("demodulate_wg");
@@ -262,7 +266,8 @@ void Modem<B,R,Q>
 	auto p5s_H_N  = this->template create_socket_in <R    >(p5, "H_N",  this->N_fil);
 	auto p5s_Y_N1 = this->template create_socket_in <Q    >(p5, "Y_N1", this->N_fil);
 	auto p5s_Y_N2 = this->template create_socket_out<Q    >(p5, "Y_N2", this->N    );
-	this->create_codelet(p5, [p5s_CP, p5s_H_N, p5s_Y_N1, p5s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p5, [p5s_CP, p5s_H_N, p5s_Y_N1, p5s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -274,7 +279,7 @@ void Modem<B,R,Q>
 
 		mdm.last_channel_param = *static_cast<float*>(t[p5s_CP].get_dataptr());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p6 = this->create_task("tdemodulate_wg");
@@ -283,8 +288,8 @@ void Modem<B,R,Q>
 	auto p6s_Y_N1 = this->template create_socket_in <Q    >(p6, "Y_N1", this->N_fil);
 	auto p6s_Y_N2 = this->template create_socket_in <Q    >(p6, "Y_N2", this->N    );
 	auto p6s_Y_N3 = this->template create_socket_out<Q    >(p6, "Y_N3", this->N    );
-	this->create_codelet(p6, [p6s_CP, p6s_H_N, p6s_Y_N1, p6s_Y_N2, p6s_Y_N3](Module &m, runtime::Task &t, const size_t frame_id)
-		-> int
+	this->create_codelet(p6, [p6s_CP, p6s_H_N, p6s_Y_N1, p6s_Y_N2, p6s_Y_N3]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mdm = static_cast<Modem<B,R,Q>&>(m);
 
@@ -297,7 +302,7 @@ void Modem<B,R,Q>
 
 		mdm.last_channel_param = *static_cast<float*>(t[p6s_CP].get_dataptr());
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 }
 
@@ -511,49 +516,49 @@ template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_modulate(const B *X_N1, R *X_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_tmodulate(const Q *X_N1, R *X_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_filter(const float *CP, const R *Y_N1, R *Y_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_demodulate(const float *CP, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_demodulate_wg(const float *CP, const R *H_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_tdemodulate(const float *CP, const Q *Y_N1, const Q *Y_N2, Q *Y_N3, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>
 void Modem<B,R,Q>
 ::_tdemodulate_wg(const float *CP, const R *H_N, const Q *Y_N1, const Q *Y_N2, Q *Y_N3, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q>

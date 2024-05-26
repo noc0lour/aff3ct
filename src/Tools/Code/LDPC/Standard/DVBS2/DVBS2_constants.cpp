@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Standard/DVBS2/DVBS2_constants.hpp"
 #include "Tools/Code/LDPC/Standard/DVBS2/DVBS2_constants_64800.hpp"
 #include "Tools/Code/LDPC/Standard/DVBS2/DVBS2_constants_16200.hpp"
@@ -102,7 +103,7 @@ std::unique_ptr<dvbs2_values> aff3ct::tools::build_dvbs2(const int K, const int 
 	{
 		std::stringstream message;
 		message << "The given format doesn't match any known generator matrix ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K != dvbs2->K)
@@ -110,7 +111,7 @@ std::unique_ptr<dvbs2_values> aff3ct::tools::build_dvbs2(const int K, const int 
 		std::stringstream message;
 		message << "'K' has to be equal to 'dvbs2->K' ('K' = " << K
 		        << ", 'dvbs2->K' = " << dvbs2->K << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != dvbs2->N)
@@ -118,7 +119,7 @@ std::unique_ptr<dvbs2_values> aff3ct::tools::build_dvbs2(const int K, const int 
 		std::stringstream message;
 		message << "'N' has to be equal to 'dvbs2->N' ('N' = " << N
 		        << ", 'dvbs2->N' = " << dvbs2->N << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (dvbs2->Q != (dvbs2->N - dvbs2->K)/dvbs2->M)
@@ -126,7 +127,7 @@ std::unique_ptr<dvbs2_values> aff3ct::tools::build_dvbs2(const int K, const int 
 		std::stringstream message;
 		message << "'Q' has to be equal to ('N' - 'K')/'M'  ('Q' = " << dvbs2->Q << ", 'N' = " << dvbs2->N
 		        << ", 'K' = " << dvbs2->K << ", 'M' = " << dvbs2->M << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (dvbs2->K != (dvbs2->M * dvbs2->N_LINES))
@@ -134,7 +135,7 @@ std::unique_ptr<dvbs2_values> aff3ct::tools::build_dvbs2(const int K, const int 
 		std::stringstream message;
 		message << "'K' has to be equal to ('M' * 'N_LINES')  ('K' = " << dvbs2->K << ", 'M' = " << dvbs2->M
 		        << ", 'N_LINES' = " << dvbs2->N_LINES << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return dvbs2;

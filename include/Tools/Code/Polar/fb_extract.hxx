@@ -1,6 +1,7 @@
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_i.hpp"
 #include "Tools/Code/Polar/fb_extract.h"
 
@@ -47,7 +48,7 @@ void fb_extract(const std::vector<std::pair<unsigned char, int>> &leaves_pattern
 				sk_idx += (n_elmts -1) * N_FRAMES;
 				break;
 			default:
-				throw runtime_error(__FILE__, __LINE__, __func__,  "Unknown polar node type.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,  "Unknown polar node type.");
 				break;
 		}
 		off_s += n_elmts;

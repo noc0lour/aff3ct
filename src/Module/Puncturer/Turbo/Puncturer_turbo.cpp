@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Puncturer/Turbo/Puncturer_turbo.hpp"
 
 using namespace aff3ct;
@@ -25,7 +26,7 @@ Puncturer_turbo<B,Q>
 	{
 		std::stringstream message;
 		message << "'tail_bits' has to be positive ('tail_bits' = " << tail_bits << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != compute_N(K, tail_bits, pattern_bits))
@@ -34,7 +35,7 @@ Puncturer_turbo<B,Q>
 		message << "'N' has to be equal to ('K' / 'period') * 'bit_count' + 'tail_bits' ('N' = " << N
 		        << ", 'tail_bits' = " << tail_bits << ", 'K' = " << K << ", 'period' = " << get_period(pattern_bits)
 		        << ", 'pattern' = " << display_pattern(pattern_bits) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -205,7 +206,7 @@ void Puncturer_turbo<B,Q>
 		std::stringstream message;
 		message << "'pattern' should give 3 different set delimited by a comma ('pattern' = "
 		        << display_pattern(pattern_bits) << ", 'pattern_bits.size()' = " << pattern_bits.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (pattern_bits[0].size() != pattern_bits[1].size() || pattern_bits[0].size() != pattern_bits[2].size())
@@ -215,7 +216,7 @@ void Puncturer_turbo<B,Q>
 		        << ", 'pattern_bits[0].size()' = " << pattern_bits[0].size()
 		        << ", 'pattern_bits[1].size()' = " << pattern_bits[1].size()
 		        << ", 'pattern_bits[2].size()' = " << pattern_bits[2].size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto period = get_period   (pattern_bits);
@@ -226,7 +227,7 @@ void Puncturer_turbo<B,Q>
 		std::stringstream message;
 		message << "'period' has to be a multiple of 'K' or all bits must be at '1' ('period' = " << period
 		        << ", 'K' = " << K << ", 'pattern' = " << display_pattern(pattern_bits) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

@@ -5,11 +5,12 @@
 #include <numeric>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/AList/AList.hpp"
 #include "Tools/Code/LDPC/QC/QC.hpp"
 #include "Tools/general_utils.h"
 #include "Tools/Math/matrix.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Algo/Matrix/matrix_utils.h"
 #include "Tools/Code/LDPC/Matrix_handler/LDPC_matrix_handler.hpp"
 
@@ -24,7 +25,7 @@ LDPC_matrix_handler::Matrix_format LDPC_matrix_handler
 	{
 		std::stringstream message;
 		message << "'filename' couldn't be opened ('filename' = " << filename << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return get_matrix_format(file);
@@ -48,7 +49,7 @@ LDPC_matrix_handler::Matrix_format LDPC_matrix_handler
 
 	std::stringstream message;
 	message << "The given LDPC matrix file does not represent a known matrix type (ALIST, QC).";
-	throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 }
 
 
@@ -60,7 +61,7 @@ Sparse_matrix LDPC_matrix_handler
 	{
 		std::stringstream message;
 		message << "'filename' couldn't be opened ('filename' = " << filename << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return read(file, info_bits_pos, pct_pattern);
@@ -115,7 +116,7 @@ void LDPC_matrix_handler
 	{
 		std::stringstream message;
 		message << "'filename' couldn't be opened ('filename' = " << filename << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return read_matrix_size(file, H, N);
@@ -154,7 +155,7 @@ bool LDPC_matrix_handler
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << K << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto pos : info_bits_pos)
@@ -165,7 +166,7 @@ bool LDPC_matrix_handler
 
 			std::stringstream message;
 			message << "'pos' has to be smaller than 'N' ('pos' = " << pos << ", 'N' = " << N << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 	return true;
@@ -236,7 +237,7 @@ LDPC_matrix_handler::LDPC_matrix LU_decomp(const LDPC_matrix_handler::LDPC_matri
 			{
 				std::stringstream message;
 				message << "Matrix H2 (H = [H1 H2]) is not invertible";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			std::swap(Hinv[r], Hinv[r_swap]);
@@ -352,7 +353,8 @@ LDPC_matrix_handler::LDPC_matrix LU_decomp2(const LDPC_matrix_handler::LDPC_matr
 		{
 			n_min = d;
 			rank_deficient = true;
-			throw runtime_error(__FILE__, __LINE__, __func__, "The matrix H is rank deficient, the SPARSE method can't handle it for now.");
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+			                                "The matrix H is rank deficient, the SPARSE method can't handle it for now.");
 			break;
 		}
 
@@ -477,7 +479,8 @@ LDPC_matrix_handler::LDPC_matrix LDPC_matrix_handler
 	// 	GHp[r][r] = !GHp[r][r];
 
 	// if (!all_zeros(GHp))
-	// 	throw runtime_error(__FILE__, __LINE__, __func__, "Generated Gp from H is not good (Gp * Hp != Identity).");
+	// 	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	// 	                                Generated Gp from H is not good (Gp * Hp != Identity).");
 
 	info_bits_pos.resize(K);
 	std::iota(info_bits_pos.begin(), info_bits_pos.end(), 0);
@@ -877,7 +880,7 @@ Sparse_matrix LDPC_matrix_handler
 		message << "'mat.get_n_cols()' has to be equal to interleaver length 'old_cols_pos.size()' "
 		        << "('mat.get_n_cols()' = " << mat.get_n_cols()
 		        << ", 'old_cols_pos.size()' = " << old_cols_pos.size() << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Sparse_matrix itl_mat(mat.get_n_rows(), mat.get_n_cols());
@@ -900,7 +903,7 @@ LDPC_matrix_handler::Positions_vector LDPC_matrix_handler
 		message << "'info_bits_pos.size()' has to be smaller than or equal to interleaver length 'old_cols_pos.size()' "
 		        << " ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'old_cols_pos.size()' = " << old_cols_pos.size() << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Positions_vector itl_vec(info_bits_pos.size());
@@ -922,7 +925,7 @@ LDPC_matrix_handler::Positions_vector LDPC_matrix_handler
 		std::stringstream message;
 		message << "'cnt' has to be equal to 'itl_vec.size()' ('cnt' = " << cnt
 		        << ", 'itl_vec.size()' = " << itl_vec.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return itl_vec;
@@ -953,7 +956,8 @@ bool LDPC_matrix_handler
 					GH = bgemm(G, H);
 				break;
 				case Matrix::Way::VERTICAL:
-					throw runtime_error(__FILE__, __LINE__, __func__, "G and H can't be both in VERTICAL way.");
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+					                                "G and H can't be both in VERTICAL way.");
 				break;
 			}
 		break;
@@ -987,7 +991,8 @@ bool LDPC_matrix_handler
 					GH = bgemm(G, H);
 				break;
 				case Matrix::Way::VERTICAL:
-					throw runtime_error(__FILE__, __LINE__, __func__, "G and H can't be both in VERTICAL way.");
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+					                                "G and H can't be both in VERTICAL way.");
 				break;
 			}
 		break;

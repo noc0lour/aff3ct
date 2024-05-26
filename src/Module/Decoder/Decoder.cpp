@@ -2,7 +2,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/Decoder.hpp"
 
 using namespace aff3ct;
@@ -25,21 +26,21 @@ Decoder
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N <= 0)
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K > N)
 	{
 		std::stringstream message;
 		message << "'K' has to be smaller or equal to 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->tasks_with_nullptr.resize((size_t)dec::tsk::SIZE);
@@ -48,7 +49,7 @@ Decoder
 Decoder* Decoder
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 int Decoder
@@ -101,7 +102,7 @@ void Decoder
 		std::stringstream message;
 		message << "'frame_id' has to be smaller than 'get_n_frames()' ('frame_id' = " << frame_id
 		        << ", 'get_n_frames()' = " << this->get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

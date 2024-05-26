@@ -1,8 +1,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Quantizer/Pow2/Quantizer_pow2.hpp"
 
 using namespace aff3ct;
@@ -25,7 +25,7 @@ Quantizer_pow2<R,Q>
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be smaller than 'sizeof(Q)' * 8 ('fixed_point_pos' = " << fixed_point_pos
 		        << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -75,14 +75,14 @@ Quantizer_pow2<R,Q>
 	{
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be greater than 0 ('fixed_point_pos' = " << fixed_point_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (saturation_pos < 2)
 	{
 		std::stringstream message;
 		message << "'saturation_pos' has to be greater than 1 ('saturation_pos' = " << saturation_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (fixed_point_pos > saturation_pos)
@@ -90,7 +90,7 @@ Quantizer_pow2<R,Q>
 		std::stringstream message;
 		message << "'saturation_pos' has to be equal or greater than 'fixed_point_pos' ('saturation_pos' = "
 		        << saturation_pos << ", 'fixed_point_pos' = " << fixed_point_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (sizeof(Q) * 8 <= (unsigned) fixed_point_pos)
@@ -98,21 +98,21 @@ Quantizer_pow2<R,Q>
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be smaller than 'sizeof(Q)' * 8 ('fixed_point_pos' = " << fixed_point_pos
 		        << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (val_max > +(((1 << ((sizeof(Q) * 8) -2))) + ((1 << ((sizeof(Q) * 8) -2)) -1)))
 	{
 		std::stringstream message;
 		message << "'val_max' value is invalid ('val_max' = " << val_max << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (val_min < -(((1 << ((sizeof(Q) * 8) -2))) + ((1 << ((sizeof(Q) * 8) -2)) -1)))
 	{
 		std::stringstream message;
 		message << "'val_min' value is invalid ('val_min' = " << val_min << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -161,7 +161,7 @@ void Quantizer_pow2<R,Q>
 {
 	auto size = (unsigned)(this->N);
 	for (unsigned i = 0; i < size; i++)
-		Y_N2[i] = (Q)tools::saturate((R)std::round((R)factor * Y_N1[i]), (R)val_min, (R)val_max);
+		Y_N2[i] = (Q)spu::tools::saturate((R)std::round((R)factor * Y_N1[i]), (R)val_min, (R)val_max);
 }
 
 // ==================================================================================== explicit template instantiation

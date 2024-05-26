@@ -1,6 +1,5 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Monitor/Monitor.hpp"
 #include "Factory/Module/Monitor/Monitor.hpp"
 

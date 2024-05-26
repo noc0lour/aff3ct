@@ -2,8 +2,9 @@
 #include <utility>
 #include <tuple>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Documentation/documentation.h"
 #include "Module/Puncturer/NO/Puncturer_NO.hpp"
 #include "Module/Puncturer/Turbo/Puncturer_turbo.hpp"
@@ -109,7 +110,7 @@ module::Puncturer<B,Q>* Puncturer_turbo
 {
 	if (this->type == "TURBO") return new module::Puncturer_turbo<B,Q>(this->K, this->N, this->tail_length, this->pattern, this->buffered);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -4,8 +4,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC_DB/BCJR/Decoder_RSC_DB_BCJR.hpp"
 
 using namespace aff3ct;
@@ -34,11 +34,11 @@ Decoder_RSC_DB_BCJR<B,R>
 	const std::string name = "Decoder_RSC_DB_BCJR";
 	this->set_name(name);
 
-	if (!tools::is_power_of_2(n_states))
+	if (!spu::tools::is_power_of_2(n_states))
 	{
 		std::stringstream message;
 		message << "'n_states' has to be a power of 2 ('n_states' = " << n_states << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -46,7 +46,7 @@ template <typename B, typename R>
 Decoder_RSC_DB_BCJR<B,R>* Decoder_RSC_DB_BCJR<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -59,29 +59,29 @@ void Decoder_RSC_DB_BCJR<B,R>
 	{
 		for (auto i = 0; i < this->K / 2; i++)
 		{
-			R a = tools::div2(Y_N[2*i  ]);
-			R b = tools::div2(Y_N[2*i+1]);
+			R a = spu::tools::div2(Y_N[2*i  ]);
+			R b = spu::tools::div2(Y_N[2*i+1]);
 			sys[4*i + 0] =  a + b;
 			sys[4*i + 1] =  a - b;
 			sys[4*i + 2] = -a + b;
 			sys[4*i + 3] = -a - b;
 		}
 		for (auto i = 0; i < this->K; i++)
-			par[i] = tools::div2(Y_N[this->K + i]);
+			par[i] = spu::tools::div2(Y_N[this->K + i]);
 	}
 	else
 	{
 		for (auto i = 0; i < this->K / 2; i++)
 		{
-			R a = tools::div2(Y_N[4*i  ]);
-			R b = tools::div2(Y_N[4*i+1]);
+			R a = spu::tools::div2(Y_N[4*i  ]);
+			R b = spu::tools::div2(Y_N[4*i+1]);
 			sys[4*i + 0] =  a + b;
 			sys[4*i + 1] =  a - b;
 			sys[4*i + 2] = -a + b;
 			sys[4*i + 3] = -a - b;
 
-			par[2*i  ] = tools::div2(Y_N[4*i + 2]);
-			par[2*i+1] = tools::div2(Y_N[4*i + 3]);
+			par[2*i  ] = spu::tools::div2(Y_N[4*i + 2]);
+			par[2*i+1] = spu::tools::div2(Y_N[4*i + 3]);
 		}
 	}
 }

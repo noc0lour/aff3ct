@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Monitor/MI/Monitor_MI.hpp"
 #include "Factory/Module/Monitor/MI/Monitor_MI.hpp"
@@ -67,7 +68,7 @@ module::Monitor_MI<B,R>* Monitor_MI
 {
 	if (this->type == "STD") return new module::Monitor_MI<B,R>(this->N, this->n_trials);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -8,8 +8,9 @@
 #include <type_traits>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/SCMA/Modem_SCMA.hpp"
 
 namespace aff3ct
@@ -40,7 +41,7 @@ Modem_SCMA<B,R,Q,PSI>
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -96,10 +97,10 @@ void Modem_SCMA<B,R,Q,PSI>
 ::_demodulate_wg(const float *CP, const R *H_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	if (*CP != this->last_channel_param && !this->disable_sig2)
 		this->n0 = ((R)4.0 * *CP * *CP);
@@ -122,10 +123,10 @@ void Modem_SCMA<B,R,Q,PSI>
 ::_demodulate(const float *CP, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	if (*CP != this->last_channel_param && !this->disable_sig2)
 		this->n0 = ((R)4.0 * *CP * *CP);
@@ -364,7 +365,7 @@ void Modem_SCMA<B,R,Q,PSI>
 		std::stringstream message;
 		message << "'n_frames' has to be equal to CB.get_number_of_users() ('n_frames' = " << n_frames
 		        << ", 'CB.get_number_of_users()' = " << CB.get_number_of_users() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto old_n_frames = this->get_n_frames();

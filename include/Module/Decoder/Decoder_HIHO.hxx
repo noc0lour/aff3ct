@@ -3,7 +3,6 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Module.hpp"
 #include "Module/Decoder/Decoder_HIHO.hpp"
 
@@ -13,24 +12,24 @@ namespace module
 {
 
 template <typename B>
-runtime::Task& Decoder_HIHO<B>
+spu::runtime::Task& Decoder_HIHO<B>
 ::operator[](const dec::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B>
-runtime::Socket& Decoder_HIHO<B>
+spu::runtime::Socket& Decoder_HIHO<B>
 ::operator[](const dec::sck::decode_hiho s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_hiho)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_hiho)[(size_t)s];
 }
 
 template <typename B>
-runtime::Socket& Decoder_HIHO<B>
+spu::runtime::Socket& Decoder_HIHO<B>
 ::operator[](const dec::sck::decode_hiho_cw s)
 {
-	return Module::operator[]((size_t)dec::tsk::decode_hiho_cw)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)dec::tsk::decode_hiho_cw)[(size_t)s];
 }
 
 template <typename B>
@@ -45,7 +44,8 @@ Decoder_HIHO<B>
 	auto p1s_Y_N = this->template create_socket_in <B     >(p1, "Y_N", this->N);
 	auto p1s_CWD = this->template create_socket_out<int8_t>(p1, "CWD",       1);
 	auto p1s_V_K = this->template create_socket_out<B     >(p1, "V_K", this->K);
-	this->create_codelet(p1, [p1s_Y_N, p1s_CWD, p1s_V_K](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_Y_N, p1s_CWD, p1s_V_K]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &dec = static_cast<Decoder_HIHO<B>&>(m);
 
@@ -67,7 +67,8 @@ Decoder_HIHO<B>
 	auto p2s_Y_N = this->template create_socket_in <B     >(p2, "Y_N", this->N);
 	auto p2s_CWD = this->template create_socket_out<int8_t>(p2, "CWD",       1);
 	auto p2s_V_N = this->template create_socket_out<B     >(p2, "V_N", this->N);
-	this->create_codelet(p2, [p2s_Y_N, p2s_CWD, p2s_V_N](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_Y_N, p2s_CWD, p2s_V_N]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &dec = static_cast<Decoder_HIHO<B>&>(m);
 
@@ -91,7 +92,7 @@ template <typename B>
 Decoder_HIHO<B>* Decoder_HIHO<B>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
@@ -209,7 +210,7 @@ template <typename B>
 int Decoder_HIHO<B>
 ::_decode_hiho(const B *Y_N, B *V_K, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
@@ -225,7 +226,7 @@ template <typename B>
 int Decoder_HIHO<B>
 ::_decode_hiho_cw(const B *Y_N, B *V_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 }

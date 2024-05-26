@@ -9,9 +9,6 @@
 #ifndef AFF3CT_HPP
 #define AFF3CT_HPP
 
-#ifndef AFF3CT_CORE_HPP
-#include <aff3ct-core.hpp>
-#endif
 #ifndef FACTORY_HPP
 #include <Factory/Factory.hpp>
 #endif

@@ -5,7 +5,8 @@
 #include <limits>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Channel/User/Channel_user.hpp"
 
 using namespace aff3ct;
@@ -20,7 +21,7 @@ Channel_user<R>
 	this->set_name(name);
 
 	if (filename.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
 
 	read_noise_file(filename, this->N, this->noise_buff);
 
@@ -74,7 +75,7 @@ read_noise_file(const std::string &filename, const int N, std::vector<std::vecto
 	{
 		Channel_user<R>::read_as_text(filename, N, noise_buffer);
 	}
-	catch(const tools::runtime_error&)
+	catch(const spu::tools::runtime_error&)
 	{
 		Channel_user<R>::read_as_binary(filename, N, noise_buffer);
 	}
@@ -99,7 +100,7 @@ read_as_text(const std::string &filename, const int N, std::vector<std::vector<R
 			std::stringstream message;
 			message << "'n_fra' and 'fra_size' have to be bigger than 0 ('n_fra' = "
 			        << n_fra << ", 'fra_size' = " << fra_size << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		if (fra_size == N)
@@ -115,7 +116,7 @@ read_as_text(const std::string &filename, const int N, std::vector<std::vector<R
 					{
 						std::stringstream message;
 						message << "Not enough data in the file (got " << i << " frames only).";
-						throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+						throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 					}
 
 					R value;
@@ -129,12 +130,12 @@ read_as_text(const std::string &filename, const int N, std::vector<std::vector<R
 
 			std::stringstream message;
 			message << "The frame size is wrong (read: " << fra_size << ", expected: " << N << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else
 	{
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + filename + "' file");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + filename + "' file");
 	}
 }
 
@@ -161,7 +162,7 @@ void Channel_user<R>::read_as_binary(const std::string &filename, const int N, s
 			std::stringstream message;
 			message << "'n_fra' and 'fra_size' have to be bigger than 0 ('n_fra' = "
 			        << n_fra << ", 'fra_size' = " << fra_size << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		const unsigned sizeof_float = (unsigned)length / (n_fra * fra_size);
@@ -205,7 +206,7 @@ void Channel_user<R>::read_as_binary(const std::string &filename, const int N, s
 
 					std::stringstream message;
 					message << "Something went wrong ('sizeof_float' = " << sizeof_float << ").";
-					throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 		}
@@ -215,14 +216,14 @@ void Channel_user<R>::read_as_binary(const std::string &filename, const int N, s
 
 			std::stringstream message;
 			message << "The frame size is wrong (read: " << fra_size << ", expected: " << N << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		file.close();
 	}
 	else
 	{
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + filename + "' file");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + filename + "' file");
 	}
 }
 

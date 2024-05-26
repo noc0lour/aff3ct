@@ -5,9 +5,10 @@
 #include <cmath>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/LDPC/BF/Decoder_LDPC_bit_flipping.hpp"
 
 using namespace aff3ct;
@@ -48,14 +49,14 @@ Decoder_LDPC_bit_flipping<B,R>
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}*/
 
 	if (syndrome_depth <= 0)
 	{
 		std::stringstream message;
 		message << "'syndrome_depth' has to be greater than 0 ('syndrome_depth' = " << syndrome_depth << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != (int)H.get_n_rows())
@@ -63,7 +64,7 @@ Decoder_LDPC_bit_flipping<B,R>
 		std::stringstream message;
 		message << "'N' is not compatible with the H matrix ('N' = " << N << ", 'H.get_n_rows()' = "
 		        << H.get_n_rows() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	transpose.resize(this->n_branches);
@@ -91,7 +92,7 @@ Decoder_LDPC_bit_flipping<B,R>
 				message << "'connections[id_V]' has to be equal or smaller than 'VN_to_CN[id_V].size()' ('id_V' = "
 				        << id_V << ", 'connections[id_V]' = " << connections[id_V] << ", 'VN_to_CN[id_V].size()' = "
 				        << VN_to_CN[id_V].size() << ").";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			transpose[k] = branch_id;
@@ -114,7 +115,7 @@ template <typename B, typename R>
 Decoder_LDPC_bit_flipping<B,R>* Decoder_LDPC_bit_flipping<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

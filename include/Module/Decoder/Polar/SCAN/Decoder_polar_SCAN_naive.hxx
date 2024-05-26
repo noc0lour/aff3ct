@@ -5,8 +5,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Decoder/Polar/SCAN/Decoder_polar_SCAN_naive.hpp"
 
@@ -32,11 +32,11 @@ Decoder_polar_SCAN_naive<B,R,F,V,H,I,S>
 	const std::string name = "Decoder_polar_SCAN_naive";
 	this->set_name(name);
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -44,7 +44,7 @@ Decoder_polar_SCAN_naive<B,R,F,V,H,I,S>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -53,14 +53,14 @@ Decoder_polar_SCAN_naive<B,R,F,V,H,I,S>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (max_iter <= 0)
 	{
 		std::stringstream message;
 		message << "'max_iter' has to be greater than 0 ('max_iter' = " << max_iter << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto t = 0; t < layers_count; t++)
@@ -303,7 +303,7 @@ void Decoder_polar_SCAN_naive<B,R,F,V,H,I,S>
 	{
 		std::stringstream message;
 		message << "'n_frames' has to be equal to 1 ('n_frames' = " << n_frames << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto old_n_frames = this->get_n_frames();

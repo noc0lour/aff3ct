@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/Repetition/Encoder_repetition_sys.hpp"
 #include "Factory/Module/Encoder/Repetition/Encoder_repetition.hpp"
@@ -64,7 +65,7 @@ module::Encoder_repetition_sys<B>* Encoder_repetition
 {
 	if (this->type == "REP") return new module::Encoder_repetition_sys<B>(this->K, this->N_cw, this->buffered);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

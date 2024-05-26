@@ -3,7 +3,8 @@
 #include <memory>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Turbo/Post_processing_SISO/CRC/CRC_checker_DB.hpp"
 #include "Tools/Code/Turbo/Post_processing_SISO/Post_processing_SISO.hpp"
 #include "Module/Encoder/RSC_DB/Encoder_RSC_DB.hpp"
@@ -33,7 +34,7 @@ Codec_turbo_DB<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -41,7 +42,7 @@ Codec_turbo_DB<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -56,7 +57,7 @@ Codec_turbo_DB<B,Q>
 		{
 			this->set_puncturer(pct_params->build<B,Q>());
 		}
-		catch (cannot_allocate const&)
+		catch (spu::tools::cannot_allocate const&)
 		{
 			this->set_puncturer(static_cast<const factory::Puncturer*>(pct_params)->build<B,Q>());
 		}
@@ -77,7 +78,7 @@ Codec_turbo_DB<B,Q>
 		std::unique_ptr<module::Encoder_RSC_DB<B>> sub_enc(enc_params.sub->build<B>());
 		this->set_encoder(enc_params.build<B>(*sub_enc, this->get_interleaver_bit()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -88,7 +89,7 @@ Codec_turbo_DB<B,Q>
 	{
 		this->set_decoder_siho(dec_params.build<B,Q>(&this->get_encoder()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		std::unique_ptr<module::Decoder_RSC_DB_BCJR<B,Q>> sub_dec(dec_params.sub->build_siso<B,Q>(*trellis));
 
@@ -109,7 +110,7 @@ Codec_turbo_DB<B,Q>
 		if (dec_params.fnc->enable)
 		{
 			if (crc == nullptr || std::unique_ptr<module::CRC<B>>(crc->clone())->get_size() == 0)
-				throw runtime_error(__FILE__, __LINE__, __func__, "The Flip aNd Check requires a CRC.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "The Flip aNd Check requires a CRC.");
 
 			post_pros.push_back(std::unique_ptr<Post_processing_SISO<B,Q>>(dec_params.fnc->build<B,Q>(*crc)));
 		}

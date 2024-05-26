@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RA/Encoder_RA.hpp"
 #include "Factory/Module/Encoder/RA/Encoder_RA.hpp"
 
@@ -94,7 +95,7 @@ module::Encoder_RA<B>* Encoder_RA
 {
 	if (this->type == "RA") return new module::Encoder_RA<B>(this->K, this->N_cw, itl);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

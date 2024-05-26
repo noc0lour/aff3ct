@@ -3,7 +3,8 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/GSL/Gaussian_noise_generator_GSL.hpp"
 
 using namespace aff3ct::tools;
@@ -14,7 +15,7 @@ Gaussian_noise_generator_GSL<R>
 : Gaussian_noise_generator<R>(), rng((void*)gsl_rng_alloc(gsl_rng_mt19937))
 {
 	if (rng == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'rng' can't be null.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'rng' can't be null.");
 
 	this->set_seed(seed);
 }

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <ios>
 
+#include <streampu.hpp>
+
 #include "Tools/Reporter/EXIT/Reporter_EXIT.hpp"
 
 using namespace aff3ct;
@@ -55,7 +57,7 @@ typename Reporter_EXIT<B,R>::report_t Reporter_EXIT<B,R>
 	{
 		str_sig_a << noise_a.get_value();
 	}
-	catch(tools::runtime_error&)
+	catch(spu::tools::runtime_error&)
 	{
 		str_sig_a << (R)0.;
 	}

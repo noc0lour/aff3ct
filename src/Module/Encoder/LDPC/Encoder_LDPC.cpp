@@ -1,8 +1,9 @@
 #include <string>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Syndrome/LDPC_syndrome.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Encoder/LDPC/Encoder_LDPC.hpp"
 
 using namespace aff3ct;
@@ -74,7 +75,7 @@ void Encoder_LDPC<B>
 		std::stringstream message;
 		message << "The built G matrix has a dimension 'K' different than the given one ('K' = " << this->K
 		        << ", 'G.get_n_cols()' = " << this->G.get_n_cols() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)this->G.get_n_rows())
@@ -82,7 +83,7 @@ void Encoder_LDPC<B>
 		std::stringstream message;
 		message << "The built G matrix has a dimension 'N' different than the given one ('N' = " << this->N
 		        << ", 'G.get_n_rows()' = " << this->G.get_n_rows() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -95,7 +96,7 @@ void Encoder_LDPC<B>
 		std::stringstream message;
 		message << "The built H matrix has a dimension 'N' different than the given one ('N' = " << this->N
 		        << ", 'H.get_n_rows()' = " << this->H.get_n_rows() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -118,7 +119,7 @@ bool Encoder_LDPC<B>
 ::is_codeword(const B *X_N)
 {
 	if (this->H.get_n_connections() == 0)
-		throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+		throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 
 	return tools::LDPC_syndrome::check_hard(X_N, this->H);
 }

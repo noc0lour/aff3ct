@@ -2,7 +2,8 @@
 #include <cstdint>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/Generic/ML/Decoder_maximum_likelihood.hpp"
 
 namespace aff3ct
@@ -28,7 +29,7 @@ Decoder_maximum_likelihood<B,R>
 		std::stringstream message;
 		message << "'encoder.get_K()' has to be equal to 'K' ('encoder.get_K()' = " << encoder.get_K()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (encoder.get_N() != N)
@@ -36,7 +37,7 @@ Decoder_maximum_likelihood<B,R>
 		std::stringstream message;
 		message << "'encoder.get_N()' has to be equal to 'N' ('encoder.get_N()' = " << encoder.get_N()
 		        << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -44,14 +45,14 @@ template <typename B, typename R>
 Decoder_maximum_likelihood<B,R>* Decoder_maximum_likelihood<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
 void Decoder_maximum_likelihood<B,R>
 ::deep_copy(const Decoder_maximum_likelihood<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.encoder != nullptr) this->encoder.reset(m.encoder->clone());
 }
 

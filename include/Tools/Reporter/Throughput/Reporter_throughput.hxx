@@ -15,7 +15,7 @@ template <typename T>
 Reporter_throughput<T>
 ::Reporter_throughput(std::function<T(void)>  progress_function, const T progress_limit,
                       std::function<T(void)> get_nbits_function, const T nbits_factor)
-: Reporter(),
+: spu::tools::Reporter(),
   progress_function(progress_function),
   get_nbits_function(get_nbits_function),
   progress_limit(progress_limit),
@@ -67,7 +67,7 @@ Reporter_throughput<T>
 }
 
 template <typename T>
-Reporter::report_t Reporter_throughput<T>
+spu::tools::Reporter::report_t Reporter_throughput<T>
 ::report(bool final)
 {
 	assert(this->cols_groups.size() == 1);

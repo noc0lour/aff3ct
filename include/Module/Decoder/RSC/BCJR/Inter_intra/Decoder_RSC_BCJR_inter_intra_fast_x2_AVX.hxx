@@ -7,7 +7,8 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Inter_intra/Decoder_RSC_BCJR_inter_intra_fast_x2_AVX.hpp"
 
 namespace aff3ct
@@ -79,14 +80,14 @@ Decoder_RSC_BCJR_inter_intra_fast_x2_AVX<B,R,MAX>
 	{
 		std::stringstream message;
 		message << "'mipp::nElReg<R>()' has to be equal to 16 ('mipp::nElReg<R>()' = " << mipp::nElReg<R>() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K % 8)
 	{
 		std::stringstream message;
 		message << "'K' has to be divisible by 8 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	RSC_BCJR_inter_intra_fast_x2_AVX_init<R>::apply(this->alpha);

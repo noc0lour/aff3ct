@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Display/Terminal/Standard/Terminal_std.hpp"
 #include "Factory/Tools/Display/Terminal/Terminal.hpp"
@@ -65,10 +66,10 @@ void Terminal
 }
 
 
-tools::Terminal* Terminal
-::build(const std::vector<std::unique_ptr<tools::Reporter>> &reporters) const
+spu::tools::Terminal* Terminal
+::build(const std::vector<std::unique_ptr<spu::tools::Reporter>> &reporters) const
 {
-	if (this->type == "STD") return new tools::Terminal_std(reporters);
+	if (this->type == "STD") return new spu::tools::Terminal_std(reporters);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }

@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/decoder_polar_functions.h"
 #include "Module/Decoder/Polar/SCAN/Decoder_polar_SCAN_naive.hpp"
 
@@ -17,8 +19,8 @@ namespace module
 template <typename B = int, typename R = float, tools::proto_f<  R> F = &tools::f_LLR,
                                                 tools::proto_v<  R> V = &tools::v_LLR,
                                                 tools::proto_h<B,R> H = &tools::h_LLR,
-                                                tools::proto_i<  R> I = &tools::init_LLR,
-                                                tools::proto_s<  R> S = &tools::sat_val>
+                                                tools::proto_i<  R> I = &spu::tools::init_LLR,
+                                                tools::proto_s<  R> S = &spu::tools::sat_val>
 class Decoder_polar_SCAN_naive_sys : public Decoder_polar_SCAN_naive<B,R,F,V,H,I,S>
 {
 public:

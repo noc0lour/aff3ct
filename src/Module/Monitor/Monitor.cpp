@@ -1,5 +1,7 @@
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Module/Monitor/Monitor.hpp"
 
 using namespace aff3ct;
@@ -19,7 +21,7 @@ Monitor
 Monitor* Monitor
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 void Monitor

@@ -8,9 +8,8 @@
 #include <cstdint>
 #include <cstddef>
 
-#include "Tools/Interface/Interface_reset.hpp"
-#include "Tools/Interface/Interface_is_done.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
+
 
 namespace aff3ct
 {
@@ -36,7 +35,7 @@ namespace module
  *
  * Please use Monitor for inheritance (instead of Monitor).
  */
-class Monitor : public Module, public tools::Interface_reset, public tools::Interface_is_done
+class Monitor : public spu::module::Module, public spu::tools::Interface_reset, public spu::tools::Interface_is_done
 {
 public:
 

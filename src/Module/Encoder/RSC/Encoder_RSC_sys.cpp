@@ -1,7 +1,8 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RSC/Encoder_RSC_sys.hpp"
 
 using namespace aff3ct;
@@ -20,7 +21,7 @@ Encoder_RSC_sys<B>
 	{
 		std::stringstream message;
 		message << "'n_ff' has to be greater than 0 ('n_ff' = " << n_ff << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N - 2 * n_ff !=  2 * K)
@@ -28,7 +29,7 @@ Encoder_RSC_sys<B>
 		std::stringstream message;
 		message << "'N' - 2 * 'n_ff' has to be equal to 2 * 'K' ('N' = " << N << ", 'n_ff' = " << n_ff
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (!buffered_encoding)
@@ -145,7 +146,7 @@ void Encoder_RSC_sys<B>
 	{
 		std::stringstream message;
 		message << "'state' should be equal to 0 ('state' = " <<  state << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

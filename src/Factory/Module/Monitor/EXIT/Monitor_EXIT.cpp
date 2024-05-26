@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Monitor/EXIT/Monitor_EXIT.hpp"
 #include "Factory/Module/Monitor/EXIT/Monitor_EXIT.hpp"
@@ -67,7 +68,7 @@ module::Monitor_EXIT<B,R>* Monitor_EXIT
 {
 	if (this->type == "STD") return new module::Monitor_EXIT<B,R>(this->size, this->n_trials);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

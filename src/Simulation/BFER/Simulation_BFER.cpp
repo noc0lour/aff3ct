@@ -8,13 +8,14 @@
 #include <string>
 #include <ios>
 
+#include <streampu.hpp>
+
 #include "Tools/Reporter/MI/Reporter_MI.hpp"
 #include "Tools/Reporter/BFER/Reporter_BFER.hpp"
 #include "Tools/Reporter/Noise/Reporter_noise.hpp"
 #include "Tools/Reporter/Throughput/Reporter_throughput.hpp"
 #include "Tools/Display/rang_format/rang_format.h"
 #include "Tools/Display/Statistics/Statistics.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Simulation/BFER/Simulation_BFER.hpp"
 
 using namespace aff3ct;
@@ -34,7 +35,7 @@ Simulation_BFER<B,R>
 	{
 		std::stringstream message;
 		message << "'n_threads' has to be greater than 0 ('n_threads' = " << params_BFER.n_threads << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (params_BFER.err_track_enable)
@@ -51,7 +52,7 @@ Simulation_BFER<B,R>
 	{
 		this->constellation.reset(params_BFER.mdm->build_constellation<R>());
 	}
-	catch (tools::cannot_allocate&) {}
+	catch (spu::tools::cannot_allocate&) {}
 }
 
 template <typename B, typename R>
@@ -79,12 +80,12 @@ std::unique_ptr<module::Monitor_BFER<B>> Simulation_BFER<B,R>
 }
 
 template <typename B, typename R>
-std::vector<std::unique_ptr<tools::Reporter>> Simulation_BFER<B,R>
+std::vector<std::unique_ptr<spu::tools::Reporter>> Simulation_BFER<B,R>
 ::build_reporters(const tools ::Noise       < > *noise,
 	              const module::Monitor_BFER<B> *monitor_er,
 	              const module::Monitor_MI<B,R> *monitor_mi)
 {
-	std::vector<std::unique_ptr<tools::Reporter>> reporters;
+	std::vector<std::unique_ptr<spu::tools::Reporter>> reporters;
 	auto reporter_noise = new tools::Reporter_noise<>(*noise, this->params_BFER.ter_sigma);
 	reporters.push_back(std::unique_ptr<tools::Reporter_noise<>>(reporter_noise));
 
@@ -103,10 +104,10 @@ std::vector<std::unique_ptr<tools::Reporter>> Simulation_BFER<B,R>
 }
 
 template <typename B, typename R>
-std::unique_ptr<tools::Terminal> Simulation_BFER<B,R>
-::build_terminal(const std::vector<std::unique_ptr<tools::Reporter>> &reporters)
+std::unique_ptr<spu::tools::Terminal> Simulation_BFER<B,R>
+::build_terminal(const std::vector<std::unique_ptr<spu::tools::Reporter>> &reporters)
 {
-	return std::unique_ptr<tools::Terminal>(params_BFER.ter->build(reporters));
+	return std::unique_ptr<spu::tools::Terminal>(params_BFER.ter->build(reporters));
 }
 
 template <typename B, typename R>
@@ -128,7 +129,7 @@ void Simulation_BFER<B,R>
 		this->sequence->export_dot(dot_file);
 	}
 
-	for (auto &mod : sequence->get_modules<module::Module>())
+	for (auto &mod : sequence->get_modules<spu::module::Module>())
 		for (auto &tsk : mod->tasks)
 		{
 			if (this->params.statistics)
@@ -254,7 +255,7 @@ void Simulation_BFER<B,R>
 			{
 				std::stringstream message;
 				message << "Impossible to read the 'chn' file ('chn' = " << params_BFER.chn->path << ").";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			this->noise->clear_callbacks_update();
@@ -317,7 +318,7 @@ void Simulation_BFER<B,R>
 			if (params_BFER.statistics)
 			{
 				std::cout << "#" << std::endl;
-				tools::Stats::show(this->sequence->get_modules_per_types(), true, true, std::cout);
+				spu::tools::Stats::show(this->sequence->get_modules_per_types(), true, true, std::cout);
 				std::cout << "#" << std::endl;
 			}
 		}
@@ -366,7 +367,7 @@ void Simulation_BFER<B,R>
 			this->dumper_red->clear();
 		}
 
-		for (auto &mod : sequence->get_modules<module::Module>())
+		for (auto &mod : sequence->get_modules<spu::module::Module>())
 			for (auto &tsk : mod->tasks)
 				tsk->reset();
 

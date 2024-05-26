@@ -2,7 +2,8 @@
 #include <utility>
 #include <memory>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/Polar/SC/Decoder_polar_SC_naive.hpp"
 #include "Module/Decoder/Polar/SC/Decoder_polar_SC_naive_sys.hpp"
@@ -164,7 +165,7 @@ module::Decoder_SISO<B,Q>* Decoder_polar
 		if (this->implem == "NAIVE") return new module::Decoder_polar_SCAN_naive    <B, Q, tools::f_LLR<Q>, tools::v_LLR<Q>, tools::h_LLR<B,Q>>(this->K, this->N_cw, this->n_ite, frozen_bits);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q, class API_polar>
@@ -216,7 +217,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q, class API_polar>
@@ -248,7 +249,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 	if (decoder != nullptr)
 		return decoder;
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -259,7 +260,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type.find("SCL") != std::string::npos && this->implem == "FAST")
 		{
@@ -354,7 +355,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

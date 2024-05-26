@@ -8,6 +8,7 @@
 #include <mpi.h>
 #endif
 #include <cli.hpp>
+#include <streampu.hpp>
 
 #include "Tools/types.h"
 #include "Tools/version.h"

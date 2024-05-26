@@ -1,5 +1,5 @@
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RS/Encoder_RS.hpp"
 #include "Factory/Module/Encoder/RS/Encoder_RS.hpp"
 
@@ -50,7 +50,7 @@ module::Encoder_RS<B>* Encoder_RS
 {
 	if (this->type == "RS") return new module::Encoder_RS<B>(this->K, this->N_cw, GF);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

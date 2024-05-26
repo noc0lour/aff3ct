@@ -4,7 +4,8 @@
 #include <string>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Turbo/Post_processing_SISO/CRC/CRC_checker.hpp"
 #include "Tools/Code/Turbo/Post_processing_SISO/Self_corrected/Self_corrected.hpp"
 #include "Tools/Code/Turbo/Post_processing_SISO/Post_processing_SISO.hpp"
@@ -35,7 +36,7 @@ Codec_turbo<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -43,7 +44,7 @@ Codec_turbo<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -66,7 +67,7 @@ Codec_turbo<B,Q>
 		{
 			this->set_puncturer(pct_params->build<B,Q>());
 		}
-		catch (cannot_allocate const&)
+		catch (spu::tools::cannot_allocate const&)
 		{
 			this->set_puncturer(static_cast<const factory::Puncturer*>(pct_params)->build<B,Q>());
 		}
@@ -87,7 +88,7 @@ Codec_turbo<B,Q>
 		std::unique_ptr<module::Encoder_RSC_sys<B>> sub_enc(enc_params.sub1->build<B>(*json_stream));
 		this->set_encoder(enc_params.build<B>(*sub_enc, *sub_enc, this->get_interleaver_bit()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -97,7 +98,7 @@ Codec_turbo<B,Q>
 	{
 		this->set_decoder_siho(dec_params.build<B,Q>(&this->get_encoder()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		std::unique_ptr<module::Decoder_SISO<B,Q>> sub_dec(dec_params.sub1->build_siso<B,Q>(*trellis,
 		                                                                                    *json_stream,
@@ -118,7 +119,7 @@ Codec_turbo<B,Q>
 		if (dec_params.fnc->enable)
 		{
 			if (crc == nullptr || std::unique_ptr<module::CRC<B>>(crc->clone())->get_size() == 0)
-				throw runtime_error(__FILE__, __LINE__, __func__, "The Flip aNd Check requires a CRC.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "The Flip aNd Check requires a CRC.");
 
 			post_pros.push_back(std::unique_ptr<Post_processing_SISO<B,Q>>(dec_params.fnc->build<B,Q>(*crc)));
 
@@ -160,7 +161,7 @@ Codec_turbo<B,Q>* Codec_turbo<B,Q>
 	{
 		std::stringstream message;
 		message << "'json_stream' has to be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto t = new Codec_turbo(*this);

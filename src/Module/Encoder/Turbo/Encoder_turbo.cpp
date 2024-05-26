@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Turbo/Encoder_turbo.hpp"
 
 using namespace aff3ct;
@@ -31,7 +32,7 @@ Encoder_turbo<B>
 		        << ", 'enco_n.tail_length()' = " << enco_n.tail_length()
 		        << ", 'enco_i.tail_length()' = " << enco_i.tail_length()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)pi.get_core().get_size() != K)
@@ -39,7 +40,7 @@ Encoder_turbo<B>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' has to be equal to 'K' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'K' = " << K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enco_n.get_n_frames() != enco_i.get_n_frames())
@@ -47,7 +48,7 @@ Encoder_turbo<B>
 		std::stringstream message;
 		message << "'enco_n.get_n_frames()' has to be equal to 'enco_i.get_n_frames()' ('enco_n.get_n_frames()' = "
 		        << enco_n.get_n_frames() << ", 'enco_i.get_n_frames()' = " << enco_i.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enco_n.get_n_frames() != pi.get_n_frames())
@@ -55,7 +56,7 @@ Encoder_turbo<B>
 		std::stringstream message;
 		message << "'enco_n.get_n_frames()' has to be equal to 'pi.get_n_frames()' ('enco_n.get_n_frames()' = "
 		        << enco_n.get_n_frames() << ", 'pi.get_n_frames()' = " << pi.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->set_n_frames(enco_n.get_n_frames());
@@ -74,7 +75,7 @@ template <typename B>
 void Encoder_turbo<B>
 ::deep_copy(const Encoder_turbo<B> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.enco_n != nullptr) this->enco_n.reset(m.enco_n->clone());
 	if (m.enco_i != nullptr) this->enco_i.reset(m.enco_i->clone());
 	if (m.pi     != nullptr) this->pi    .reset(m.pi    ->clone());

@@ -4,7 +4,8 @@
 #include <cmath>     // fabs(), copysign()...
 #include <algorithm> // min()
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/max.h"
 
 namespace aff3ct
@@ -35,8 +36,8 @@ inline R max_star(const R a, const R b)
 template <typename R>
 inline R max_star_safe(const R a, const R b)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "This method is not defined in fixed-point arithmetic.");
-
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "This method is not defined in fixed-point arithmetic.");
 	return (R)0;
 }
 
@@ -93,7 +94,7 @@ inline mipp::Reg<R> max_star_i(const mipp::Reg<R> a, const mipp::Reg<R> b)
 template <typename R>
 inline mipp::Reg<R> max_star_safe_i(const mipp::Reg<R> a, const mipp::Reg<R> b)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>

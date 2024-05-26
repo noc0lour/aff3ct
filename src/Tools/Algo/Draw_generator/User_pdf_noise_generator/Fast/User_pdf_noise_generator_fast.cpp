@@ -1,4 +1,5 @@
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/Fast/User_pdf_noise_generator_fast.hpp"
 
 using namespace aff3ct;
@@ -46,14 +47,16 @@ template <typename R>
 mipp::Reg<R> User_pdf_noise_generator_fast<R>
 ::get_random_simd()
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The MT19937 random generator does not support this type.");
 }
 
 template <typename R>
 R User_pdf_noise_generator_fast<R>
 ::get_random()
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The MT19937 random generator does not support this type.");
 }
 
 namespace aff3ct
@@ -88,7 +91,8 @@ template <typename R>
 void User_pdf_noise_generator_fast<R>
 ::generate(const R* signal, R *draw, const unsigned length, const R noise_power)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The MT19937 random generator does not support this type.");
 }
 
 namespace aff3ct
@@ -127,7 +131,7 @@ template <typename R>
 void User_pdf_noise_generator_fast<R>
 ::generate(R *draw, const unsigned length, const R noise_power)
 {
-	throw unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

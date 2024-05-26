@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Module/Decoder/Turbo/Decoder_turbo.hpp"
 
@@ -54,7 +55,7 @@ Decoder_turbo<B,R>
 		std::stringstream message;
 		message << "'siso_n.get_K()' has to be equal to 'K' ('siso_n.get_K()' = " << siso_n.get_K()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_i.get_K() != K)
@@ -62,7 +63,7 @@ Decoder_turbo<B,R>
 		std::stringstream message;
 		message << "'siso_i.get_K()' has to be equal to 'K' ('siso_i.get_K()' = " << siso_i.get_K()
 		        << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N - (siso_n.tail_length() + siso_i.tail_length()) != K * 3)
@@ -71,14 +72,14 @@ Decoder_turbo<B,R>
 		message << "'N' - ('siso_n.tail_length()' + 'siso_i.tail_length()') has to be equal to 'K' * 3 ('N' = "
 		        << N << ", 'siso_n.tail_length()' = " << siso_n.tail_length()
 		        << ", 'siso_i.tail_length()' = " << siso_i.tail_length() << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_ite <= 0)
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)pi.get_core().get_size() != K)
@@ -86,7 +87,7 @@ Decoder_turbo<B,R>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' has to be equal to 'K' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'K' = " << K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_n_frames() != siso_i.get_n_frames())
@@ -94,7 +95,7 @@ Decoder_turbo<B,R>
 		std::stringstream message;
 		message << "'siso_n.get_n_frames()' has to be equal to 'siso_i.get_n_frames()' ('siso_n.get_n_frames()' = "
 		        << siso_n.get_n_frames() << ", 'siso_i.get_n_frames()' = " << siso_i.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (pi.get_n_frames() != siso_n.get_n_frames())
@@ -102,7 +103,7 @@ Decoder_turbo<B,R>
 		std::stringstream message;
 		message << "'pi.get_n_frames()' has to be equal to 'siso_n.get_n_frames()' ('pi.get_n_frames()' = "
 		        << pi.get_n_frames() << ", 'siso_n.get_n_frames()' = " << siso_n.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (siso_n.get_n_frames_per_wave() != siso_i.get_n_frames_per_wave())
@@ -111,7 +112,7 @@ Decoder_turbo<B,R>
 		message << "'siso_n.get_n_frames_per_wave()' has to be equal to 'siso_i.get_n_frames_per_wave()' "
 		        << "('siso_n.get_n_frames_per_wave()' = " << siso_n.get_n_frames_per_wave()
 		        << ", 'siso_i.get_n_frames_per_wave()' = " << siso_i.get_n_frames_per_wave() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -119,14 +120,14 @@ template <typename B, typename R>
 Decoder_turbo<B,R>* Decoder_turbo<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
 void Decoder_turbo<B,R>
 ::deep_copy(const Decoder_turbo<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.siso_n != nullptr) this->siso_n.reset(dynamic_cast<Decoder_SISO<B,R>*>(m.siso_n->clone()));
 	if (m.siso_i != nullptr) this->siso_i.reset(dynamic_cast<Decoder_SISO<B,R>*>(m.siso_i->clone()));
 	if (m.pi     != nullptr) this->pi    .reset(                                 m.pi    ->clone());

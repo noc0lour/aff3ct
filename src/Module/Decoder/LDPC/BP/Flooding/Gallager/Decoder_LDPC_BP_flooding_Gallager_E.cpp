@@ -3,7 +3,8 @@
 #include <numeric>
 #include <string>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/LDPC/BP/Flooding/Gallager/Decoder_LDPC_BP_flooding_Gallager_E.hpp"
 
 using namespace aff3ct;
@@ -126,7 +127,7 @@ void Decoder_LDPC_BP_flooding_Gallager_E<B,R>
 		sum += (int)cur_state;
 
 		// take the hard decision
-		V_N[v] = (int8_t)tools::div2(B(1) -(sum == 0 ? cur_state : signum(sum)));
+		V_N[v] = (int8_t)spu::tools::div2(B(1) -(sum == 0 ? cur_state : signum(sum)));
 
 		chk_to_var_ptr += var_degree;
 	}

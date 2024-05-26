@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Module/Puncturer/Turbo_DB/Puncturer_turbo_DB.hpp"
 
@@ -52,7 +53,7 @@ Puncturer_turbo_DB<B,Q>
 			std::stringstream message;
 			message << "Unsupported code rate 'R' = 'K' / 'N' ('R' = " << rate << ", 'K' = " << K << ", 'N' = "
 					<< N << "), supported code rates are 1/3, 2/5, 1/2, 2/3, 3/4, 4/5, 5/6, 6/7 and 7/8.";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

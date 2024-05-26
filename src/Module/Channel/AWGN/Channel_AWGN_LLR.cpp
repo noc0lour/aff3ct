@@ -1,8 +1,9 @@
 #include <algorithm>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Standard/Gaussian_noise_generator_std.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Fast/Gaussian_noise_generator_fast.hpp"
 #ifdef AFF3CT_CHANNEL_GSL
@@ -56,7 +57,7 @@ tools::Gaussian_gen<R>* create_gaussian_generator(const tools::Gaussian_noise_ge
 		default:
 			std::stringstream message;
 			message << "Unsupported 'implem' ('implem' = " << (int)implem << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 }
 
@@ -90,7 +91,7 @@ template <typename R>
 void Channel_AWGN_LLR<R>
 ::deep_copy(const Channel_AWGN_LLR<R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.gaussian_generator != nullptr) this->gaussian_generator.reset(m.gaussian_generator->clone());
 }
 

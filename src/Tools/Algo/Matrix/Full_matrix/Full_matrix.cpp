@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Tools/Algo/Matrix/Full_matrix/Full_matrix.hpp"
 
@@ -36,7 +37,7 @@ void Full_matrix<T>
 		std::stringstream message;
 		message << "('row_index';'col_index') connection already exists ('row_index' = " << row_index
 		        << ", 'col_index' = " << col_index << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	(*this)[row_index][col_index] = 1;

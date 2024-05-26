@@ -2,7 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/mutual_info.h"
 #include "Module/Monitor/MI/Monitor_MI.hpp"
 
@@ -23,13 +24,14 @@ Monitor_MI<B,R>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p = this->create_task("get_mutual_info", (int)mnt::tsk::get_mutual_info);
 	auto ps_X = this->template create_socket_in<B>(p, "X", get_N());
 	auto ps_Y = this->template create_socket_in<R>(p, "Y", get_N());
-	this->create_codelet(p, [ps_X, ps_Y](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p, [ps_X, ps_Y]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mnt = static_cast<Monitor_MI<B,R>&>(m);
 
@@ -52,7 +54,7 @@ Monitor_MI<B,R>* Monitor_MI<B,R>
 		std::stringstream message;
 		message << "'callback_check.size()' has to be equal to 0 ('callback_check.size()' = "
 		        << this->callback_check.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->callback_n_trials_limit_achieved.size())
@@ -61,7 +63,7 @@ Monitor_MI<B,R>* Monitor_MI<B,R>
 		message << "'callback_n_trials_limit_achieved.size()' has to be equal to 0 "
 		        << "('callback_n_trials_limit_achieved.size()' = "
 		        << this->callback_n_trials_limit_achieved.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto m = new Monitor_MI(*this);
@@ -81,7 +83,7 @@ bool Monitor_MI<B,R>
 		std::stringstream message;
 		message << "'get_N()' is different than 'm.get_N()' ('get_N()' = " << get_N() << ", 'm.get_N()' = "
 		        << m.get_N() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (get_max_n_trials() != m.get_max_n_trials())
@@ -92,7 +94,7 @@ bool Monitor_MI<B,R>
 		std::stringstream message;
 		message << "'get_max_n_trials()' is different than 'm.get_max_n_trials()' ('get_max_n_trials()' = "
 		        << get_max_n_trials() << ", 'm.get_max_n_trials()' = " << m.get_max_n_trials() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return true;
@@ -129,8 +131,8 @@ template <typename B, typename R>
 R Monitor_MI<B,R>
 ::__get_mutual_info(const B *X, const R *Y, const size_t frame_id)
 {
-	throw tools::runtime_error(__FILE__, __LINE__, __func__, "The _get_mutual_info() function does not support this "
-	                                                         "type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+	                                "The _get_mutual_info() function does not support this type.");
 }
 
 #include "Tools/types.h"

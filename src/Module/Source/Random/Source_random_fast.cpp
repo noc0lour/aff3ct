@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Module/Source/Random/Source_random_fast.hpp"
 
 using namespace aff3ct::module;
@@ -8,7 +10,7 @@ using namespace aff3ct::module;
 template <typename B>
 Source_random_fast<B>
 ::Source_random_fast(const int K, const int seed)
-: Source<B>(K),
+: spu::module::Source<B>(K),
   mt19937(seed),
   mt19937_simd()
 {
@@ -35,7 +37,7 @@ void Source_random_fast<B>
 ::_generate(B *U_K, const size_t frame_id)
 {
 	if (!mipp::isAligned(U_K))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'U_K' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'U_K' is misaligned memory.");
 
 	const auto size = (unsigned)(this->max_data_size);
 

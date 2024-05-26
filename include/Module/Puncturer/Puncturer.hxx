@@ -1,7 +1,6 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Puncturer/Puncturer.hpp"
 
 namespace aff3ct
@@ -10,30 +9,30 @@ namespace module
 {
 
 template <typename B, typename Q>
-runtime::Task& Puncturer<B,Q>
+spu::runtime::Task& Puncturer<B,Q>
 ::operator[](const pct::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B, typename Q>
-runtime::Socket& Puncturer<B,Q>
+spu::runtime::Socket& Puncturer<B,Q>
 ::operator[](const pct::sck::puncture s)
 {
-	return Module::operator[]((size_t)pct::tsk::puncture)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)pct::tsk::puncture)[(size_t)s];
 }
 
 template <typename B, typename Q>
-runtime::Socket& Puncturer<B,Q>
+spu::runtime::Socket& Puncturer<B,Q>
 ::operator[](const pct::sck::depuncture s)
 {
-	return Module::operator[]((size_t)pct::tsk::depuncture)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)pct::tsk::depuncture)[(size_t)s];
 }
 
 template <typename B, typename Q>
 Puncturer<B,Q>
 ::Puncturer(const int K, const int N, const int N_cw)
-: Module(), K(K), N(N), N_cw(N_cw)
+: spu::module::Module(), K(K), N(N), N_cw(N_cw)
 {
 	const std::string name = "Puncturer";
 	this->set_name(name);
@@ -43,41 +42,42 @@ Puncturer<B,Q>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N <= 0)
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N_cw <= 0)
 	{
 		std::stringstream message;
 		message << "'N_cw' has to be greater than 0 ('N_cw' = " << N_cw << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K > N)
 	{
 		std::stringstream message;
 		message << "'K' has to be smaller or equal to 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N > N_cw)
 	{
 		std::stringstream message;
 		message << "'N' has to be smaller or equal to 'N_cw' ('N' = " << N << ", 'N_cw' = " << N_cw << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p1 = this->create_task("puncture");
 	auto p1s_X_N1 = this->template create_socket_in <B>(p1, "X_N1", this->N_cw);
 	auto p1s_X_N2 = this->template create_socket_out<B>(p1, "X_N2", this->N   );
-	this->create_codelet(p1, [p1s_X_N1, p1s_X_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_X_N1, p1s_X_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &pct = static_cast<Puncturer<B,Q>&>(m);
 
@@ -85,13 +85,14 @@ Puncturer<B,Q>
 		              static_cast<B*>(t[p1s_X_N2].get_dataptr()),
 		              frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("depuncture");
 	auto p2s_Y_N1 = this->template create_socket_in <Q>(p2, "Y_N1", this->N   );
 	auto p2s_Y_N2 = this->template create_socket_out<Q>(p2, "Y_N2", this->N_cw);
-	this->create_codelet(p2, [p2s_Y_N1, p2s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_Y_N1, p2s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &pct = static_cast<Puncturer<B,Q>&>(m);
 
@@ -99,7 +100,7 @@ Puncturer<B,Q>
 		                static_cast<Q*>(t[p2s_Y_N2].get_dataptr()),
 		                frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 }
 
@@ -107,7 +108,7 @@ template <typename B, typename Q>
 Puncturer<B,Q>* Puncturer<B,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -173,14 +174,14 @@ template <typename B, typename Q>
 void Puncturer<B,Q>
 ::_puncture(const B *X_N1, B *X_N2, const size_t frame_id) const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
 void Puncturer<B,Q>
 ::_depuncture(const Q *Y_N1, Q *Y_N2, const size_t frame_id) const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 }

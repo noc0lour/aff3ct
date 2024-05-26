@@ -10,17 +10,18 @@
 #include <functional>
 #include <type_traits>
 
+#include <streampu.hpp>
+
 #include "Module/Monitor/MI/Monitor_MI.hpp"
 #include "Module/Monitor/BFER/Monitor_BFER.hpp"
 #include "Module/Monitor/EXIT/Monitor_EXIT.hpp"
-#include "Tools/Reporter/Reporter.hpp"
 
 namespace aff3ct
 {
 namespace tools
 {
 template <typename T = uint64_t>
-class Reporter_throughput : public Reporter
+class Reporter_throughput : public spu::tools::Reporter
 {
 	static_assert(std::is_convertible<T, double>::value, "T type must be convertible to a double.");
 

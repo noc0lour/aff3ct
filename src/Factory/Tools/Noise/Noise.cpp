@@ -3,7 +3,8 @@
 #include <utility>
 #include <memory>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/Distribution/Distributions.hpp"
 #include "Tools/general_utils.h"
 #include "Tools/Noise/noise_utils.h"
@@ -182,7 +183,7 @@ tools::Noise<R>* Noise
 
 	std::stringstream message;
 	message << "Unknown noise type ('noise_type' = " << this->type << ").";
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__, message.str());
 }
 
 template <typename R>
@@ -195,7 +196,7 @@ tools::Noise<R>* Noise
 
 	std::stringstream message;
 	message << "Unknown noise type ('noise_type' = " << this->type << ").";
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__, message.str());
 }
 
 // ==================================================================================== explicit template instantiation

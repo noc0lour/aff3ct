@@ -10,9 +10,7 @@
 #include <memory>
 #include <vector>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -41,13 +39,13 @@ namespace module
  * Please use CRC for inheritance (instead of CRC).
  */
 template <typename B = int>
-class CRC : public Module
+class CRC : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const crc::tsk          t);
-	inline runtime::Socket& operator[](const crc::sck::build   s);
-	inline runtime::Socket& operator[](const crc::sck::extract s);
-	inline runtime::Socket& operator[](const crc::sck::check   s);
+	inline spu::runtime::Task&   operator[](const crc::tsk          t);
+	inline spu::runtime::Socket& operator[](const crc::sck::build   s);
+	inline spu::runtime::Socket& operator[](const crc::sck::extract s);
+	inline spu::runtime::Socket& operator[](const crc::sck::check   s);
 
 protected:
 	const int K; /*!< Number of information bits (the CRC bits are not included in K) */

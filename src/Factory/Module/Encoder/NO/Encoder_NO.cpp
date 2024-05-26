@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Encoder/NO/Encoder_NO.hpp"
 #include "Factory/Module/Encoder/NO/Encoder_NO.hpp"
@@ -65,7 +66,7 @@ module::Encoder_NO<B>* Encoder_NO
 {
 	if (this->type == "NO") return new module::Encoder_NO<B>(this->K);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

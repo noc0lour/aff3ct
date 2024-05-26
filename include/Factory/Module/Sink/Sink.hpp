@@ -43,7 +43,7 @@ public:
 
 	// builder
 	template <typename B = int>
-	module::Sink<B>* build() const;
+	spu::module::Sink<B>* build() const;
 };
 }
 }

@@ -2,7 +2,6 @@
 #include <string>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Channel/User/Channel_user_bs.hpp"
 
 using namespace aff3ct;

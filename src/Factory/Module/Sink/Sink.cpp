@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Sink/NO/Sink_NO.hpp"
 #include "Module/Sink/User/Sink_user_binary.hpp"
@@ -68,26 +69,26 @@ void Sink
 }
 
 template <typename B>
-module::Sink<B>* Sink
+spu::module::Sink<B>* Sink
 ::build() const
 {
 	if (this->implem == "STD")
 	{
-		if (this->type == "NO"      ) return new module::Sink_NO         <B>(this->K            );
-		if (this->type == "USER_BIN") return new module::Sink_user_binary<B>(this->K, this->path);
+		if (this->type == "NO"      ) return new spu::module::Sink_NO         <B>(this->K            );
+		if (this->type == "USER_BIN") return new spu::module::Sink_user_binary<B>(this->K, this->path);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation
 #include "Tools/types.h"
 #ifdef AFF3CT_MULTI_PREC
-template aff3ct::module::Sink<B_8 >* aff3ct::factory::Sink::build<B_8 >() const;
-template aff3ct::module::Sink<B_16>* aff3ct::factory::Sink::build<B_16>() const;
-template aff3ct::module::Sink<B_32>* aff3ct::factory::Sink::build<B_32>() const;
-template aff3ct::module::Sink<B_64>* aff3ct::factory::Sink::build<B_64>() const;
+template spu::module::Sink<B_8 >* aff3ct::factory::Sink::build<B_8 >() const;
+template spu::module::Sink<B_16>* aff3ct::factory::Sink::build<B_16>() const;
+template spu::module::Sink<B_32>* aff3ct::factory::Sink::build<B_32>() const;
+template spu::module::Sink<B_64>* aff3ct::factory::Sink::build<B_64>() const;
 #else
-template aff3ct::module::Sink<B>* aff3ct::factory::Sink::build<B>() const;
+template spu::module::Sink<B>* aff3ct::factory::Sink::build<B>() const;
 #endif
 // ==================================================================================== explicit template instantiation

@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/matrix.h"
 
 namespace aff3ct
@@ -18,7 +19,7 @@ void rgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'A.size()' has to be equal to 'M' * 'K' ('A.size()' = " << A.size()  << ", 'M' = " << M
 		        << ", 'K' = " << K << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tB.size() != unsigned(K * N))
@@ -26,7 +27,7 @@ void rgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tB.size()' has to be equal to 'K' * 'N' ('tB.size()' = " << tB.size() << ", 'K' = " << K
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tC.size() != unsigned(M * N))
@@ -34,7 +35,7 @@ void rgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tC.size()' has to be equal to 'M' * 'N' ('tC.size()' = " << tC.size() << ", 'M' = " << M
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	rgemm(M, N, K, A.data(), tB.data(), tC.data());
@@ -68,7 +69,7 @@ void cgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'A.size()' has to be equal to 'M' * 'K' * 2 ('A.size()' = " << A.size() << ", 'M' = " << M
 		        << ", 'K' = " << K << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tB.size() != unsigned(K * N * 2))
@@ -76,7 +77,7 @@ void cgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tB.size()' has to be equal to 'K' * 'N' * 2 ('tB.size()' = " << tB.size() << ", 'K' = " << K
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tC.size() != unsigned(M * N * 2))
@@ -84,7 +85,7 @@ void cgemm(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tC.size()' has to be equal to 'M' * 'N' * 2 ('tC.size()' = " << tC.size() << ", 'M' = " << M
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	cgemm(M, N, K, A.data(), tB.data(), tC.data());
@@ -131,7 +132,7 @@ void cgemm_r(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'A.size()' has to be equal to 'M' * 'K' * 2 ('A.size()' = " << A.size() << ", 'M' = " << M
 		        << ", 'K' = " << K << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tB.size() != unsigned(K * N * 2))
@@ -139,7 +140,7 @@ void cgemm_r(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tB.size()' has to be equal to 'K' * 'N' * 2 ('tB.size()' = " << tB.size() << ", 'K' = " << K
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tC.size() != unsigned(M * N * 1))
@@ -147,7 +148,7 @@ void cgemm_r(const int M, const int N, const int K,
 		std::stringstream message;
 		message << "'tC.size()' has to be equal to 'M' * 'N' * 1 ('tC.size()' = " << tC.size() << ", 'M' = " << M
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	cgemm_r(M, N, K, A.data(), tB.data(), tC.data());
@@ -188,7 +189,7 @@ void real_transpose(const int M, const int N,
 		std::stringstream message;
 		message << "'A.size()' has to be equal to 'M' * 'N' ('A.size()' = " << A.size() << ", 'M' = " << M
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (B.size() != unsigned(N * M))
@@ -196,7 +197,7 @@ void real_transpose(const int M, const int N,
 		std::stringstream message;
 		message << "'B.size()' has to be equal to 'N' * 'M' ('B.size()' = " << B.size() << ", 'N' = " << N
 		        << ", 'M' = " << M << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	real_transpose(M, N, A.data(), B.data());
@@ -222,7 +223,7 @@ void complex_transpose(const int M, const int N,
 		std::stringstream message;
 		message << "'A.size()' has to be equal to 'M' * 'N' * 2 ('A.size()' = " << A.size() << ", 'M' = " << M
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (B.size() != unsigned(N * M * 2))
@@ -230,7 +231,7 @@ void complex_transpose(const int M, const int N,
 		std::stringstream message;
 		message << "'B.size()' has to be equal to 'N' * 'M' * 2 ('B.size()' = " << B.size() << ", 'N' = " << N
 		        << ", 'M' = " << M << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	complex_transpose(M, N, A.data(), B.data());

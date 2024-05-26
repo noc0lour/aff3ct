@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Codec/Codec_SISO.hpp"
 
 namespace aff3ct
@@ -18,7 +19,7 @@ template <typename B, typename Q>
 Codec_SISO<B,Q>* Codec_SISO<B,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -38,7 +39,7 @@ module::Decoder_SISO<B,Q>& Codec_SISO<B,Q>
 	{
 		std::stringstream message;
 		message << "'decoder_siso' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->decoder_siso;

@@ -4,7 +4,8 @@
 #include <iterator>
 #endif
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_seq.h"
 
 namespace aff3ct
@@ -157,7 +158,7 @@ void rep_seq<B,signed char,H,N_ELMTS>
 		sum_l += (int)l_a[i];
 
 	// hardcoded h function
-	B r = ((sum_l < 0) * bit_init<B>());
+	B r = ((sum_l < 0) * spu::tools::bit_init<B>());
 	for (auto i = 0; i < N_ELMTS; i++)
 		s_a[i] = r;
 }
@@ -184,7 +185,7 @@ void rep_seq<B,signed char,H,0>
 		sum_l += (int)l_a[i];
 
 	// hardcoded h function
-	B r = ((sum_l < 0) * bit_init<B>());
+	B r = ((sum_l < 0) * spu::tools::bit_init<B>());
 	for (auto i = 0; i < n_elmts; i++)
 		s_a[i] = r;
 }
@@ -216,7 +217,7 @@ bool spc_seq<B,R,H,N_ELMTS>
 	}
 
 	if (prod_sign < 0)
-		s_a[cur_min_pos] = (s_a[cur_min_pos] == 0) ? bit_init<B>() : 0; // correction
+		s_a[cur_min_pos] = (s_a[cur_min_pos] == 0) ? spu::tools::bit_init<B>() : 0; // correction
 
 	return (prod_sign < 0);
 }
@@ -244,7 +245,7 @@ bool spc_seq<B,R,H,0>
 	}
 
 	if (prod_sign < 0)
-		s_a[cur_min_pos] = (s_a[cur_min_pos] == 0) ? bit_init<B>() : 0; // correction
+		s_a[cur_min_pos] = (s_a[cur_min_pos] == 0) ? spu::tools::bit_init<B>() : 0; // correction
 
 	return (prod_sign < 0);
 }

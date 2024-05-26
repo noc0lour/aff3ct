@@ -2,7 +2,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/LDPC/From_IRA/Encoder_LDPC_from_IRA.hpp"
 
 using namespace aff3ct;
@@ -43,7 +44,6 @@ void Encoder_LDPC_from_IRA<B>
 	B* parity = X_N + this->K;
 	std::fill_n(parity, M, 0);
 
-
 	//Calculate parity part
 	for (auto& l : this->H.get_rows_from_col(0))
 		if (l < (unsigned)this->K)
@@ -70,7 +70,7 @@ void Encoder_LDPC_from_IRA<B>
 		std::stringstream message;
 		message << "The built H matrix has a dimension '(N-K)' different than the given one ('(N-K)' = " << (this->N-this->K)
 		        << ", 'H.get_n_cols()' = " << this->H.get_n_cols() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

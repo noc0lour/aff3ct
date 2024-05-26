@@ -10,10 +10,9 @@
 #include <memory>
 #include <vector>
 
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/Interleaver_core.hpp"
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
 
 namespace aff3ct
 {
@@ -33,14 +32,14 @@ namespace module
 	}
 
 template <typename D = int32_t, typename T = uint32_t>
-class Interleaver : public Module
+class Interleaver : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const itl::tsk                          t);
-	inline runtime::Socket& operator[](const itl::sck::interleave              s);
-	inline runtime::Socket& operator[](const itl::sck::interleave_reordering   s);
-	inline runtime::Socket& operator[](const itl::sck::deinterleave            s);
-	inline runtime::Socket& operator[](const itl::sck::deinterleave_reordering s);
+	inline spu::runtime::Task&   operator[](const itl::tsk                          t);
+	inline spu::runtime::Socket& operator[](const itl::sck::interleave              s);
+	inline spu::runtime::Socket& operator[](const itl::sck::interleave_reordering   s);
+	inline spu::runtime::Socket& operator[](const itl::sck::deinterleave            s);
+	inline spu::runtime::Socket& operator[](const itl::sck::deinterleave_reordering s);
 
 protected:
 	const tools::Interleaver_core<T> &core;

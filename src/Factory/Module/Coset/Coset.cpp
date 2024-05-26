@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Coset/Bit/Coset_bit.hpp"
 #include "Module/Coset/Real/Coset_real.hpp"
@@ -61,7 +63,7 @@ module::Coset<B1,B2>* Coset
 {
 	if (type == "STD") return new module::Coset_bit<B1,B2>(size);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -70,7 +72,7 @@ module::Coset<B,R>* Coset
 {
 	if (type == "STD") return new module::Coset_real<B,R>(size);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

@@ -14,7 +14,7 @@ namespace aff3ct
 namespace module
 {
 template <typename B = int>
-class Source_random_fast : public Source<B>
+class Source_random_fast : public spu::module::Source<B>
 {
 private:
 	tools::PRNG_MT19937      mt19937;      // Mersenne Twister 19937 (scalar)

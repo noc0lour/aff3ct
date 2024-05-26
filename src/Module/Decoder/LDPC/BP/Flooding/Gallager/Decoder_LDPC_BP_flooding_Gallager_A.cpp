@@ -2,10 +2,10 @@
 #include <sstream>
 #include <numeric>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
 #include "Module/Decoder/LDPC/BP/Flooding/Gallager/Decoder_LDPC_BP_flooding_Gallager_A.hpp"
 
 using namespace aff3ct;
@@ -55,7 +55,7 @@ Decoder_LDPC_BP_flooding_Gallager_A<B,R>
 				message << "'connections[var_id]' has to be equal or smaller than 'var_to_chk_id[var_id].size()' "
 				        << "('var_id' = " << var_id << ", 'connections[var_id]' = " << connections[var_id]
 				        << ", 'var_to_chk_id[var_id].size()' = " << var_to_chk_id[var_id].size() << ").";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			transpose[k] = branch_id;
@@ -313,7 +313,7 @@ void Decoder_LDPC_BP_flooding_Gallager_A<B,R>
 		const auto n_ones = std::accumulate(chk_to_var_ptr, chk_to_var_ptr + var_degree, (int)0);
 		const auto n_zero = var_degree - n_ones;
 		const auto n_z_m_o = n_zero - n_ones;
-		V_N[v] = n_z_m_o == 0 ? (int8_t)cur_state : (int8_t)tools::signbit(n_z_m_o);
+		V_N[v] = n_z_m_o == 0 ? (int8_t)cur_state : (int8_t)spu::tools::signbit(n_z_m_o);
 		chk_to_var_ptr += var_degree;
 
 		// // naive version of the majority vote

@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/Turbo_DB/Decoder_turbo_DB.hpp"
 #include "Factory/Module/Decoder/Turbo_DB/Decoder_turbo_DB.hpp"
@@ -189,7 +190,7 @@ module::Decoder_turbo_DB<B,Q>* Decoder_turbo_DB
 		if (this->implem == "STD") return new module::Decoder_turbo_DB<B,Q>(this->K, this->N_cw, this->n_ite, siso_n, siso_i, itl);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>

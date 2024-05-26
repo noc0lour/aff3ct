@@ -47,7 +47,7 @@ public:
 
 	// builder
 	template <typename B = int>
-	module::Source<B>* build() const;
+	spu::module::Source<B>* build() const;
 };
 }
 }

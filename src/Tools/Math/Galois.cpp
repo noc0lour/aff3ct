@@ -1,7 +1,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/Galois.hpp"
 
 using namespace aff3ct;
@@ -16,28 +17,28 @@ Galois<I>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (m != (int)std::ceil(std::log2(N +1)))
 	{
 		std::stringstream message;
 		message << "'m' has to be equal to ceil(log2('N' +1)) ('m' = " << m << ", 'N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (m <= 1)
 	{
 		std::stringstream message;
 		message << "'m' has to be strictly greater than 1 ('m' = " << m << ", 'N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (m > 20)
 	{
 		std::stringstream message;
 		message << "'m' is supported until 20 ('m' = " << m << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((size_t)m > sizeof(I) * 8)
@@ -45,21 +46,21 @@ Galois<I>
 		std::stringstream message;
 		message << "'m' can't be higher than 'sizeof(I) * 8' ('m' = " << m << ", 'sizeof(I) * 8' = "
 		        << (sizeof(I) * 8) << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != ((1 << m) -1))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 minus 1 ('N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (!p.empty() && (p.size() != static_cast<size_t>(m +1)))
 	{
 		std::stringstream message;
 		message << "The order of the Galois primitive polynomial (p) must be m + 1 (= " << m +1 << ") .";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (p.empty())

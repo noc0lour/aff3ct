@@ -2,8 +2,9 @@
 #include <algorithm>
 #include <type_traits>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/BPSK/Modem_BPSK.hpp"
 
 using namespace aff3ct;
@@ -57,10 +58,10 @@ void Modem_BPSK<B,R,Q>
 	else
 	{
 		if (!std::is_same<R,Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 		if (!std::is_floating_point<Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 		if (*CP != this->last_channel_param)
 			this->two_on_square_sigma = (R)2.0 / (*CP * *CP);
@@ -77,10 +78,10 @@ void Modem_BPSK<B,R,Q>
 ::_demodulate_wg(const float *CP, const R *H_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	if (disable_sig2)
 	{

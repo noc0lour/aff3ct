@@ -3,7 +3,8 @@
 #include <cmath>
 #include <map>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 
 #include "Tools/Code/Polar/Polar_code.hpp"
@@ -79,7 +80,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 									std::stringstream message;
 									message << "'values.size()' should be equal to 'kernel_size' ('values.size()' = "
 									        << values.size() << ", 'kernel_size' = " << kernel_size << ").";
-									throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+									throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 								}
 							}
 						}
@@ -90,7 +91,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 							std::stringstream message;
 							message << "'kernel_size' should be greater than 1 ('kernel_size' = "
 							        << kernel_size << ").";
-							throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+							throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 						}
 
 						kernel_matrices[k] = kernel;
@@ -102,7 +103,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 						std::stringstream message;
 						message << "'values.size()' should be greater than 0 ('values.size()' = "
 						        << values.size() << ").";
-						throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+						throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 					}
 				}
 			}
@@ -112,7 +113,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 
 				std::stringstream message;
 				message << "'n_kernels' should be greater than 0 ('n_kernels' = " << n_kernels << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			tools::getline(file, line);
@@ -140,7 +141,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 						std::stringstream message;
 						message << "'values.size()' should be equal to 'n_stages' ('values.size()' = "
 						        << values.size() << ", 'n_stages' = " << n_stages << ").";
-						throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+						throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 					}
 				}
 				else
@@ -149,7 +150,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 
 					std::stringstream message;
 					message << "'n_stages' should be greater than 0 ('n_stages' = " << n_stages << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 			else
@@ -159,7 +160,7 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 				std::stringstream message;
 				message << "'values.size()' should be greater than 0 ('values.size()' = "
 				        << values.size() << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 		else
@@ -168,14 +169,14 @@ void aff3ct::tools::read_polar_MK_code(const std::string                        
 
 			std::stringstream message;
 			message << "'values.size()' should be greater than 0 ('values.size()' = " << values.size() << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else
 	{
 		std::stringstream message;
 		message << "Can't open '" + code_path + "' file.";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -291,7 +292,7 @@ void Polar_code
 		std::stringstream message;
 		message << "'stages.size()' has to be higher than 0 ("
 		        << "'stages.size()' = " << this->stages.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->stages.size() < this->kernel_matrices.size())
@@ -300,7 +301,7 @@ void Polar_code
 		message << "'stages.size()' has to be higher or equal to 'kernel_matrices.size()' ("
 		        << "'stages.size()' = " << this->stages.size() << ", "
 		        << "'kernel_matrices.size()' = " << this->kernel_matrices.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto s : this->stages)
@@ -310,7 +311,7 @@ void Polar_code
 			message << "'s' should not be higher than 'kernel_matrices.size()' ("
 			        << "'s' = " << s << ", "
 			        << "'kernel_matrices.size()' = " << this->kernel_matrices.size() << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 	this->verif();
@@ -330,7 +331,7 @@ void Polar_code
 				        << "'l' = " << l << ", "
 				        << "'kernel_matrices[ke][l].size()' = " << this->kernel_matrices[ke][l].size() << ", "
 				        << "'kernel_matrices[ke].size()' = " << this->kernel_matrices[ke].size() << ").";
-				throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 	for (auto ke = 0; ke < (int)this->kernel_matrices.size(); ke++)
@@ -340,7 +341,7 @@ void Polar_code
 			message << "'kernel_matrices[ke]' has to be invertible ("
 			        << "'ke' = " << ke << ", "
 			        << "'kernel_matrices[ke]' = " << tools::display_kernel(this->kernel_matrices[ke]) << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 	std::map<int,int> n_kernels_per_type;
@@ -360,7 +361,7 @@ void Polar_code
 		message << "'expected_N' should be equal to 'N' ("
 		        << "'expected_N' = " << expected_N << ", "
 		        << "'N' = " << this->N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

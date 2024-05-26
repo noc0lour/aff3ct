@@ -2,8 +2,9 @@
 #include <sstream>
 #include <algorithm>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/Repetition/Decoder_repetition.hpp"
 
 using namespace aff3ct;
@@ -22,7 +23,7 @@ Decoder_repetition<B,R>
 	{
 		std::stringstream message;
 		message << "'K' has to be a multiple of 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -30,7 +31,7 @@ template <typename B, typename R>
 Decoder_repetition<B,R>* Decoder_repetition<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

@@ -3,7 +3,7 @@
 #include <sstream>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 #include "Tools/Interleaver/User/Interleaver_core_user.hpp"
 
@@ -16,7 +16,7 @@ Interleaver_core_user<T>
 : Interleaver_core<T>(size, "user", false), cur_itl_id(0)
 {
 	if (filename.empty())
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
 
 	std::ifstream file(filename.c_str(), std::ios::in);
 
@@ -63,7 +63,7 @@ Interleaver_core_user<T>
 								std::stringstream message;
 								message << "The interleaver value is wrong, it already exists elsewhere (read: "
 								        << val << ").";
-								throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+								throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 							}
 						}
 						else
@@ -73,7 +73,7 @@ Interleaver_core_user<T>
 							std::stringstream message;
 							message << "The interleaver value is wrong (read: " << val
 							        << ", expected: < " << this->get_size() << ").";
-							throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+							throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 						}
 					}
 				}
@@ -85,7 +85,7 @@ Interleaver_core_user<T>
 				std::stringstream message;
 				message << "The interleaver value is wrong (read: " << val << ", expected: "
 				        << this->get_size() << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			file.close();
@@ -96,14 +96,14 @@ Interleaver_core_user<T>
 
 			std::stringstream message;
 			message << "'n_itl' should be greater than 0 ('n_itl' = " << n_itl << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else
 	{
 		std::stringstream message;
 		message << "Can't open '" + filename + "' file.";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->init();

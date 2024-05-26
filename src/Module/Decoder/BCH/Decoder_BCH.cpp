@@ -1,8 +1,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/BCH/Decoder_BCH.hpp"
 
 using namespace aff3ct;
@@ -12,7 +12,7 @@ template <typename B, typename R>
 Decoder_BCH<B, R>
 ::Decoder_BCH(const int K, const int N, const int t)
 : Decoder_SIHO<B,R>(K, N),
-  t(t), N_p2_1(tools::next_power_of_2(N) -1), last_is_codeword(this->n_frames)
+  t(t), N_p2_1(spu::tools::next_power_of_2(N) -1), last_is_codeword(this->n_frames)
 {
 	const std::string name = "Decoder_BCH";
 	this->set_name(name);
@@ -21,7 +21,7 @@ Decoder_BCH<B, R>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 3 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -29,7 +29,7 @@ template <typename B, typename R>
 Decoder_BCH<B,R>* Decoder_BCH<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

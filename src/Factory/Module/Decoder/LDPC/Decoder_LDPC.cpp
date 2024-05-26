@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Display/rang_format/rang_format.h"
 #include "Tools/Math/max.h"
@@ -376,7 +377,7 @@ module::Decoder_SISO<B,Q>* Decoder_LDPC
 		if (this->implem == "SPA" ) return new module::Decoder_LDPC_BP_flooding_SPA<B,Q>(this->K, this->N_cw, this->n_ite, H, info_bits_pos, this->enable_syndrome, this->syndrome_depth);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -387,7 +388,7 @@ module::Decoder_SIHO<B,Q>* Decoder_LDPC
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if ((this->type == "BP" || this->type == "BP_FLOODING") && this->simd_strategy.empty())
 		{

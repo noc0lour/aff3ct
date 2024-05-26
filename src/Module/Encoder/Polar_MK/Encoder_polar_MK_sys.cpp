@@ -1,7 +1,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Polar_MK/Encoder_polar_MK_sys.hpp"
 
 using namespace aff3ct;
@@ -20,7 +21,7 @@ Encoder_polar_MK_sys<B>
 	{
 		std::stringstream message;
 		message << "This polar code does not support systematic encoding.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

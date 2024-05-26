@@ -10,7 +10,8 @@
 #include <iostream>
 #endif
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Tools/Perf/compute_parity.h"
 #ifndef NDEBUG_TPC
@@ -55,7 +56,7 @@ Decoder_chase_pyndiah<B,R>
 		std::stringstream message;
 		message << "'n_least_reliable_positions' has to be positive and lower than 'N_np' ('n_least_reliable_positions' = "
 		        << n_least_reliable_positions << ", 'N_np' = " << N_np << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_test_vectors <= 0 || n_test_vectors > ((int)1 << n_least_reliable_positions))
@@ -63,7 +64,7 @@ Decoder_chase_pyndiah<B,R>
 		std::stringstream message;
 		message << "'n_test_vectors' has to be positive and lower than 2^'n_least_reliable_positions' ('n_least_reliable_positions' = "
 		        << n_least_reliable_positions << ", 'n_test_vectors' = " << n_test_vectors << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_competitors <= 0 || n_competitors > n_test_vectors)
@@ -71,7 +72,7 @@ Decoder_chase_pyndiah<B,R>
 		std::stringstream message;
 		message << "'n_competitors' has to be positive and lower or equal than 'n_test_vectors' ('n_competitors' = "
 		        << n_competitors << " and 'n_test_vectors' = " << n_test_vectors << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 
@@ -81,7 +82,7 @@ Decoder_chase_pyndiah<B,R>
 		message << "'enc->get_K()' has to be equal to 'dec->get_K()' "
 		        << "('enc->get_K()' = " << enc->get_K()
 		        << ", 'dec->get_K()' = " << dec->get_K() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc->get_N() != dec->get_N())
@@ -90,7 +91,7 @@ Decoder_chase_pyndiah<B,R>
 		message << "'enc->get_N()' has to be equal to 'dec->get_K()' "
 		        << "('enc->get_N()' = " << enc->get_N()
 		        << ", 'dec->get_N()' = " << dec->get_N() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (cp_coef.size() != 5)
@@ -98,7 +99,7 @@ Decoder_chase_pyndiah<B,R>
 		std::stringstream message;
 		message << "'cp_coef.size()' has to be equal to 5 (the 5 coef a, b, c, d and e of the Pyndiah)"
 		        << "('cp_coef.size()' = " << cp_coef.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	generate_bit_flipping_candidates(); // generate bit flipping patterns in 'test_patterns'
@@ -117,7 +118,7 @@ template <typename B, typename R>
 void Decoder_chase_pyndiah<B,R>
 ::deep_copy(const Decoder_chase_pyndiah<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.dec != nullptr) this->dec.reset(m.dec->clone());
 	if (m.enc != nullptr) this->enc.reset(m.enc->clone());
 }
@@ -137,7 +138,7 @@ void Decoder_chase_pyndiah<B,R>
 	{
 		std::stringstream message;
 		message << "beta value 'b' has to be positive or null ('b' = " << b << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	beta_is_set = true;
@@ -544,8 +545,7 @@ void Decoder_chase_pyndiah<B,R>
 		}
 	}
 	else
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "unimplemented method");
-
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "unimplemented method");
 
 	// one 'test_patterns' element is the bit flipping pattern to apply on the least reliable positions
 	// in this pattern, the first position is the instruction to flip or not the least reliable position

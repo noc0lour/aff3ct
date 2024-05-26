@@ -3,7 +3,8 @@
 #include <ios>
 #include <rang.hpp>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Display/Frame_trace/Frame_trace.hpp"
 
 namespace aff3ct
@@ -79,14 +80,14 @@ void Frame_trace<B>
 		std::stringstream message;
 		message << "'ref.size()' has to be equal to 'vec.size()' ('ref.size()' = " << ref.size()
 		        << ", 'vec.size()' = " << vec.size() << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->n_bits < 0)
 	{
 		std::stringstream message;
 		message << "'n_bits' has to be equal or greater than 0 ('n_bits' = " << this->n_bits << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto n_bits = this->n_bits ? (this->n_bits <= (int)vec.size() ? this->n_bits : (int)vec.size()) : (int)vec.size();

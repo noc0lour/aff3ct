@@ -2,8 +2,9 @@
 #include <algorithm>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Module/Extractor/Polar/Extractor_polar.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Noise/Sigma.hpp"
 #include "Tools/Noise/Event_probability.hpp"
@@ -36,7 +37,7 @@ Codec_polar<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -44,7 +45,7 @@ Codec_polar<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -56,7 +57,7 @@ Codec_polar<B,Q>
 		std::stringstream message;
 		message << "'N_cw' has to be equal to 'N' ('N_cw' = " << this->N_cw << ", 'N' = "
 		        << this->N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------- allocations
@@ -79,7 +80,7 @@ Codec_polar<B,Q>
 			this->set_puncturer(pct_params->build<B,Q>(*fb_generator));
 			puncturer_shortlast = dynamic_cast<module::Puncturer_polar_shortlast<B,Q>*>(&this->get_puncturer());
 		}
-		catch(cannot_allocate const&)
+		catch(spu::tools::cannot_allocate const&)
 		{
 			this->set_puncturer(static_cast<const factory::Puncturer*>(pct_params)->build<B,Q>());
 		}
@@ -90,7 +91,7 @@ Codec_polar<B,Q>
 		this->set_encoder(enc_params.build<B>(*frozen_bits));
 		fb_encoder = dynamic_cast<Interface_get_set_frozen_bits*>(&this->get_encoder());
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -149,7 +150,7 @@ Codec_polar<B,Q>
 			std::stringstream message;
 			message << "'fb.size()' has to be equal to 'frozen_bits->size()' ('fb.size()' = " << fb.size()
 			        << ", 'frozen_bits->size()' = " << frozen_bits->size() << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 		std::copy(fb.begin(), fb.end(), frozen_bits->begin());
 		if (this->N_cw != this->N && puncturer_shortlast)
@@ -221,7 +222,7 @@ void Codec_polar<B,Q>
 		std::stringstream message;
 		message << "Incompatible noise type, expected noise types are SIGMA or EP ('noise->get_type()' = "
 		        << Noise<>::type_to_str(this->noise->get_type()) << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -254,7 +255,7 @@ const Frozenbits_generator& Codec_polar<B,Q>
 	{
 		std::stringstream message;
 		message << "'fb_generator' can't be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->fb_generator.get();

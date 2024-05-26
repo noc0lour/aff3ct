@@ -10,7 +10,8 @@
 #include <map>
 #include <cli.hpp>
 
-#include "Tools/Interface/Interface_clone.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Factory/Header.hpp"
 
 namespace aff3ct
@@ -21,7 +22,7 @@ namespace factory
 extern const std::string Factory_name;
 extern const std::string Factory_short_name;
 extern const std::string Factory_prefix;
-class Factory : public tools::Interface_clone
+class Factory : public spu::tools::Interface_clone
 {
 public:
 	// constructor/destructor

@@ -3,8 +3,8 @@
 #include <utility>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Quantizer/Pow2/Quantizer_pow2_fast.hpp"
 
 using namespace aff3ct;
@@ -27,7 +27,7 @@ Quantizer_pow2_fast<R,Q>
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be smaller than 'sizeof(Q)' * 8 ('fixed_point_pos' = " << fixed_point_pos
 		        << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -77,14 +77,14 @@ Quantizer_pow2_fast<R,Q>
 	{
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be greater than 0 ('fixed_point_pos' = " << fixed_point_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (saturation_pos < 2)
 	{
 		std::stringstream message;
 		message << "'saturation_pos' has to be greater than 1 ('saturation_pos' = " << saturation_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (fixed_point_pos > saturation_pos)
@@ -92,7 +92,7 @@ Quantizer_pow2_fast<R,Q>
 		std::stringstream message;
 		message << "'saturation_pos' has to be equal or greater than 'fixed_point_pos' ('saturation_pos' = "
 		        << saturation_pos << ", 'fixed_point_pos' = " << fixed_point_pos << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (sizeof(Q) * 8 <= (unsigned) fixed_point_pos)
@@ -100,21 +100,21 @@ Quantizer_pow2_fast<R,Q>
 		std::stringstream message;
 		message << "'fixed_point_pos' has to be smaller than 'sizeof(Q)' * 8 ('fixed_point_pos' = " << fixed_point_pos
 		        << ", 'sizeof(Q)' = " << sizeof(Q) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (val_max > +(((1 << ((sizeof(Q) * 8) -2))) + ((1 << ((sizeof(Q) * 8) -2)) -1)))
 	{
 		std::stringstream message;
 		message << "'val_max' value is invalid ('val_max' = " << val_max << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (val_min < -(((1 << ((sizeof(Q) * 8) -2))) + ((1 << ((sizeof(Q) * 8) -2)) -1)))
 	{
 		std::stringstream message;
 		message << "'val_min' value is invalid ('val_min' = " << val_min << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -162,7 +162,7 @@ void Quantizer_pow2_fast<R,Q>
 ::_process(const R *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	std::string message = "Supports only 'float' to 'short' and 'float' to 'signed char' conversions.";
-	throw tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
 }
 
 namespace aff3ct
@@ -174,10 +174,10 @@ void Quantizer_pow2_fast<float,short>
 ::_process(const float *Y_N1, short *Y_N2, const size_t frame_id)
 {
 	if (!mipp::isAligned(Y_N1))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N1' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N1' is misaligned memory.");
 
 	if (!mipp::isAligned(Y_N2))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N2' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N2' is misaligned memory.");
 
 	auto size = (unsigned)(this->N);
 	auto vectorized_size = (size / mipp::nElmtsPerRegister<short>()) * mipp::nElmtsPerRegister<short>();
@@ -198,7 +198,7 @@ void Quantizer_pow2_fast<float,short>
 	}
 
 	for (unsigned i = vectorized_size; i < size; i++)
-		Y_N2[i] = (short)tools::saturate((float)std::round((float)factor * Y_N1[i]), (float)val_min, (float)val_max);
+		Y_N2[i] = (short)spu::tools::saturate((float)std::round((float)factor * Y_N1[i]), (float)val_min, (float)val_max);
 }
 }
 }
@@ -212,10 +212,10 @@ void Quantizer_pow2_fast<float,signed char>
 ::_process(const float *Y_N1, signed char *Y_N2, const size_t frame_id)
 {
 	if (!mipp::isAligned(Y_N1))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N1' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N1' is misaligned memory.");
 
 	if (!mipp::isAligned(Y_N2))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N2' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N2' is misaligned memory.");
 
 	auto size = (unsigned)(this->N);
 	auto vectorized_size = (size / mipp::nElmtsPerRegister<signed char>()) * mipp::nElmtsPerRegister<signed char>();
@@ -243,7 +243,7 @@ void Quantizer_pow2_fast<float,signed char>
 	}
 
 	for (unsigned i = vectorized_size; i < size; i++)
-		Y_N2[i] = (signed char)tools::saturate((float)std::round((float)factor * Y_N1[i]), (float)val_min, (float)val_max);
+		Y_N2[i] = (signed char)spu::tools::saturate((float)std::round((float)factor * Y_N1[i]), (float)val_min, (float)val_max);
 }
 }
 }

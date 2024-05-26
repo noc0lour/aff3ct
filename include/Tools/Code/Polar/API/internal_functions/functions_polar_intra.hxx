@@ -5,7 +5,8 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_inter_intra.h"
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_intra.h"
 
@@ -192,7 +193,7 @@ bool spc_intra<B,R,HI,N_ELMTS>
 		auto i = 0;
 		// while (l_a[i] != s_cur_min_abs) i++;
 		while (std::abs(l_a[i]) != s_cur_min_abs) i++;
-		s_a[i] = (s_a[i] == 0) ? bit_init<B>() : 0;
+		s_a[i] = (s_a[i] == 0) ? spu::tools::bit_init<B>() : 0;
 	}
 
 	return (s_prod_sign < 0);
@@ -248,7 +249,7 @@ bool spc_intra<B,R,HI,0>
 		auto i = 0;
 		// while (l_a[i] != s_cur_min_abs) i++;
 		while (std::abs(l_a[i]) != s_cur_min_abs) i++;
-		s_a[i] = (s_a[i] == 0) ? bit_init<B>() : 0;
+		s_a[i] = (s_a[i] == 0) ? spu::tools::bit_init<B>() : 0;
 	}
 	return (s_prod_sign < 0);
 }

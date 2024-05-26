@@ -2,8 +2,9 @@
 #include <sstream>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Perf/common/hard_decide.h"
 #include "Module/Decoder/LDPC/BP/Flooding/Decoder_LDPC_BP_flooding.hpp"
 
@@ -57,7 +58,7 @@ Decoder_LDPC_BP_flooding<B,R,Update_rule>
 				message << "'connections[var_id]' has to be equal or smaller than 'msg_var_to_chk_id[var_id].size()' "
 				        << "('var_id' = " << var_id << ", 'connections[var_id]' = " << connections[var_id]
 				        << ", 'msg_var_to_chk_id[var_id].size()' = " << msg_var_to_chk_id[var_id].size() << ").";
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			transpose[k] = branch_id;

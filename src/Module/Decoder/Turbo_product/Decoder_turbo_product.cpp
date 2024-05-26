@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/Turbo_product/Decoder_turbo_product.hpp"
 
 using namespace aff3ct;
@@ -38,7 +39,7 @@ Decoder_turbo_product<B,R>
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_ite*2 != (int)alpha.size())
@@ -46,7 +47,7 @@ Decoder_turbo_product<B,R>
 		std::stringstream message;
 		message << "'alpha.size()' has to be twice 'n_ite' ('n_ite' = " << n_ite << " and 'alpha.size()' = "
 		        << alpha.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (n_ite*2 != (int)beta.size() && beta.size() != 0)
@@ -54,7 +55,7 @@ Decoder_turbo_product<B,R>
 		std::stringstream message;
 		message << "'beta.size()' has to be twice 'n_ite' or null ('n_ite' = " << n_ite << " and 'beta.size()' = "
 		        << alpha.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (cp_r.get_n_frames() != cp_c.get_n_frames())
@@ -62,7 +63,7 @@ Decoder_turbo_product<B,R>
 		std::stringstream message;
 		message << "'cp_r.get_n_frames()' has to be equal to 'cp_c.get_n_frames()' ('cp_r.get_n_frames()' = "
 		        << cp_r.get_n_frames() << ", 'cp_c.get_n_frames()' = " << cp_c.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (cp_r.get_n_frames_per_wave() != cp_c.get_n_frames_per_wave())
@@ -71,7 +72,7 @@ Decoder_turbo_product<B,R>
 		message << "'cp_r.get_n_frames_per_wave()' has to be equal to 'cp_c.get_n_frames_per_wave()' "
 		        << "('cp_r.get_n_frames_per_wave()' = " << cp_r.get_n_frames_per_wave()
 		        << ", 'cp_c.get_n_frames_per_wave()' = " << cp_c.get_n_frames_per_wave() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != cp_r.get_N() * cp_c.get_N())
@@ -80,7 +81,7 @@ Decoder_turbo_product<B,R>
 		message << "'N' has to be equal to 'cp_r.get_N()' * 'cp_c.get_N()' ('N' = "
 		        << this->N << ", 'cp_r.get_N()' = " << cp_r.get_N()
 		        << ", 'cp_c.get_N()' = " << cp_c.get_N() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 
@@ -90,7 +91,7 @@ Decoder_turbo_product<B,R>
 		message << "'K' has to be equal to 'cp_r.get_K()' * 'cp_c.get_K()' ('K' = "
 		        << this->K << ", 'cp_r.get_K()' = " << cp_r.get_K()
 		        << ", 'cp_c.get_K()' = " << cp_c.get_K() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)pi.get_core().get_size())
@@ -98,7 +99,7 @@ Decoder_turbo_product<B,R>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' has to be equal to 'N' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'N' = " << this->N << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (beta.size())
@@ -123,7 +124,7 @@ template <typename B, typename R>
 void Decoder_turbo_product<B,R>
 ::deep_copy(const Decoder_turbo_product<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.cp_r != nullptr) this->cp_r.reset(m.cp_r->clone());
 	if (m.cp_c != nullptr) this->cp_c.reset(m.cp_c->clone());
 	if (m.pi   != nullptr) this->pi  .reset(m.pi  ->clone());

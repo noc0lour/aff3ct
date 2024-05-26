@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Update_rule/NMS/Update_rule_NMS_simd.hpp"
 
 namespace aff3ct
@@ -36,7 +37,8 @@ Update_rule_NMS_simd<R,F>
 : name("NMS"), normalize_factor(normalize_factor), MS()
 {
 	if (sizeof(R) == 1)
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "This update rule does not work in 8-bit fixed-point.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+		                                "This update rule does not work in 8-bit fixed-point.");
 
 	if (typeid(R) == typeid(int16_t) || typeid(R) == typeid(int8_t))
 	{
@@ -54,7 +56,7 @@ Update_rule_NMS_simd<R,F>
 			std::stringstream message;
 			message << "'normalize_factor' can only be 0.125f, 0.250f, 0.375f, 0.500f, 0.625f, 0.750f, 0.875f or 1.000f"
 			        << " ('normalize_factor' = " << normalize_factor << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		if (error)
@@ -62,7 +64,7 @@ Update_rule_NMS_simd<R,F>
 			std::stringstream message;
 			message << "Incompatible 'normalize_factor' and 'F' template ('normalize_factor' = "
 			        << normalize_factor << ", 'F' = " << F << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 }

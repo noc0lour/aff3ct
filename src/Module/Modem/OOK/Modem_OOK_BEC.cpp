@@ -2,9 +2,7 @@
 #include <type_traits>
 
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Noise/noise_utils.h"
-// #include "Tools/Math/utils.h"
 #include "Module/Modem/OOK/Modem_OOK_BEC.hpp"
 
 using namespace aff3ct;
@@ -40,7 +38,7 @@ void Modem_OOK_BEC<B,R,Q>
 			sign *= (Q)-1;
 		}
 		else
-//			Y_N2[i] = std::copysign(tools::sat_val<Q>(), ((Q)1 - (Q)2.0 * Y_N1[i]));
+//			Y_N2[i] = std::copysign(spu::tools::sat_val<Q>(), ((Q)1 - (Q)2.0 * Y_N1[i]));
 			Y_N2[i] = ((Q)1 - (Q)2.0 * Y_N1[i]);
 }
 

@@ -1,7 +1,6 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Quantizer/Quantizer.hpp"
 
 namespace aff3ct
@@ -10,23 +9,23 @@ namespace module
 {
 
 template <typename R, typename Q>
-runtime::Task& Quantizer<R,Q>
+spu::runtime::Task& Quantizer<R,Q>
 ::operator[](const qnt::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename R, typename Q>
-runtime::Socket& Quantizer<R,Q>
+spu::runtime::Socket& Quantizer<R,Q>
 ::operator[](const qnt::sck::process s)
 {
-	return Module::operator[]((size_t)qnt::tsk::process)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)qnt::tsk::process)[(size_t)s];
 }
 
 template <typename R, typename Q>
 Quantizer<R,Q>
 ::Quantizer(const int N)
-: Module(), N(N)
+: spu::module::Module(), N(N)
 {
 	const std::string name = "Quantizer";
 	this->set_name(name);
@@ -36,13 +35,14 @@ Quantizer<R,Q>
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p = this->create_task("process");
 	auto ps_Y_N1 = this->template create_socket_in <R>(p, "Y_N1", this->N);
 	auto ps_Y_N2 = this->template create_socket_out<Q>(p, "Y_N2", this->N);
-	this->create_codelet(p, [ps_Y_N1, ps_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p, [ps_Y_N1, ps_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &qnt = static_cast<Quantizer<R,Q>&>(m);
 
@@ -50,7 +50,7 @@ Quantizer<R,Q>
 		             static_cast<Q*>(t[ps_Y_N2].get_dataptr()),
 		             frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 }
 
@@ -58,7 +58,7 @@ template <typename R, typename Q>
 Quantizer<R,Q>* Quantizer<R,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename R, typename Q>
@@ -91,7 +91,7 @@ template <typename R, typename Q>
 void Quantizer<R,Q>
 ::_process(const R *Y_N1, Q *Y_N2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 }

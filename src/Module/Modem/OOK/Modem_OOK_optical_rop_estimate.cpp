@@ -4,8 +4,9 @@
 #include <sstream>
 #include <cmath>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Received_optical_power.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/general_utils.h"
 #include "Module/Modem/OOK/Modem_OOK_optical_rop_estimate.hpp"
 
@@ -61,7 +62,7 @@ void Modem_OOK_optical_rop_estimate<B,R,Q>
 		std::stringstream message;
 		message << "'ROP_known_bits.size()' has to be smaller than 'N' ('ROP_known_bits.size()' = "
 		        << ROP_known_bits.size() << ", 'N' = " << this->N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	dist_ROP_range = dist.get_noise_range();
@@ -90,10 +91,10 @@ void Modem_OOK_optical_rop_estimate<B,R,Q>
 ::_demodulate_wg(const float *CP, const R *X_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	// ROP estimation
 	Q mean1 = 0;

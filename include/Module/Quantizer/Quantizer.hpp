@@ -9,9 +9,7 @@
 #include <memory>
 #include <vector>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -39,11 +37,11 @@ namespace module
  * If Q is a floating-point representation then the Quantizer does nothing more than a cast.
  */
 template <typename R = float, typename Q = int>
-class Quantizer : public Module
+class Quantizer : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const qnt::tsk          t);
-	inline runtime::Socket& operator[](const qnt::sck::process s);
+	inline spu::runtime::Task&   operator[](const qnt::tsk          t);
+	inline spu::runtime::Socket& operator[](const qnt::sck::process s);
 
 protected:
 	const int N; /*!< Size of one frame (= number of bits in one frame) */

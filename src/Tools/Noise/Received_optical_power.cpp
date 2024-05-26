@@ -1,4 +1,3 @@
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Noise/Received_optical_power.hpp"
 
 using namespace aff3ct;

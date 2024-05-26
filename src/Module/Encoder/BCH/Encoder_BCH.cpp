@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/BCH/Encoder_BCH.hpp"
 
 using namespace aff3ct;
@@ -23,7 +24,7 @@ Encoder_BCH<B>
 		std::stringstream message;
 		message << "'N - K' is different than 'n_rdncy' ('K' = " << K << ", 'N' = " << N
 		        << ", 'n_rdncy' = " << n_rdncy << ", 'N - K' = " << (this->N - this->K) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::iota(this->info_bits_pos.begin(), this->info_bits_pos.end(), n_rdncy); // redundancy on the first 'n_rdncy' bits

@@ -1,7 +1,8 @@
 #include <map>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/LTE/Interleaver_core_LTE.hpp"
 
 using namespace aff3ct;
@@ -228,7 +229,7 @@ void Interleaver_core_LTE<T>
 	{
 		std::stringstream message;
 		message << "There is no LTE f_1 and f_2 parameters for 'size' = " << size << ".";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

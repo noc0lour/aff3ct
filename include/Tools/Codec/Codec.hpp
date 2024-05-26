@@ -12,9 +12,8 @@
 
 #include "Tools/Interface/Interface_get_set_noise.hpp"
 #include "Tools/Interface/Interface_notify_noise_update.hpp"
-#include "Tools/Interface/Interface_get_set_n_frames.hpp"
 #ifndef _MSC_VER
-#include "Tools/Interface/Interface_clone.hpp"
+#include <streampu.hpp>
 #endif
 #include "Tools/Interleaver/Interleaver_core.hpp"
 #include "Tools/Noise/Noise.hpp"
@@ -32,12 +31,12 @@ template <typename B = int, typename Q = float>
 #ifdef _MSC_VER
 class Codec : public Interface_get_set_noise,
               public Interface_notify_noise_update,
-              public Interface_get_set_n_frames
+              public spu::tools::Interface_get_set_n_frames
 #else
 class Codec : public Interface_get_set_noise,
               public Interface_notify_noise_update,
-              public Interface_get_set_n_frames,
-              public Interface_clone
+              public spu::tools::Interface_get_set_n_frames,
+              public spu::tools::Interface_clone
 #endif
 {
 private:

@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/Event_generator/Fast/Event_generator_fast.hpp"
 
 using namespace aff3ct;
@@ -38,7 +39,7 @@ template <typename R, typename E>
 void Event_generator_fast<R,E>
 ::generate(E *draw, const unsigned length, const R event_probability)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "The MT19937 random generator does not support this type.");
 }
 
 

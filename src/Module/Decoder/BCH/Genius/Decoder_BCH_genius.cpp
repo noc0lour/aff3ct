@@ -2,9 +2,10 @@
 #include <sstream>
 #include <algorithm>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Tools/Perf/distance/hamming_distance.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/BCH/Genius/Decoder_BCH_genius.hpp"
 
 using namespace aff3ct;
@@ -24,7 +25,7 @@ Decoder_BCH_genius<B,R>
 	{
 		std::stringstream message;
 		message << "The given 'encoder' has to be memorizing its generated code words.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -32,7 +33,7 @@ template <typename B, typename R>
 int Decoder_BCH_genius<B,R>
 ::_decode(B *Y_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

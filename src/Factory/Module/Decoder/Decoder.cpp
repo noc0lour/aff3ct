@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/Generic/ML/Decoder_maximum_likelihood_std.hpp"
 #include "Module/Decoder/Generic/ML/Decoder_maximum_likelihood_naive.hpp"
@@ -107,7 +109,7 @@ module::Decoder_SIHO<B,Q>* Decoder
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

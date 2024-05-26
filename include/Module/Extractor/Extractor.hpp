@@ -10,9 +10,7 @@
 #include <memory>
 #include <vector>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -32,14 +30,14 @@ namespace module
 	}
 
 template <typename B = int, typename Q = float>
-class Extractor : public Module
+class Extractor : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const ext::tsk                      t);
-	inline runtime::Socket& operator[](const ext::sck::get_sys_llr         s);
-	inline runtime::Socket& operator[](const ext::sck::get_sys_bit         s);
-	inline runtime::Socket& operator[](const ext::sck::get_sys_and_par_llr s);
-	inline runtime::Socket& operator[](const ext::sck::add_sys_and_ext_llr s);
+	inline spu::runtime::Task&   operator[](const ext::tsk                      t);
+	inline spu::runtime::Socket& operator[](const ext::sck::get_sys_llr         s);
+	inline spu::runtime::Socket& operator[](const ext::sck::get_sys_bit         s);
+	inline spu::runtime::Socket& operator[](const ext::sck::get_sys_and_par_llr s);
+	inline spu::runtime::Socket& operator[](const ext::sck::add_sys_and_ext_llr s);
 
 protected:
 	const int K;

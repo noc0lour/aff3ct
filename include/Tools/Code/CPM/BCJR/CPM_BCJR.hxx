@@ -5,7 +5,6 @@
 #include <sstream>
 #include <limits>
 
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Code/CPM/BCJR/CPM_BCJR.hpp"
 
 namespace aff3ct
@@ -57,7 +56,7 @@ void CPM_BCJR<SIN,SOUT,Q,MAX>
 		std::stringstream message;
 		message << "'Lch_N.size()' has to be equal to 'chn_size' ('Lch_N.size()' = " << Lch_N.size()
 		        << ", 'chn_size' = " << chn_size << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (Le_N.size() != ext_size)
@@ -65,7 +64,7 @@ void CPM_BCJR<SIN,SOUT,Q,MAX>
 		std::stringstream message;
 		message << "'Le_N.size()' has to be equal to 'ext_size' ('Le_N.size()' = " << Le_N.size()
 		        << ", 'ext_size' = " << ext_size << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->decode(Lch_N.data(), Le_N.data());
@@ -92,7 +91,7 @@ void CPM_BCJR<SIN,SOUT,Q,MAX>
 		std::stringstream message;
 		message << "'Lch_N.size()' has to be equal to 'chn_size' ('Lch_N.size()' = " << Lch_N.size()
 		        << ", 'chn_size' = " << chn_size << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (Ldec_N.size() != dec_size)
@@ -100,7 +99,7 @@ void CPM_BCJR<SIN,SOUT,Q,MAX>
 		std::stringstream message;
 		message << "'Ldec_N.size()' has to be equal to 'dec_size' ('Ldec_N.size()' = " << Ldec_N.size()
 		        << ", 'dec_size' = " << dec_size << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (Le_N.size() != ext_size)
@@ -108,7 +107,7 @@ void CPM_BCJR<SIN,SOUT,Q,MAX>
 		std::stringstream message;
 		message << "'Le_N.size()' has to be equal to 'ext_size' ('Le_N.size()' = " << Le_N.size()
 		        << ", 'ext_size' = " << ext_size << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->decode(Lch_N.data(), Ldec_N.data(), Le_N.data());

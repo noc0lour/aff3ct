@@ -3,8 +3,9 @@
 #include <cmath>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/general_utils.h"
 #include "Module/Modem/OOK/Modem_OOK_optical.hpp"
 
@@ -34,10 +35,10 @@ void Modem_OOK_optical<B,R,Q>
 ::_demodulate(const float *CP, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	if (*CP != this->last_channel_param)
 	{
@@ -46,7 +47,7 @@ void Modem_OOK_optical<B,R,Q>
 		{
 			std::stringstream message;
 			message << "Undefined noise power 'CP' in the given distributions ('CP' = " << *CP << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 

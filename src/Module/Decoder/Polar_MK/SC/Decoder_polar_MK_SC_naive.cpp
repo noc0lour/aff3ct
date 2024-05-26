@@ -1,8 +1,9 @@
 #include <algorithm>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/decoder_polar_functions.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Decoder/Polar_MK/SC/Decoder_polar_MK_SC_naive.hpp"
 
@@ -45,7 +46,7 @@ Decoder_polar_MK_SC_naive<B,R>
 		std::stringstream message;
 		message << "'N' has to be equal to 'code.get_codeword_size()' ('N' = " << N
 		        << ", 'code.get_codeword_size()' = " << code.get_codeword_size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -53,7 +54,7 @@ Decoder_polar_MK_SC_naive<B,R>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -62,7 +63,7 @@ Decoder_polar_MK_SC_naive<B,R>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->recursive_allocate_nodes_contents(this->polar_tree.get_root(), this->N);
@@ -83,7 +84,7 @@ Decoder_polar_MK_SC_naive<B,R>
 		{
 			if (tools::Polar_lambdas<B,R>::functions.find(code.get_kernel_matrices()[l]) ==
 			    tools::Polar_lambdas<B,R>::functions.end())
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
 			this->lambdas[l] = tools::Polar_lambdas<B,R>::functions[code.get_kernel_matrices()[l]];
 		}
 	}
@@ -95,7 +96,7 @@ Decoder_polar_MK_SC_naive<B,R>
 			message << "'lambdas.size()' has to be equal to 'code.get_kernel_matrices().size()' ("
 			        << "'lambdas.size()' = " << lambdas.size() << ", "
 			        << "'code.get_kernel_matrices().size()' = " << code.get_kernel_matrices().size() << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (size_t l = 0; l < code.get_kernel_matrices().size(); l++)
@@ -107,7 +108,7 @@ Decoder_polar_MK_SC_naive<B,R>
 				        << "'l' = " << l  << ", "
 				        << "'lambdas[l].size()' = " << lambdas[l].size() << ", "
 				        << "'code.get_kernel_matrices()[l].size()' = " << code.get_kernel_matrices()[l].size() << ").";
-				throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 
@@ -145,7 +146,7 @@ template <typename B, typename R>
 void Decoder_polar_MK_SC_naive<B,R>
 ::deep_copy(const Decoder_polar_MK_SC_naive<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	this->recursive_deep_copy(m.polar_tree.get_root(), this->polar_tree.get_root());
 }
 

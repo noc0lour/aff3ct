@@ -1,4 +1,5 @@
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Turbo/Post_processing_SISO/Scaling_factor/Scaling_factor_seq.hpp"
 
 using namespace aff3ct;
@@ -36,7 +37,7 @@ bool Scaling_factor_seq<B,R>
 	// {}
 	// else // sf = 0.75
 		for (auto i = 0; i < loop_size; i++)
-			ext[i] = div2<R>(ext[i]) + div4<R>(ext[i]);
+			ext[i] = spu::tools::div2<R>(ext[i]) + spu::tools::div4<R>(ext[i]);
 
 	return false;
 }
@@ -58,7 +59,7 @@ bool Scaling_factor_seq<B,R>
 		// {}
 		// else // sf = 0.75
 			for (auto i = 0; i < loop_size; i++)
-				ext[i] = div2<R>(ext[i]) + div4<R>(ext[i]);
+				ext[i] = spu::tools::div2<R>(ext[i]) + spu::tools::div4<R>(ext[i]);
 	}
 
 	return false;

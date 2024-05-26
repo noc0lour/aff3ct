@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
 
 namespace aff3ct
@@ -24,7 +25,7 @@ Noise_type Noise<R>
 	{
 		std::stringstream message;
 		message << "The string 'str' does not represent a noise type ('str' = " << str << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return t;
@@ -54,7 +55,7 @@ std::string Noise<R>
 	{
 		std::stringstream message;
 		message << "The type 't' does not represent a noise type ('t' = " << (int8_t)t << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return str;

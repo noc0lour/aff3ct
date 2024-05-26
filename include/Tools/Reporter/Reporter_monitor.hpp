@@ -9,14 +9,14 @@
 #include <utility>
 #include <string>
 
-#include "Tools/Reporter/Reporter.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
 namespace tools
 {
 template <class M_t>
-class Reporter_monitor : public Reporter
+class Reporter_monitor : public spu::tools::Reporter
 {
 public:
 	using M = M_t;

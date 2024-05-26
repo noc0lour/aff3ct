@@ -1,7 +1,8 @@
 #include <string>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Coset/Encoder_coset.hpp"
 
 using namespace aff3ct::module;
@@ -38,14 +39,14 @@ template <typename B>
 const std::vector<uint32_t>& Encoder_coset<B>
 ::get_info_bits_pos() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
 bool Encoder_coset<B>
 ::is_sys() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>

@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Module.hpp"
 #include "Module/Monitor/BFER/Monitor_BFER.hpp"
 
@@ -10,24 +9,24 @@ namespace module
 {
 
 template <typename B>
-runtime::Task& Monitor_BFER<B>
+spu::runtime::Task& Monitor_BFER<B>
 ::operator[](const mnt::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B>
-runtime::Socket& Monitor_BFER<B>
+spu::runtime::Socket& Monitor_BFER<B>
 ::operator[](const mnt::sck::check_errors s)
 {
-	return Module::operator[]((size_t)mnt::tsk::check_errors)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mnt::tsk::check_errors)[(size_t)s];
 }
 
 template <typename B>
-runtime::Socket& Monitor_BFER<B>
+spu::runtime::Socket& Monitor_BFER<B>
 ::operator[](const mnt::sck::check_errors2 s)
 {
-	return Module::operator[]((size_t)mnt::tsk::check_errors2)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)mnt::tsk::check_errors2)[(size_t)s];
 }
 
 template <typename B>

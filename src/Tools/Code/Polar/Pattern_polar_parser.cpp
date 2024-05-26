@@ -3,7 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Pattern_polar_parser.hpp"
 
 using namespace aff3ct;
@@ -29,7 +30,7 @@ Pattern_polar_parser
 		std::stringstream message;
 		message << "'pattern_rate0_id' has to be smaller than 'patterns.size()' ('pattern_rate0_id' = "
 		        << pattern_rate0_id << ", 'patterns.size()' = " << patterns.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (pattern_rate1_id >= patterns.size())
@@ -37,7 +38,7 @@ Pattern_polar_parser
 		std::stringstream message;
 		message << "'pattern_rate1_id' has to be smaller than 'patterns.size()' ('pattern_rate1_id' = "
 		        << pattern_rate1_id << ", 'patterns.size()' = " << patterns.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (pattern_rate0_id == pattern_rate1_id)
@@ -45,7 +46,7 @@ Pattern_polar_parser
 		std::stringstream message;
 		message << "'pattern_rate0_id' can't be equal to 'pattern_rate1_id' ('pattern_rate0_id' = "
 		        << pattern_rate0_id << ", 'pattern_rate1_id' = " << pattern_rate1_id << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto p : patterns)

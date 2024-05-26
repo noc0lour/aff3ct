@@ -7,7 +7,8 @@
 #include <limits>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Update_rule/LSPA/Update_rule_LSPA.hpp"
 
 namespace aff3ct
@@ -22,14 +23,14 @@ Update_rule_LSPA<R>::Update_rule_LSPA(const unsigned max_check_node_degree)
 	{
 		std::stringstream message;
 		message << "'max_check_node_degree' has to greater than 0.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (!std::is_same<R, double>::value && !std::is_same<R, float>::value)
 	{
 		std::stringstream message;
 		message << "The 'LSPA' update rule supports only 'float' or 'double' datatypes.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

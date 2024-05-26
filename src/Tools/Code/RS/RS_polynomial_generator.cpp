@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/RS/RS_polynomial_generator.hpp"
 
 using namespace aff3ct::tools;
@@ -13,7 +14,7 @@ RS_polynomial_generator
 	{
 		std::stringstream message;
 		message << "The correction power 't' has to be strictly positive ('t' = " << t << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	compute_polynomial();

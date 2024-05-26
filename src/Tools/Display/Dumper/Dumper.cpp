@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Display/Dumper/Dumper.hpp"
 
 using namespace aff3ct;
@@ -29,23 +30,23 @@ void Dumper
                 const bool binary_mode, const unsigned n_frames, std::vector<unsigned> headers)
 {
 	if (ptr == nullptr)
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'ptr' can't be null.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'ptr' can't be null.");
 
 	if (size <= 0)
 	{
 		std::stringstream message;
 		message << "'size' has to be greater than 0 ('size' = " << size << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (file_ext.empty())
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'file_ext' can't be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'file_ext' can't be empty.");
 
 	if (n_frames == 0)
 	{
 		std::stringstream message;
 		message << "'n_frames' has to be greater than 0 ('n_frames' = " << n_frames << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->buffer.push_back(std::vector<std::vector<char>>());
@@ -71,7 +72,7 @@ void Dumper
 	{
 		std::stringstream message;
 		message << "'n_frames' has to be greater than 0('n_frames' = " << n_frames << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 
 	this->register_data(data.data(), (unsigned)(data.size() / n_frames), add_threshold,
@@ -105,7 +106,7 @@ void Dumper
 ::dump(const std::string& base_path)
 {
 	if (base_path.empty())
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'base_path' can't be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'base_path' can't be empty.");
 
 	for (auto i = 0; i < (int)this->registered_data_ptr.size(); i++)
 	{
@@ -183,7 +184,7 @@ void Dumper
 	else if (type == typeid(float   )) this->_write_body_text<float   >(file, buffer, size);
 	else if (type == typeid(double  )) this->_write_body_text<double  >(file, buffer, size);
 	else
-		throw invalid_argument(__FILE__, __LINE__, __func__, "Unsupported data type.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported data type.");
 }
 
 template <typename T>

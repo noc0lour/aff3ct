@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Noise/Event_probability.hpp"
 
 using namespace aff3ct;
@@ -23,7 +24,7 @@ void Event_probability<R>
 	{
 		std::stringstream message;
 		message << "The EP noise '_n' has to be between [0,1] ('_n' = " << n << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

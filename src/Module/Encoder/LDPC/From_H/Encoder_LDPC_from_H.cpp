@@ -1,7 +1,8 @@
 #include <sstream>
 #include <fstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Matrix/Matrix.hpp"
 #include "Tools/Code/LDPC/AList/AList.hpp"
 #include "Tools/Code/LDPC/Matrix_handler/LDPC_matrix_handler.hpp"
@@ -32,7 +33,7 @@ Encoder_LDPC_from_H<B>
 	{
 		std::stringstream message;
 		message << "Generation method of G 'G_method' is unknown ('G_method' = \"" << G_method << "\").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (G_save_path != "")
@@ -44,7 +45,7 @@ Encoder_LDPC_from_H<B>
 			{
 				std::stringstream message;
 				message << "'G_save_path' could not be opened ('G_save_path' = \"" << G_save_path << "\").";
-				throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			tools::AList::write(this->G, file);

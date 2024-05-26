@@ -5,14 +5,13 @@
 #include <random>
 #include <string>
 
-#include "Runtime/Sequence/Sequence.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Display/rang_format/rang_format.h"
-#include "Tools/Interface/Interface_set_seed.hpp"
 #include "Tools/Interface/Interface_get_set_noise.hpp"
 #include "Tools/Interface/Interface_notify_noise_update.hpp"
 #include "Tools/Interface/Interface_get_set_frozen_bits.hpp"
 #include "Tools/Display/Dumper/Dumper.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Coset/Coset.hpp"
 #include "Factory/Tools/Codec/Codec.hpp"
 #include "Factory/Tools/Codec/Codec_SIHO.hpp"
@@ -34,10 +33,10 @@ Simulation_BFER_ite<B,R,Q>
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Source<B>> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Source<B>> Simulation_BFER_ite<B,R,Q>
 ::build_source()
 {
-	auto src = std::unique_ptr<module::Source<B>>(params_BFER_ite.src->build<B>());
+	auto src = std::unique_ptr<spu::module::Source<B>>(params_BFER_ite.src->build<B>());
 	src->set_n_frames(this->params.n_frames);
 	return src;
 }
@@ -141,47 +140,47 @@ std::unique_ptr<module::Coset<B,B>> Simulation_BFER_ite<B,R,Q>
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Switcher> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Switcher> Simulation_BFER_ite<B,R,Q>
 ::build_switcher()
 {
-	auto switcher = std::unique_ptr<module::Switcher>(
-		new module::Switcher(2, params_BFER_ite.cdc->N_cw, typeid(Q)));
+	auto switcher = std::unique_ptr<spu::module::Switcher>(
+		new spu::module::Switcher(2, params_BFER_ite.cdc->N_cw, typeid(Q)));
 	switcher->set_n_frames(this->params.n_frames);
 	return switcher;
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Iterator> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Iterator> Simulation_BFER_ite<B,R,Q>
 ::build_iterator()
 {
-	auto iterator = std::unique_ptr<module::Iterator>(new module::Iterator(params_BFER_ite.n_ite));
+	auto iterator = std::unique_ptr<spu::module::Iterator>(new spu::module::Iterator(params_BFER_ite.n_ite));
 	iterator->set_n_frames(this->params.n_frames);
 	return iterator;
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Unaryop_not_abs<int32_t>> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Unaryop_not_abs<int32_t>> Simulation_BFER_ite<B,R,Q>
 ::build_unaryop()
 {
-	auto unaryop = std::unique_ptr<module::Unaryop_not_abs<int32_t>>(new module::Unaryop_not_abs<int32_t>(1));
+	auto unaryop = std::unique_ptr<spu::module::Unaryop_not_abs<int32_t>>(new spu::module::Unaryop_not_abs<int32_t>(1));
 	unaryop->set_n_frames(this->params.n_frames);
 	return unaryop;
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Reducer_and<int32_t,int8_t>> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Reducer_and<int32_t,int8_t>> Simulation_BFER_ite<B,R,Q>
 ::build_reducer()
 {
-	auto reducer = std::unique_ptr<module::Reducer_and<int32_t,int8_t>>(new module::Reducer_and<int32_t,int8_t>(1));
+	auto reducer = std::unique_ptr<spu::module::Reducer_and<int32_t,int8_t>>(new spu::module::Reducer_and<int32_t,int8_t>(1));
 	reducer->set_n_frames(this->params.n_frames);
 	return reducer;
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Binaryop_or<int8_t>> Simulation_BFER_ite<B,R,Q>
+std::unique_ptr<spu::module::Binaryop_or<int8_t>> Simulation_BFER_ite<B,R,Q>
 ::build_binaryop()
 {
-	auto binaryop = std::unique_ptr<module::Binaryop_or<int8_t>>(new module::Binaryop_or<int8_t>(1));
+	auto binaryop = std::unique_ptr<spu::module::Binaryop_or<int8_t>>(new spu::module::Binaryop_or<int8_t>(1));
 	binaryop->set_n_frames(this->params.n_frames);
 	return binaryop;
 }
@@ -246,8 +245,9 @@ void Simulation_BFER_ite<B,R,Q>
 	auto &red  = *this->reducer;
 	auto &bop  = *this->binaryop;
 
-	std::vector<Module*> modules = { &src, &crc, &itb,  &mdm1, &mdm2, &chn, &qnt, &itl1, &itl2, &csr1, &csr2, &csr3,
-	                                 &csb, &mnt, &swi, &ite, &enc, &dcs, &dch, &ext, &uop, &red, &bop };
+	std::vector<spu::module::Module*> modules = { &src, &crc, &itb,  &mdm1, &mdm2, &chn, &qnt, &itl1, &itl2, &csr1,
+	                                              &csr2, &csr3, &csb, &mnt, &swi, &ite, &enc, &dcs, &dch, &ext, &uop,
+	                                              &red, &bop };
 
 	for (auto& mod : modules)
 		for (auto& tsk : mod->tasks)
@@ -255,15 +255,15 @@ void Simulation_BFER_ite<B,R,Q>
 
 	if (this->params_BFER_ite.src->type == "AZCW")
 	{
-		auto src_data = (uint8_t*)(src[src::sck::generate  ::out_data].get_dataptr());
-		auto crc_data = (uint8_t*)(crc[crc::sck::build     ::U_K2    ].get_dataptr());
-		auto enc_data = (uint8_t*)(enc[enc::sck::encode    ::X_N     ].get_dataptr());
-		auto itl_data = (uint8_t*)(itb[itl::sck::interleave::itl     ].get_dataptr());
+		auto src_data = (uint8_t*)(src[spu::module::src::sck::generate  ::out_data].get_dataptr());
+		auto crc_data = (uint8_t*)(crc[             crc::sck::build     ::U_K2    ].get_dataptr());
+		auto enc_data = (uint8_t*)(enc[             enc::sck::encode    ::X_N     ].get_dataptr());
+		auto itl_data = (uint8_t*)(itb[             itl::sck::interleave::itl     ].get_dataptr());
 
-		auto src_bytes = src[src::sck::generate  ::out_data].get_databytes();
-		auto crc_bytes = crc[crc::sck::build     ::U_K2    ].get_databytes();
-		auto enc_bytes = enc[enc::sck::encode    ::X_N     ].get_databytes();
-		auto itl_bytes = itb[itl::sck::interleave::itl     ].get_databytes();
+		auto src_bytes = src[spu::module::src::sck::generate  ::out_data].get_databytes();
+		auto crc_bytes = crc[             crc::sck::build     ::U_K2    ].get_databytes();
+		auto enc_bytes = enc[             enc::sck::encode    ::X_N     ].get_databytes();
+		auto itl_bytes = itb[             itl::sck::interleave::itl     ].get_databytes();
 
 		std::fill(src_data, src_data + src_bytes, 0);
 		std::fill(crc_data, crc_data + crc_bytes, 0);
@@ -277,14 +277,14 @@ void Simulation_BFER_ite<B,R,Q>
 	else
 	{
 		if (this->params_BFER_ite.crc->type != "NO")
-			crc[crc::sck::build::U_K1] = src[src::sck::generate::out_data];
+			crc[crc::sck::build::U_K1] = src[spu::module::src::sck::generate::out_data];
 
 		if (this->params_BFER_ite.cdc->enc->type != "NO")
 		{
 			if (this->params_BFER_ite.crc->type != "NO")
 				enc[enc::sck::encode::U_K] = crc[crc::sck::build::U_K2];
 			else
-				enc[enc::sck::encode::U_K] = src[src::sck::generate::out_data];
+				enc[enc::sck::encode::U_K] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (this->params_BFER_ite.cdc->enc->type != "NO")
@@ -292,7 +292,7 @@ void Simulation_BFER_ite<B,R,Q>
 		else if (this->params_BFER_ite.crc->type != "NO")
 			itb[itl::sck::interleave::nat] = crc[crc::sck::build::U_K2];
 		else
-			itb[itl::sck::interleave::nat] = src[src::sck::generate::out_data];
+			itb[itl::sck::interleave::nat] = src[spu::module::src::sck::generate::out_data];
 
 		mdm1[mdm::sck::modulate::X_N1] = itb[itl::sck::interleave::itl];
 	}
@@ -308,14 +308,14 @@ void Simulation_BFER_ite<B,R,Q>
 			else if (this->params_BFER_ite.crc->type != "NO")
 				csb[cst::sck::apply::ref] = crc[crc::sck::build::U_K2];
 			else
-				csb[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+				csb[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 		}
 		else
 		{
 			if (this->params_BFER_ite.crc->type != "NO")
 				csb[cst::sck::apply::ref] = crc[crc::sck::build::U_K2];
 			else
-				csb[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+				csb[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (this->params_BFER_ite.src->type == "AZCW")
@@ -338,9 +338,9 @@ void Simulation_BFER_ite<B,R,Q>
 		}
 		else
 		{
-			csr1[cst::sck::apply::ref] = src[src::sck::generate::out_data];
-			csr2[cst::sck::apply::ref] = src[src::sck::generate::out_data];
-			csr3[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+			csr1[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
+			csr2[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
+			csr3[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 		}
 	}
 
@@ -353,10 +353,10 @@ void Simulation_BFER_ite<B,R,Q>
 		else if (this->params_BFER_ite.crc->type != "NO")
 			mnt[mnt::sck::check_errors::U] = crc[crc::sck::build::U_K2];
 		else
-			mnt[mnt::sck::check_errors::U] = src[src::sck::generate::out_data];
+			mnt[mnt::sck::check_errors::U] = src[spu::module::src::sck::generate::out_data];
 	}
 	else
-		mnt[mnt::sck::check_errors::U] = src[src::sck::generate::out_data];
+		mnt[mnt::sck::check_errors::U] = src[spu::module::src::sck::generate::out_data];
 
 	const auto is_rayleigh = this->params_BFER_ite.chn->type.find("RAYLEIGH") != std::string::npos;
 	if (is_rayleigh && this->params_BFER_ite.chn->type == "NO")
@@ -477,33 +477,33 @@ void Simulation_BFER_ite<B,R,Q>
 	// ---------------------------------------------------------------------------------------- turbo demodulation loop
 	// ----------------------------------------------------------------------------------------------------------------
 
-	swi[swi::tsk::select ][1] = itl1[itl::sck::deinterleave::nat];
-	ite[ite::tsk::iterate   ] = swi [swi::tsk::select      ][2  ];
-	swi[swi::tsk::commute][0] = swi [swi::tsk::select      ][2  ];
+	swi[spu::module::swi::tsk::select ][1] = itl1[             itl::sck::deinterleave::nat];
+	ite[spu::module::ite::tsk::iterate   ] = swi [spu::module::swi::tsk::select      ][2  ];
+	swi[spu::module::swi::tsk::commute][0] = swi [spu::module::swi::tsk::select      ][2  ];
 
 	if (this->params_BFER_ite.crc->type != "NO" && this->params_BFER_ite.crc_early_termination)
 	{
-		ext[ext::sck::get_sys_bit::Y_N] = swi[swi::tsk::select     ][2     ];
-		crc[crc::sck::check      ::V_K] = ext[ext::sck::get_sys_bit::V_K   ];
-		uop[uop::sck::perform    ::in ] = crc[crc::sck::check      ::status];
-		red[red::sck::reduce     ::in ] = uop[uop::sck::perform    ::out   ];
-		bop[bop::sck::perform    ::in0] = ite[ite::sck::iterate    ::out   ];
-		bop[bop::sck::perform    ::in1] = red[red::sck::reduce     ::out   ];
-		swi[swi::tsk::commute    ][1  ] = bop[bop::sck::perform    ::out   ];
+		ext[             ext::sck::get_sys_bit::Y_N] = swi[spu::module::swi::tsk::select     ][2     ];
+		crc[             crc::sck::check      ::V_K] = ext[             ext::sck::get_sys_bit::V_K   ];
+		uop[spu::module::uop::sck::perform    ::in ] = crc[             crc::sck::check      ::status];
+		red[spu::module::red::sck::reduce     ::in ] = uop[spu::module::uop::sck::perform    ::out   ];
+		bop[spu::module::bop::sck::perform    ::in0] = ite[spu::module::ite::sck::iterate    ::out   ];
+		bop[spu::module::bop::sck::perform    ::in1] = red[spu::module::red::sck::reduce     ::out   ];
+		swi[spu::module::swi::tsk::commute    ][1  ] = bop[spu::module::bop::sck::perform    ::out   ];
 	}
 	else
-		swi[swi::tsk::commute][1] = ite[ite::sck::iterate::out];
+		swi[spu::module::swi::tsk::commute][1] = ite[spu::module::ite::sck::iterate::out];
 
 	// ------------------------------------------------------------------------------------------------------- decoding
 	if (this->params_BFER_ite.coset)
 	{
-		csr1[cst::sck::apply      ::in  ] = swi [swi::tsk::commute    ][2   ];
-		dcs [dec::sck::decode_siso::Y_N1] = csr1[cst::sck::apply      ::out ];
-		csr2[cst::sck::apply      ::in  ] = dcs [dec::sck::decode_siso::Y_N2];
+		csr1[cst::sck::apply      ::in  ] = swi [spu::module::swi::tsk::commute    ][2   ];
+		dcs [dec::sck::decode_siso::Y_N1] = csr1[             cst::sck::apply      ::out ];
+		csr2[cst::sck::apply      ::in  ] = dcs [             dec::sck::decode_siso::Y_N2];
 	}
 	else
 	{
-		dcs[dec::sck::decode_siso::Y_N1] = swi[swi::tsk::commute][2];
+		dcs[dec::sck::decode_siso::Y_N1] = swi[spu::module::swi::tsk::commute][2];
 	}
 
 	// --------------------------------------------------------------------------------------------------- interleaving
@@ -572,18 +572,18 @@ void Simulation_BFER_ite<B,R,Q>
 	else
 		itl2[itl::sck::deinterleave::itl] = mdm1[mdm::sck::modulate::X_N2];
 
-	swi[swi::tsk::select][0] = itl2[itl::sck::deinterleave::nat];
+	swi[spu::module::swi::tsk::select][0] = itl2[itl::sck::deinterleave::nat];
 
 	// ----------------------------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------- end of turbo demodulation loop
 	// ----------------------------------------------------------------------------------------------------------------
 
 	if (this->params_BFER_ite.crc->type != "NO" && this->params_BFER_ite.crc_early_termination)
-		ite[ite::tsk::reset] = swi[swi::tsk::commute][3];
+		ite[spu::module::ite::tsk::reset] = swi[spu::module::swi::tsk::commute][3];
 
 	if (this->params_BFER_ite.coset)
 	{
-		csr3[cst::sck::apply::in] = swi[swi::tsk::commute][3];
+		csr3[cst::sck::apply::in] = swi[spu::module::swi::tsk::commute][3];
 
 		if (this->params_BFER_ite.coded_monitoring)
 		{
@@ -602,11 +602,11 @@ void Simulation_BFER_ite<B,R,Q>
 	{
 		if (this->params_BFER_ite.coded_monitoring)
 		{
-			dch[dec::sck::decode_siho_cw::Y_N] = swi[swi::tsk::commute][3];
+			dch[dec::sck::decode_siho_cw::Y_N] = swi[spu::module::swi::tsk::commute][3];
 		}
 		else
 		{
-			dch[dec::sck::decode_siho::Y_N] = swi[swi::tsk::commute][3];
+			dch[dec::sck::decode_siho::Y_N] = swi[spu::module::swi::tsk::commute][3];
 
 			if (this->params_BFER_ite.crc->type != "NO")
 				crc[crc::sck::extract::V_K1] = dch[dec::sck::decode_siho::V_K];
@@ -641,27 +641,27 @@ void Simulation_BFER_ite<B,R,Q>
 	const auto is_rayleigh = this->params_BFER_ite.chn->type.find("RAYLEIGH") != std::string::npos;
 	const auto t = this->params_BFER.n_threads;
 	if (this->params_BFER_ite.src->type != "AZCW")
-		this->sequence.reset(new runtime::Sequence((*this->source)[module::src::tsk::generate], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->source)[spu::module::src::tsk::generate], t));
 	else if (this->params_BFER_ite.chn->type != "NO")
 	{
 		if (is_rayleigh)
-			this->sequence.reset(new runtime::Sequence((*this->channel)[module::chn::tsk::add_noise_wg], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->channel)[module::chn::tsk::add_noise_wg], t));
 		else
-			this->sequence.reset(new runtime::Sequence((*this->channel)[module::chn::tsk::add_noise], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->channel)[module::chn::tsk::add_noise], t));
 	}
 	else if (this->modem1->is_filter())
-		this->sequence.reset(new runtime::Sequence((*this->modem1)[module::mdm::tsk::filter], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->modem1)[module::mdm::tsk::filter], t));
 	else if (this->params_BFER_ite.qnt->type != "NO")
-		this->sequence.reset(new runtime::Sequence((*this->quantizer)[module::qnt::tsk::process], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->quantizer)[module::qnt::tsk::process], t));
 	else if (this->modem1->is_demodulator())
 	{
 		if (is_rayleigh)
-			this->sequence.reset(new runtime::Sequence((*this->modem1)[module::mdm::tsk::demodulate_wg], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->modem1)[module::mdm::tsk::demodulate_wg], t));
 		else
-			this->sequence.reset(new runtime::Sequence((*this->modem1)[module::mdm::tsk::demodulate], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->modem1)[module::mdm::tsk::demodulate], t));
 	}
 	else
-		this->sequence.reset(new runtime::Sequence((*this->interleaver_llr1)[module::itl::tsk::deinterleave], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->interleaver_llr1)[module::itl::tsk::deinterleave], t));
 
 	// set the noise
 	this->codec->set_noise(*this->noise);
@@ -675,7 +675,7 @@ void Simulation_BFER_ite<B,R,Q>
 
 	// set different seeds in the modules that uses PRNG
 	std::mt19937 prng(params_BFER_ite.local_seed);
-	for (auto &m : this->sequence->template get_modules<tools::Interface_set_seed>())
+	for (auto &m : this->sequence->template get_modules<spu::tools::Interface_set_seed>())
 		m->set_seed(prng());
 
 	auto fb_modules = this->sequence->template get_modules<tools::Interface_get_set_frozen_bits>();
@@ -692,7 +692,7 @@ void Simulation_BFER_ite<B,R,Q>
 	{
 		std::stringstream message;
 		message << "Uniform interleaver is not supported at this time in the simulations.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto monitors_er   = this->sequence->template get_modules<module::Monitor_BFER<B  >>();
@@ -707,12 +707,12 @@ void Simulation_BFER_ite<B,R,Q>
 
 	if (this->params_BFER_ite.err_track_enable)
 	{
-		auto sources = this->sequence->template get_modules<module::Source<B>>();
+		auto sources = this->sequence->template get_modules<spu::module::Source<B>>();
 		for (size_t tid = 0; tid < (size_t)this->params_BFER.n_threads; tid++)
 		{
 			auto &source  = sources.size() ? *sources[tid] : *this->source;
-			auto src_data = (B*)(source[module::src::sck::generate::out_data].get_dataptr());
-			auto src_bytes = source[module::src::sck::generate::out_data].get_databytes();
+			auto src_data = (B*)(source[spu::module::src::sck::generate::out_data].get_dataptr());
+			auto src_bytes = source[spu::module::src::sck::generate::out_data].get_databytes();
 			auto src_size = (src_bytes / sizeof(B)) / this->params_BFER_ite.n_frames;
 			this->dumper[tid]->register_data(src_data,
 			                                 (unsigned int)src_size,

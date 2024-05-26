@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_very_fast.hpp"
 
 namespace aff3ct
@@ -24,7 +25,7 @@ Decoder_RSC_BCJR_seq_very_fast<B,R,RD,MAX1,MAX2>
 		std::stringstream message;
 		message << "'K' has to be divisible by 'mipp::nElReg<R>()' ('K' = " << this->K
 		        << ", 'mipp::nElReg<R>()' = " << mipp::nElReg<R>() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

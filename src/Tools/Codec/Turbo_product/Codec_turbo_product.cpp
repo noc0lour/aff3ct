@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/BCH/Encoder_BCH.hpp"
 #include "Module/Decoder/BCH/Decoder_BCH.hpp"
 #include "Module/Decoder/Turbo_product/Chase_pyndiah/Decoder_chase_pyndiah.hpp"
@@ -28,7 +29,7 @@ Codec_turbo_product<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -36,14 +37,14 @@ Codec_turbo_product<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (dec_params.sub->implem == "GENIUS")
 	{
 		std::stringstream message;
 		message << "sub decoder can't have a GENIUS implem (dec_params.sub->implem).";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------- allocations
@@ -93,7 +94,7 @@ Codec_turbo_product<B,Q>
 	{
 		this->set_encoder(enc_params.build<B>(*enc_bch, *enc_bch, this->get_interleaver_bit()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -102,7 +103,7 @@ Codec_turbo_product<B,Q>
 	{
 		this->set_decoder_siso(dec_params.build_siso<B,Q>(*dec_cp, *dec_cp, this->get_interleaver_llr()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_decoder_siho(dec_params.build<B,Q>(*dec_cp, *dec_cp, this->get_interleaver_llr()));
 	}

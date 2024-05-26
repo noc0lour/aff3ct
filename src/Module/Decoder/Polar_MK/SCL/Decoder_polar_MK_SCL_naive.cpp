@@ -4,9 +4,9 @@
 #include <limits>
 #include <tuple>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/decoder_polar_functions.h"
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Decoder/Polar_MK/SCL/Decoder_polar_MK_SCL_naive.hpp"
 
@@ -42,7 +42,7 @@ Decoder_polar_MK_SCL_naive<B,R>
 		std::stringstream message;
 		message << "'N' has to be equal to 'code.get_codeword_size()' ('N' = " << N
 		        << ", 'code.get_codeword_size()' = " << code.get_codeword_size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -50,7 +50,7 @@ Decoder_polar_MK_SCL_naive<B,R>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -59,14 +59,14 @@ Decoder_polar_MK_SCL_naive<B,R>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
-	if (this->L <= 0 || !tools::is_power_of_2(this->L))
+	if (this->L <= 0 || !spu::tools::is_power_of_2(this->L))
 	{
 		std::stringstream message;
 		message << "'L' has to be a positive power of 2 ('L' = " << L << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->active_paths.insert(0);
@@ -100,7 +100,7 @@ Decoder_polar_MK_SCL_naive<B,R>
 		{
 			if (tools::Polar_lambdas<B,R>::functions.find(code.get_kernel_matrices()[l]) ==
 			    tools::Polar_lambdas<B,R>::functions.end())
-				throw tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported polar kernel.");
 			this->lambdas[l] = tools::Polar_lambdas<B,R>::functions[code.get_kernel_matrices()[l]];
 		}
 	}
@@ -112,7 +112,7 @@ Decoder_polar_MK_SCL_naive<B,R>
 			message << "'lambdas.size()' has to be equal to 'code.get_kernel_matrices().size()' ("
 			        << "'lambdas.size()' = " << lambdas.size() << ", "
 			        << "'code.get_kernel_matrices().size()' = " << code.get_kernel_matrices().size() << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (size_t l = 0; l < code.get_kernel_matrices().size(); l++)
@@ -124,7 +124,7 @@ Decoder_polar_MK_SCL_naive<B,R>
 				        << "'l' = " << l  << ", "
 				        << "'lambdas[l].size()' = " << lambdas[l].size() << ", "
 				        << "'code.get_kernel_matrices()[l].size()' = " << code.get_kernel_matrices()[l].size() << ").";
-				throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 
@@ -164,7 +164,7 @@ template <typename B, typename R>
 void Decoder_polar_MK_SCL_naive<B,R>
 ::deep_copy(const Decoder_polar_MK_SCL_naive<B,R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	this->leaves_array.clear();
 	for (auto i = 0; i < L; i++)
 	{

@@ -3,8 +3,9 @@
 #include <sstream>
 #include <memory>
 
+#include <streampu.hpp>
+
 #include "Module/Extractor/RSC/Extractor_RSC.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Puncturer/Puncturer.hpp"
 #include "Factory/Module/Encoder/Encoder.hpp"
 #include "Tools/Codec/RSC/Codec_RSC.hpp"
@@ -26,7 +27,7 @@ Codec_RSC<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -34,7 +35,7 @@ Codec_RSC<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -56,7 +57,7 @@ Codec_RSC<B,Q>
 	{
 		this->set_encoder(enc_params.build<B>());
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}
@@ -65,7 +66,7 @@ Codec_RSC<B,Q>
 	{
 		this->set_decoder_siso(dec_params.build_siso<B,Q>(*trellis, std::cout, 1, &this->get_encoder()));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_decoder_siho(dec_params.build<B,Q>(*trellis, std::cout, 1, &this->get_encoder()));
 	}

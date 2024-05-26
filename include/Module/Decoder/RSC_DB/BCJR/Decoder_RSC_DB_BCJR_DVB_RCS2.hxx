@@ -1,7 +1,8 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC_DB/BCJR/Decoder_RSC_DB_BCJR_DVB_RCS2.hpp"
 
 namespace aff3ct
@@ -22,7 +23,7 @@ Decoder_RSC_DB_BCJR_DVB_RCS2<B,R,MAX>
 	{
 		std::stringstream message;
 		message << "'n_states' has to be equal to 16 ('n_states' = " << this->n_states << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

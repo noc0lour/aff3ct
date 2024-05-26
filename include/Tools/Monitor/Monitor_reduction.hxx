@@ -1,8 +1,9 @@
 #include <sstream>
 #include <numeric>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Monitor/Monitor_reduction.hpp"
 
 namespace aff3ct
@@ -17,7 +18,7 @@ M& get_monitor_from_vector(const std::vector<M*> &monitors)
 	{
 		std::stringstream message;
 		message << "'monitors.size()' has to be greater than 0 ('monitors.size()' = " << monitors.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *monitors.front();
@@ -40,24 +41,24 @@ Monitor_reduction<M>
 		{
 			std::stringstream message;
 			message << "'monitors[" << m << "]' can't be null.";
-			throw tools::logic_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::logic_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		try
 		{
 			this->monitors[0]->equivalent(*this->monitors[m], true);
 		}
-		catch(tools::exception& e)
+		catch(spu::tools::exception& e)
 		{
 			std::stringstream message;
 
-			auto save = tools::exception::no_stacktrace;
+			auto save = spu::tools::exception::no_stacktrace;
 
-			tools::exception::no_stacktrace = true;
+			spu::tools::exception::no_stacktrace = true;
 			message << "'monitors[0]' and 'monitors[" << m << "]' have to be equivalent: " << e.what();
-			tools::exception::no_stacktrace = save;
+			spu::tools::exception::no_stacktrace = save;
 
-			throw tools::logic_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::logic_error(__FILE__, __LINE__, __func__, message.str());
 
 		}
 	}

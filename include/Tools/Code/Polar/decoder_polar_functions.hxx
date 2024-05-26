@@ -6,8 +6,8 @@
 #include <limits>
 #include <cmath>     // fabs(), copysign()...
 
-#include "Tools/Math/utils.h"
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/decoder_polar_functions.h"
 
 namespace aff3ct
@@ -17,21 +17,21 @@ namespace tools
 template <typename R>
 inline R f_LR(const R& lambda_a, const R& lambda_b)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
 }
 
 template <>
 inline double f_LR(const double& lambda_a, const double& lambda_b)
 {
 	auto res = (double)(((double)1.0 + (lambda_a * lambda_b)) / (lambda_a + lambda_b));
-	return saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
-	                              std::sqrt(std::numeric_limits<double>::max()));
+	return spu::tools::saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
+	                                          std::sqrt(std::numeric_limits<double>::max()));
 }
 
 template <typename R>
 inline R f_LLR(const R& lambda_a, const R& lambda_b)
 {
-	auto sign_lambda_a_b = sgn<int,R>(lambda_a * lambda_b);
+	auto sign_lambda_a_b = spu::tools::sgn<int,R>(lambda_a * lambda_b);
 	auto abs_lambda_a = (lambda_a >= 0) ? lambda_a : -lambda_a;
 	auto abs_lambda_b = (lambda_b >= 0) ? lambda_b : -lambda_b;
 
@@ -41,7 +41,7 @@ inline R f_LLR(const R& lambda_a, const R& lambda_b)
 template <typename R>
 inline R f_LLR_tanh(const R& lambda_a, const R& lambda_b)
 {
-	auto sign_lambda_a_b = sgn<int,R>(lambda_a * lambda_b);
+	auto sign_lambda_a_b = spu::tools::sgn<int,R>(lambda_a * lambda_b);
 	auto abs_lambda_a = (lambda_a >= 0) ? lambda_a : -lambda_a;
 	auto abs_lambda_b = (lambda_b >= 0) ? lambda_b : -lambda_b;
 
@@ -56,7 +56,7 @@ inline R f_LLR_tanh(const R& lambda_a, const R& lambda_b)
 template <typename R>
 inline R f_LLR_tanh_safe(const R& lambda_a, const R& lambda_b)
 {
-	auto sign_lambda_a_b = sgn<int, R>(lambda_a * lambda_b);
+	auto sign_lambda_a_b = spu::tools::sgn<int, R>(lambda_a * lambda_b);
 	auto abs_lambda_a = (lambda_a >= 0) ? lambda_a : -lambda_a;
 	auto abs_lambda_b = (lambda_b >= 0) ? lambda_b : -lambda_b;
 
@@ -75,7 +75,7 @@ inline R f_LLR_tanh_safe(const R& lambda_a, const R& lambda_b)
 template <>
 inline float f_LLR(const float& lambda_a, const float& lambda_b)
 {
-	auto sign_lambda_a_b = sgn<int,float>(lambda_a * lambda_b);
+	auto sign_lambda_a_b = spu::tools::sgn<int,float>(lambda_a * lambda_b);
 
 	auto abs_lambda_a = fabsf(lambda_a);
 	auto abs_lambda_b = fabsf(lambda_b);
@@ -86,8 +86,8 @@ inline float f_LLR(const float& lambda_a, const float& lambda_b)
 template <>
 inline int16_t f_LLR(const int16_t& lambda_a, const int16_t& lambda_b)
 {
-	auto sign_lambda_a   = sgn<int16_t,int16_t>(lambda_a);
-	auto sign_lambda_b   = sgn<int16_t,int16_t>(lambda_b);
+	auto sign_lambda_a   = spu::tools::sgn<int16_t,int16_t>(lambda_a);
+	auto sign_lambda_b   = spu::tools::sgn<int16_t,int16_t>(lambda_b);
 	auto sign_lambda_a_b = sign_lambda_a * sign_lambda_b;
 
 	auto abs_lambda_a = sign_lambda_a * lambda_a;
@@ -101,8 +101,8 @@ inline int16_t f_LLR(const int16_t& lambda_a, const int16_t& lambda_b)
 template <>
 inline int8_t f_LLR(const int8_t& lambda_a, const int8_t& lambda_b)
 {
-	auto sign_lambda_a   = sgn<int8_t,int8_t>(lambda_a);
-	auto sign_lambda_b   = sgn<int8_t,int8_t>(lambda_b);
+	auto sign_lambda_a   = spu::tools::sgn<int8_t,int8_t>(lambda_a);
+	auto sign_lambda_b   = spu::tools::sgn<int8_t,int8_t>(lambda_b);
 	auto sign_lambda_a_b = sign_lambda_a * sign_lambda_b;
 
 	auto abs_lambda_a = sign_lambda_a * lambda_a;
@@ -131,15 +131,15 @@ inline mipp::reg f_LLR_i(const mipp::reg& r_lambda_a, const mipp::reg& r_lambda_
 template <typename B, typename R>
 inline R g_LR(const R& lambda_a, const R& lambda_b, const B& u)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
 }
 
 template <>
 inline double g_LR(const double& lambda_a, const double& lambda_b, const int64_t& u)
 {
 	auto res = (u) ? (double)(lambda_b / lambda_a) : (double)(lambda_a * lambda_b);
-	return saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
-	                              std::sqrt(std::numeric_limits<double>::max()));
+	return spu::tools::saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
+	                                          std::sqrt(std::numeric_limits<double>::max()));
 }
 
 template <typename B, typename R>
@@ -152,16 +152,16 @@ template <>
 inline int16_t g_LLR(const int16_t& lambda_a, const int16_t& lambda_b, const int16_t& u)
 {
 	int32_t lambda_c = (int32_t)((u == 0) ? lambda_a : -lambda_a) + (int32_t)lambda_b;
-	return (int16_t)saturate<int32_t>(lambda_c, (int32_t)sat_vals<int16_t>().first,
-	                                            (int32_t)sat_vals<int16_t>().second);
+	return (int16_t)spu::tools::saturate<int32_t>(lambda_c, (int32_t)spu::tools::sat_vals<int16_t>().first,
+	                                                        (int32_t)spu::tools::sat_vals<int16_t>().second);
 }
 
 template <>
 inline int8_t g_LLR(const int8_t& lambda_a, const int8_t& lambda_b, const int8_t& u)
 {
 	int32_t lambda_c = (int32_t)((u == 0) ? lambda_a : -lambda_a) + (int32_t)lambda_b;
-	return (int8_t)saturate<int32_t>(lambda_c, (int32_t)sat_vals<int8_t>().first,
-	                                           (int32_t)sat_vals<int8_t>().second);
+	return (int8_t)spu::tools::saturate<int32_t>(lambda_c, (int32_t)spu::tools::sat_vals<int8_t>().first,
+	                                                       (int32_t)spu::tools::sat_vals<int8_t>().second);
 }
 
 template <typename B, typename R>
@@ -176,15 +176,15 @@ inline mipp::reg g_LLR_i(const mipp::reg& r_lambda_a, const mipp::reg& r_lambda_
 template <typename R>
 inline R g0_LR(const R& lambda_a, const R& lambda_b)
 {
-	throw runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Works only on 64bit data.");
 }
 
 template <>
 inline double g0_LR(const double& lambda_a, const double& lambda_b)
 {
 	auto res = lambda_a * lambda_b;
-	return saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
-	                              std::sqrt(std::numeric_limits<double>::max()));
+	return spu::tools::saturate<double>(res, -std::sqrt(std::numeric_limits<double>::max()),
+	                                          std::sqrt(std::numeric_limits<double>::max()));
 }
 
 template <typename R>
@@ -197,16 +197,16 @@ template <>
 inline int16_t g0_LLR(const int16_t& lambda_a, const int16_t& lambda_b)
 {
 	int32_t lambda_c = (int32_t)lambda_a + (int32_t)lambda_b;
-	return (int16_t)saturate<int32_t>(lambda_c, (int32_t)sat_vals<int16_t>().first,
-	                                            (int32_t)sat_vals<int16_t>().second);
+	return (int16_t)spu::tools::saturate<int32_t>(lambda_c, (int32_t)spu::tools::sat_vals<int16_t>().first,
+	                                                        (int32_t)spu::tools::sat_vals<int16_t>().second);
 }
 
 template <>
 inline int8_t g0_LLR(const int8_t& lambda_a, const int8_t& lambda_b)
 {
 	int32_t lambda_c = (int32_t)lambda_a + (int32_t)lambda_b;
-	return (int8_t)saturate<int32_t>(lambda_c, (int32_t)sat_vals<int8_t>().first,
-	                                           (int32_t)sat_vals<int8_t>().second);
+	return (int8_t)spu::tools::saturate<int32_t>(lambda_c, (int32_t)spu::tools::sat_vals<int8_t>().first,
+	                                                       (int32_t)spu::tools::sat_vals<int8_t>().second);
 }
 
 template <typename R>
@@ -219,13 +219,13 @@ inline mipp::reg g0_LLR_i(const mipp::reg& r_lambda_a, const mipp::reg& r_lambda
 template <typename B, typename R>
 inline B h_LR(const R& lambda_a)
 {
-	return (lambda_a < init_LR<R>());
+	return (lambda_a < spu::tools::init_LR<R>());
 }
 
 template <typename B, typename R>
 inline B h_LLR(const R& lambda_a)
 {
-	return ((lambda_a < init_LLR<R>()) * bit_init<B>());
+	return ((lambda_a < spu::tools::init_LLR<R>()) * spu::tools::bit_init<B>());
 }
 
 template <typename B, typename R>
@@ -287,7 +287,7 @@ inline int8_t phi(const int8_t& mu, const int8_t& lambda, const int8_t& u)
 	else
 		new_mu = mu;
 
-	return saturate<int8_t>(new_mu, -128, sat_vals<int8_t>().second);
+	return spu::tools::saturate<int8_t>(new_mu, -128, spu::tools::sat_vals<int8_t>().second);
 }
 
 inline int compute_depth(int index, int tree_depth)

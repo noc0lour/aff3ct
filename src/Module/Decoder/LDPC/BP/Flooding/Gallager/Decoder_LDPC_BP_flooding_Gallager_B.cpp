@@ -2,7 +2,8 @@
 #include <numeric>
 #include <string>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/LDPC/BP/Flooding/Gallager/Decoder_LDPC_BP_flooding_Gallager_B.hpp"
 
 using namespace aff3ct;
@@ -59,7 +60,7 @@ void Decoder_LDPC_BP_flooding_Gallager_B<B,R>
 			for (auto c = 0; c < var_degree; c++)
 			{
 				const auto diff = n_z_m_o + chk_to_var_ptr[c];
-				var_to_chk_ptr[c] = diff == 0 ? cur_state : (int8_t)tools::signbit(diff);
+				var_to_chk_ptr[c] = diff == 0 ? cur_state : (int8_t)spu::tools::signbit(diff);
 			}
 
 			// // naive version of the variable to check node messages computations

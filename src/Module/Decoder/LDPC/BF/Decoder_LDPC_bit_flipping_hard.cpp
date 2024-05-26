@@ -3,9 +3,10 @@
 #include <sstream>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/LDPC/BF/Decoder_LDPC_bit_flipping_hard.hpp"
 
 using namespace aff3ct;
@@ -39,14 +40,14 @@ Decoder_LDPC_bit_flipping_hard<B,R>
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (syndrome_depth <= 0)
 	{
 		std::stringstream message;
 		message << "'syndrome_depth' has to be greater than 0 ('syndrome_depth' = " << syndrome_depth << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != (int)H.get_n_rows())
@@ -54,7 +55,7 @@ Decoder_LDPC_bit_flipping_hard<B,R>
 		std::stringstream message;
 		message << "'N' is not compatible with the H matrix ('N' = " << N << ", 'H.get_n_rows()' = "
 		        << H.get_n_rows() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -62,7 +63,7 @@ template <typename B, typename R>
 Decoder_LDPC_bit_flipping_hard<B,R>* Decoder_LDPC_bit_flipping_hard<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>

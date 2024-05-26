@@ -1,4 +1,3 @@
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Interleaver/Interleaver.hpp"
 
 using namespace aff3ct;

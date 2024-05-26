@@ -5,7 +5,6 @@
 #include <numeric>
 #include <cmath>
 
-
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_BEC.hpp"
 

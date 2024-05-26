@@ -36,7 +36,7 @@ protected:
 	const factory::BFER_ite &params_BFER_ite;
 
 	// communication sequence
-	std::unique_ptr<module::Source          <B    >> source;
+	std::unique_ptr<spu::module::Source     <B    >> source;
 	std::unique_ptr<module::CRC             <B    >> crc;
 	std::unique_ptr<tools ::Codec_SISO      <B,  Q>> codec;
 	std::unique_ptr<module::Modem           <B,R,Q>> modem1;
@@ -51,19 +51,19 @@ protected:
 	std::unique_ptr<module::Interleaver     <B    >> interleaver_bit;
 	std::unique_ptr<module::Interleaver     <Q    >> interleaver_llr1;
 	std::unique_ptr<module::Interleaver     <Q    >> interleaver_llr2;
-	std::unique_ptr<module::Switcher               > switcher;
-	std::unique_ptr<module::Iterator               > iterator;
+	std::unique_ptr<spu::module::Switcher          > switcher;
+	std::unique_ptr<spu::module::Iterator          > iterator;
 
-	std::unique_ptr<module::Unaryop_not_abs<int32_t       >> unaryop;
-	std::unique_ptr<module::Reducer_and    <int32_t,int8_t>> reducer;
-	std::unique_ptr<module::Binaryop_or    <        int8_t>> binaryop;
+	std::unique_ptr<spu::module::Unaryop_not_abs<int32_t       >> unaryop;
+	std::unique_ptr<spu::module::Reducer_and    <int32_t,int8_t>> reducer;
+	std::unique_ptr<spu::module::Binaryop_or    <        int8_t>> binaryop;
 
 public:
 	explicit Simulation_BFER_ite(const factory::BFER_ite &params_BFER_ite);
 	virtual ~Simulation_BFER_ite() = default;
 
 protected:
-	std::unique_ptr<module::Source          <B    >> build_source     (                                            );
+	std::unique_ptr<spu::module::Source     <B    >> build_source     (                                            );
 	std::unique_ptr<module::CRC             <B    >> build_crc        (                                            );
 	std::unique_ptr<tools ::Codec_SISO      <B,Q  >> build_codec      (const module::CRC         <B> *crc          );
 	std::unique_ptr<module::Modem           <B,R,Q>> build_modem      (const tools::Distributions<R> *distributions,
@@ -73,12 +73,12 @@ protected:
 	std::unique_ptr<module::Coset           <B,Q  >> build_coset_real (                                            );
 	std::unique_ptr<module::Coset           <B,B  >> build_coset_bit  (                                            );
 	std::unique_ptr<tools ::Interleaver_core<     >> build_interleaver(                                            );
-	std::unique_ptr<module::Switcher               > build_switcher   (                                            );
-	std::unique_ptr<module::Iterator               > build_iterator   (                                            );
+	std::unique_ptr<spu::module::Switcher          > build_switcher   (                                            );
+	std::unique_ptr<spu::module::Iterator          > build_iterator   (                                            );
 
-	std::unique_ptr<module::Unaryop_not_abs<int32_t       >> build_unaryop ();
-	std::unique_ptr<module::Reducer_and    <int32_t,int8_t>> build_reducer ();
-	std::unique_ptr<module::Binaryop_or    <        int8_t>> build_binaryop();
+	std::unique_ptr<spu::module::Unaryop_not_abs<int32_t       >> build_unaryop ();
+	std::unique_ptr<spu::module::Reducer_and    <int32_t,int8_t>> build_reducer ();
+	std::unique_ptr<spu::module::Binaryop_or    <        int8_t>> build_binaryop();
 
 	virtual void create_modules();
 	virtual void bind_sockets();

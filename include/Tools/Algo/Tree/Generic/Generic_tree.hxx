@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 #include "Tools/Algo/Tree/Generic/Generic_tree.hpp"
 
@@ -50,7 +50,7 @@ void Generic_tree<T>
 		{
 			std::stringstream message;
 			message << "'sequence[" << s << "]' has to be bigger than 0.";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 
 	std::vector<int> lanes(depth +1);
@@ -82,9 +82,9 @@ void Generic_tree<T>
 ::recursive_copy(const Generic_node<T> *nref, Generic_node<T> *nclone)
 {
 	if (nref == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'nref' can't be nullptr.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'nref' can't be nullptr.");
 	if (nclone == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'nclone' can't be nullptr.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'nclone' can't be nullptr.");
 
 	nclone->set_contents(nref->get_contents());
 
@@ -115,7 +115,8 @@ void Generic_tree<T>
 ::create_nodes(Generic_node<T>* cur_node, int cur_depth, std::vector<int> &lanes, const std::vector<uint32_t> &sequence)
 {
 	if (cur_node->children.size())
-		throw runtime_error(__FILE__, __LINE__, __func__, "'cur_node->children.size()' has to be equal to 0.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+		                                "'cur_node->children.size()' has to be equal to 0.");
 
 	if (cur_depth < this->depth)
 	{

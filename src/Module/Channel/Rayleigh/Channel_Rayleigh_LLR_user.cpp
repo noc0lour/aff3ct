@@ -3,6 +3,8 @@
 #include <string>
 #include <cmath>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Standard/Gaussian_noise_generator_std.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Fast/Gaussian_noise_generator_fast.hpp"
@@ -12,7 +14,6 @@
 #ifdef AFF3CT_CHANNEL_MKL
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/MKL/Gaussian_noise_generator_MKL.hpp"
 #endif
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Algo/Draw_generator/Gaussian_noise_generator/Standard/Gaussian_noise_generator_std.hpp"
 #include "Module/Channel/Rayleigh/Channel_Rayleigh_LLR_user.hpp"
 
@@ -40,10 +41,10 @@ Channel_Rayleigh_LLR_user<R>
 	this->set_name(name);
 
 	if (complex || add_users)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Arguments 'complex' and 'add_users' are not supported yet.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Arguments 'complex' and 'add_users' are not supported yet.");
 
 	if (gain_occurrences <= 0)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gain_occurrences' must be strictly positive.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gain_occurrences' must be strictly positive.");
 
 	read_gains(gains_filename);
 
@@ -74,7 +75,7 @@ tools::Gaussian_gen<R>* create_gaussian_generator(const tools::Gaussian_noise_ge
 		default:
 			std::stringstream message;
 			message << "Unsupported 'implem' ('implem' = " << (int)implem << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 }
 
@@ -100,10 +101,10 @@ Channel_Rayleigh_LLR_user<R>
 	this->set_name(name);
 
 	if (complex || add_users)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Arguments 'complex' and 'add_users' are not supported yet.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Arguments 'complex' and 'add_users' are not supported yet.");
 
 	if (gain_occurrences <= 0)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gain_occurrences' must be strictly positive.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gain_occurrences' must be strictly positive.");
 
 	read_gains(gains_filename);
 
@@ -123,7 +124,7 @@ template <typename R>
 void Channel_Rayleigh_LLR_user<R>
 ::deep_copy(const Channel_Rayleigh_LLR_user<R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.gaussian_generator != nullptr) this->gaussian_generator.reset(m.gaussian_generator->clone());
 }
 
@@ -139,7 +140,7 @@ void Channel_Rayleigh_LLR_user<R>
 ::read_gains(const std::string& gains_filename)
 {
 	if (gains_filename.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gains_filename' should not be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Argument 'gains_filename' should not be empty.");
 
 	std::ifstream file(gains_filename);
 
@@ -156,11 +157,11 @@ void Channel_Rayleigh_LLR_user<R>
 	}
 	else
 	{
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + gains_filename + "' file.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Can't open '" + gains_filename + "' file.");
 	}
 
 	if(gains_stock.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "The file '" + gains_filename + "' is empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "The file '" + gains_filename + "' is empty.");
 }
 
 template <typename R>

@@ -4,7 +4,8 @@
 #include <ios>
 #include <cli.hpp>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Math/Distribution/Distributions.hpp"
 
 using namespace aff3ct;
@@ -21,7 +22,7 @@ Distributions<R>
 	{
 		std::stringstream message;
 		message << "'filename' file name is not valid: f_distributions failbit is set.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	read_noise_range();
@@ -77,16 +78,16 @@ void Distributions<R>
 
 
 	if (this->ROP_pos == desc.size())
-		throw runtime_error(__FILE__, __LINE__, __func__, "No ROP in the description of the distribution");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "No ROP in the description of the distribution");
 
 	if (this->x_pos == desc.size())
-		throw runtime_error(__FILE__, __LINE__, __func__, "No x in the description of the distribution");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "No x in the description of the distribution");
 
 	if (this->y0_pos == desc.size())
-		throw runtime_error(__FILE__, __LINE__, __func__, "No y0 in the description of the distribution");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "No y0 in the description of the distribution");
 
 	if (this->y1_pos == desc.size())
-		throw runtime_error(__FILE__, __LINE__, __func__, "No y1 in the description of the distribution");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "No y1 in the description of the distribution");
 
 	while (!f_distributions.eof())
 	{
@@ -133,14 +134,14 @@ const Distribution<R>& Distributions<R>
 	{
 		std::stringstream message;
 		message << "Undefined 'noise' in the distributions ('noise' = " << noise << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (it->second == nullptr)
 	{
 		std::stringstream message;
 		message << "Defined noise but no associated distribution ('noise' = " << noise << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *it->second;
@@ -154,7 +155,7 @@ void Distributions<R>
 	{
 		std::stringstream message;
 		message << "The given 'new_distribution' is a null pointer.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	try
@@ -162,9 +163,9 @@ void Distributions<R>
 		get_distribution(noise);
 		std::stringstream message;
 		message << "A distribution already exists for the given noise 'noise' ('noise' = " << noise << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
-	catch (const tools::invalid_argument&)
+	catch (const spu::tools::invalid_argument&)
 	{
 		this->distributions[calibrated_noise(noise)] = std::move(new_distribution);
 	}
@@ -212,7 +213,7 @@ void Distributions<R>
 		std::stringstream message;
 		message << "Failed to go to the asked position in the file stream 'f_distribution' (this->noise_file_index["
 		        << index << "] = " << this->noise_file_index[index] << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::string ROP, line;
@@ -221,7 +222,7 @@ void Distributions<R>
 	for (unsigned i = 0; i < this->desc.size(); i++)
 	{
 		if (f_distributions.eof())
-			throw runtime_error(__FILE__, __LINE__, __func__, "The file stream is at the end while reading it.");
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "The file stream is at the end while reading it.");
 
 		my_getline(f_distributions, line);
 
@@ -240,7 +241,7 @@ void Distributions<R>
 		else if (i == y1_pos)
 			v_y1 = cli::Splitter::split(line, "", "", " ");
 		else
-			tools::runtime_error(__FILE__, __LINE__, __func__);
+			spu::tools::runtime_error(__FILE__, __LINE__, __func__);
 	}
 
 	if (v_x.size() != v_y0.size() || v_x.size() != v_y1.size() )
@@ -249,7 +250,7 @@ void Distributions<R>
 		message << "'v_x' does not have the same size than 'v_y0' or 'v_y1' "
 		        << "('v_x.size()' = " << v_x.size() << ", 'v_y0.size()' = " << v_y0.size()
 		        << ", 'v_y1.size()' = " << v_y1.size() << " and 'ROP' = " << ROP << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	R ROP_R;
@@ -262,7 +263,7 @@ void Distributions<R>
 	{
 		std::stringstream message;
 		message << "'ROP' value does not represent a float (ROP = " << ROP << ")";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (ROP_R != this->noise_range[index])
@@ -270,7 +271,7 @@ void Distributions<R>
 		std::stringstream message;
 		message << "'ROP_R' does not match with the asked distribution 'this->noise_range[index]'"
 			    << "('ROP_R' = " << ROP_R << " and 'this->noise_range[" << index << "]' = " << this->noise_range[index] << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<R> v_x_R(v_x.size()) ;
@@ -294,7 +295,7 @@ void Distributions<R>
 		std::stringstream message;
 		message << "A value does not represent a float (ROP = " << ROP << ", ROP_R = " << ROP_R
 		        << ", j = " << j << ", v_x[j] = " << v_x[j] << ", v_y0[j] = " << v_y0[j] << ", v_y1[j] = " << v_y1[j] << ")";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	add_distribution(ROP_R, std::unique_ptr<Distribution<R>>(new Distribution<R>(std::move(v_x_R), std::move(v_y_R))));

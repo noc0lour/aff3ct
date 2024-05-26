@@ -8,8 +8,6 @@
 #include <cstdint>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-
 #include "Tools/Interleaver/Interleaver_core.hpp"
 
 /*

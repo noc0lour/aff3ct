@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Matrix/Matrix.hpp"
 
 using namespace aff3ct;
@@ -59,7 +60,7 @@ void Matrix
 		std::stringstream message;
 		message << "'col_index' has to be smaller than 'n_cols' ('col_index' = " << col_index
 		        << ", 'n_cols' = " << get_n_cols() << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (row_index >= get_n_rows())
@@ -67,7 +68,7 @@ void Matrix
 		std::stringstream message;
 		message << "'row_index' has to be smaller than 'n_rows' ('row_index' = " << row_index
 		        << ", 'n_rows' = " << get_n_rows() << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -92,7 +93,7 @@ void Matrix
 		std::stringstream message;
 		message << "This matrix way ('" << way_to_str(get_way()) << "') is not same as the given checked one ('"
 				<< way_to_str(w) << "').";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -116,7 +117,7 @@ std::string Matrix
 	{
 		std::stringstream message;
 		message << "The way 'w' does not represent a matrix way ('w' = " << (short)w << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return str;

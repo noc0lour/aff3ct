@@ -2,7 +2,8 @@
 #include <sstream>
 #include <type_traits>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/LDPC/BF/PPBF/Decoder_LDPC_probabilistic_parallel_bit_flipping.hpp"
 
 using namespace aff3ct;
@@ -27,7 +28,7 @@ Decoder_LDPC_probabilistic_parallel_bit_flipping<B,R>
 	{
 		std::stringstream message;
 		message << "This decoder does not work in 8-bit fixed-point (try in 16-bit).";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (bernouilli_probas.size() != (this->H.get_rows_max_degree() + 2))
@@ -36,7 +37,7 @@ Decoder_LDPC_probabilistic_parallel_bit_flipping<B,R>
 		message << "'bernouilli_probas.size()' must be equal to the biggest variable node degree plus 2"
 		        << "('bernouilli_probas.size() = '" << bernouilli_probas.size() << ", 'variable node max degree' = "
 		        << this->H.get_rows_max_degree() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// generate Bernouilli distributions

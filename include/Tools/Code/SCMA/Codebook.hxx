@@ -5,7 +5,8 @@
 #include <fstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/SCMA/Codebook.hpp"
 
 namespace aff3ct
@@ -22,21 +23,21 @@ Codebook<R>
 	{
 		std::stringstream message;
 		message << "'number_of_users' has to be strictly positive ('number_of_users' = " << number_of_users << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (number_of_resources <= 0)
 	{
 		std::stringstream message;
 		message << "'number_of_resources' has to be strictly positive ('number_of_resources' = " << number_of_resources << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (codebook_size <= 0)
 	{
 		std::stringstream message;
 		message << "'number_of_users' has to be strictly positive ('codebook_size' = " << codebook_size << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -50,7 +51,7 @@ void Codebook<R>
 	{
 		std::stringstream message;
 		message << "Can't open '" + codebook_path + "' codebook file.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	file >> number_of_users >> number_of_resources >> codebook_size;
@@ -69,7 +70,7 @@ void Codebook<R>
 				{
 					std::stringstream message;
 					message << "There is not enough data in codebook file 'codebook_path' ( = \"" << codebook_path << "\").";
-					throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 				}
 				float real, imag;
 				file >> real >> imag;
@@ -113,7 +114,7 @@ void Codebook<R>
 		{
 			std::stringstream message;
 			message << "All resources do not have the same number of users (the first one have " << number_of_users_per_resource << " of them).";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 
@@ -131,7 +132,7 @@ void Codebook<R>
 		{
 			std::stringstream message;
 			message << "All users do not use the same number of resources (the first one use " << number_of_resources_per_user << " of them).";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 

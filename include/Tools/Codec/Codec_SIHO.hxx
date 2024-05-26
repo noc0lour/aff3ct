@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Codec/Codec_SIHO.hpp"
 
 namespace aff3ct
@@ -19,7 +20,7 @@ template <typename B, typename Q>
 Codec_SIHO<B,Q>* Codec_SIHO<B,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -39,7 +40,7 @@ module::Decoder_SIHO<B,Q>& Codec_SIHO<B,Q>
 	{
 		std::stringstream message;
 		message << "'decoder_siho' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->decoder_siho;

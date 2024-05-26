@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/LDPC/From_QC/Encoder_LDPC_from_QC.hpp"
 
 using namespace aff3ct;
@@ -70,7 +71,7 @@ void Encoder_LDPC_from_QC<B>
 		std::stringstream message;
 		message << "The built H matrix has a dimension '(N-K)' different than the given one ('(N-K)' = " << (this->N-this->K)
 		        << ", 'H.get_n_cols()' = " << this->H.get_n_cols() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

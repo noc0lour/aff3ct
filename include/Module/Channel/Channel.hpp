@@ -10,11 +10,9 @@
 #include <vector>
 #include <memory>
 
-#include "Tools/Interface/Interface_set_seed.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
 
 namespace aff3ct
 {
@@ -41,12 +39,12 @@ namespace module
  * Please use Channel for inheritance (instead of Channel).
  */
 template <typename R = float>
-class Channel : public Module, public tools::Interface_set_seed
+class Channel : public spu::module::Module, public spu::tools::Interface_set_seed
 {
 public:
-	inline runtime::Task&   operator[](const chn::tsk               t);
-	inline runtime::Socket& operator[](const chn::sck::add_noise    s);
-	inline runtime::Socket& operator[](const chn::sck::add_noise_wg s);
+	inline spu::runtime::Task&   operator[](const chn::tsk               t);
+	inline spu::runtime::Socket& operator[](const chn::sck::add_noise    s);
+	inline spu::runtime::Socket& operator[](const chn::sck::add_noise_wg s);
 
 protected:
 	const int N;                 // Size of one frame (= number of bits in one frame)

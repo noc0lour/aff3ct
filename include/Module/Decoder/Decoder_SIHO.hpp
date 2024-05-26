@@ -9,8 +9,6 @@
 #include <vector>
 #include <cstdint>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
 #include "Module/Decoder/Decoder_HIHO.hpp"
 
 namespace aff3ct
@@ -34,11 +32,11 @@ protected:
 	std::vector<R> Y_N;
 
 public:
-	inline runtime::Task&   operator[](const dec::tsk                 t);
-	inline runtime::Socket& operator[](const dec::sck::decode_hiho    s);
-	inline runtime::Socket& operator[](const dec::sck::decode_hiho_cw s);
-	inline runtime::Socket& operator[](const dec::sck::decode_siho    s);
-	inline runtime::Socket& operator[](const dec::sck::decode_siho_cw s);
+	inline spu::runtime::Task&   operator[](const dec::tsk                 t);
+	inline spu::runtime::Socket& operator[](const dec::sck::decode_hiho    s);
+	inline spu::runtime::Socket& operator[](const dec::sck::decode_hiho_cw s);
+	inline spu::runtime::Socket& operator[](const dec::sck::decode_siho    s);
+	inline spu::runtime::Socket& operator[](const dec::sck::decode_siho_cw s);
 
 public:
 	/*!

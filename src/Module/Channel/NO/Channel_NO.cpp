@@ -2,7 +2,6 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Channel/NO/Channel_NO.hpp"
 
 using namespace aff3ct;

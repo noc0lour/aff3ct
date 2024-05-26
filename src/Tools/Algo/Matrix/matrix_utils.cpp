@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Matrix/matrix_utils.h"
 
 using namespace aff3ct::tools;
@@ -12,7 +13,7 @@ Sparse_matrix aff3ct::tools::bgemm(const Sparse_matrix& A, const Sparse_matrix& 
 		std::stringstream message;
 		message << "'A.get_n_cols()' is different to 'B.get_n_rows()' ('A.get_n_cols()' = " << A.get_n_cols()
 		        << ", 'B.get_n_rows()' = " << B.get_n_rows() << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto L = A.get_n_rows();
@@ -46,7 +47,7 @@ Sparse_matrix aff3ct::tools::bgemmt(const Sparse_matrix& A, const Sparse_matrix&
 		std::stringstream message;
 		message << "'A.get_n_cols()' is different to 'tB.get_n_cols()' ('A.get_n_cols()' = " << A.get_n_cols()
 		        << ", 'tB.get_n_cols()' = " << tB.get_n_cols() << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto L =  A.get_n_rows();

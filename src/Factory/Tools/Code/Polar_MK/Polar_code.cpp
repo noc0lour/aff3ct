@@ -2,7 +2,8 @@
 #include <utility>
 #include <tuple>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_file.hpp"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_GA.hpp"
@@ -106,5 +107,5 @@ tools::Polar_code* Polar_code
 	if (this->code_path.empty()) return new tools::Polar_code(this->N_cw, this->kernel_matrix);
 	else                         return new tools::Polar_code(this->code_path);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }

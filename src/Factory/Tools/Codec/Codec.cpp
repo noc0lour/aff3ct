@@ -2,8 +2,9 @@
 #include <sstream>
 #include <utility>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Math/utils.h"
 #include "Factory/Tools/Codec/Codec.hpp"
 
 using namespace aff3ct;
@@ -33,7 +34,7 @@ Codec* Codec
 void Codec
 ::enable_puncturer()
 {
-	throw tools::runtime_error(__FILE__, __LINE__, __func__, "This codec does not support to be punctured.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "This codec does not support to be punctured.");
 }
 
 std::vector<std::string> Codec
@@ -97,7 +98,7 @@ void Codec
 
 	const auto code_rate = (float)this->K / (float)this->N;
 	// find the greatest common divisor of K and N
-	auto gcd = tools::greatest_common_divisor(this->K, this->N);
+	auto gcd = spu::tools::greatest_common_divisor(this->K, this->N);
 	std::stringstream cr_str;
 	cr_str << code_rate << " (" << this->K/gcd << "/" << this->N/gcd << ")";
 

@@ -2,8 +2,9 @@
 #include <algorithm>
 #include <sstream>
 
+#include <streampu.hpp>
+
 #include "Module/Extractor/Uncoded/Extractor_uncoded.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Puncturer/Puncturer.hpp"
 #include "Tools/Codec/Uncoded/Codec_uncoded.hpp"
 
@@ -22,7 +23,7 @@ Codec_uncoded<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -30,7 +31,7 @@ Codec_uncoded<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.K != enc_params.N_cw)
@@ -38,7 +39,7 @@ Codec_uncoded<B,Q>
 		std::stringstream message;
 		message << "'K' has to be equal to 'N' ('K' = " << enc_params.K
 		        << ", 'N' = " << enc_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------- allocations

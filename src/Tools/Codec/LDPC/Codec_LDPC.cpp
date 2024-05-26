@@ -4,7 +4,8 @@
 #include <numeric>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Extractor/LDPC/Extractor_LDPC.hpp"
 #include "Factory/Module/Encoder/Encoder.hpp"
 #include "Factory/Module/Puncturer/Puncturer.hpp"
@@ -29,7 +30,7 @@ Codec_LDPC<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -37,7 +38,7 @@ Codec_LDPC<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------------- tools
@@ -98,7 +99,7 @@ Codec_LDPC<B,Q>
 		{
 			this->set_puncturer(pct_params->build<B,Q>());
 		}
-		catch (cannot_allocate const&)
+		catch (spu::tools::cannot_allocate const&)
 		{
 			this->set_puncturer(static_cast<const factory::Puncturer*>(pct_params)->build<B,Q>());
 		}
@@ -108,13 +109,13 @@ Codec_LDPC<B,Q>
 	{
 		this->get_encoder();
 	}
-	catch (runtime_error const&)
+	catch (spu::tools::runtime_error const&)
 	{ // encoder not set when building encoder LDPC_H
 		try
 		{
 			this->set_encoder(enc_params.build<B>(*G, *H, *dvbs2));
 		}
-		catch(cannot_allocate const&)
+		catch(spu::tools::cannot_allocate const&)
 		{
 			this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 		}
@@ -126,7 +127,7 @@ Codec_LDPC<B,Q>
 		{
 			*info_bits_pos = this->get_encoder().get_info_bits_pos();
 		}
-		catch(unimplemented_error const&)
+		catch(spu::tools::unimplemented_error const&)
 		{
 			// generate a default vector [0, 1, 2, 3, ..., K-1]
 			info_bits_pos->resize(enc_params.K);
@@ -165,7 +166,7 @@ const Sparse_matrix& Codec_LDPC<B,Q>
 	{
 		std::stringstream message;
 		message << "'H->size()' has to be strictly greater than 0 ('H->size()' = " << H->size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->H;
@@ -179,7 +180,7 @@ const Sparse_matrix& Codec_LDPC<B,Q>
 	{
 		std::stringstream message;
 		message << "'G->size()' has to be strictly greater than 0 ('G->size()' = " << G->size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->G;
@@ -200,7 +201,7 @@ const dvbs2_values& Codec_LDPC<B,Q>
 	{
 		std::stringstream message;
 		message << "'dvbs2' can't be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->dvbs2.get();

@@ -1,7 +1,8 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/CRC/CRC.hpp"
 
 namespace aff3ct
@@ -10,37 +11,37 @@ namespace module
 {
 
 template <typename B>
-runtime::Task& CRC<B>
+spu::runtime::Task& CRC<B>
 ::operator[](const crc::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B>
-runtime::Socket& CRC<B>
+spu::runtime::Socket& CRC<B>
 ::operator[](const crc::sck::build s)
 {
-	return Module::operator[]((size_t)crc::tsk::build)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)crc::tsk::build)[(size_t)s];
 }
 
 template <typename B>
-runtime::Socket& CRC<B>
+spu::runtime::Socket& CRC<B>
 ::operator[](const crc::sck::extract s)
 {
-	return Module::operator[]((size_t)crc::tsk::extract)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)crc::tsk::extract)[(size_t)s];
 }
 
 template <typename B>
-runtime::Socket& CRC<B>
+spu::runtime::Socket& CRC<B>
 ::operator[](const crc::sck::check s)
 {
-	return Module::operator[]((size_t)crc::tsk::check)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)crc::tsk::check)[(size_t)s];
 }
 
 template <typename B>
 CRC<B>
 ::CRC(const int K, const int size)
-: Module(), K(K), size(size)
+: spu::module::Module(), K(K), size(size)
 {
 	const std::string name = "CRC";
 	this->set_name(name);
@@ -50,13 +51,14 @@ CRC<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p1 = this->create_task("build");
 	auto p1s_U_K1 = this->template create_socket_in <B>(p1, "U_K1", this->K             );
 	auto p1s_U_K2 = this->template create_socket_out<B>(p1, "U_K2", this->K + this->size);
-	this->create_codelet(p1, [p1s_U_K1, p1s_U_K2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_U_K1, p1s_U_K2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &crc = static_cast<CRC<B>&>(m);
 
@@ -64,13 +66,14 @@ CRC<B>
 		           static_cast<B*>(t[p1s_U_K2].get_dataptr()),
 		           frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("extract");
 	auto p2s_V_K1 = this->template create_socket_in <B>(p2, "V_K1", this->K + this->size);
 	auto p2s_V_K2 = this->template create_socket_out<B>(p2, "V_K2", this->K             );
-	this->create_codelet(p2, [p2s_V_K1, p2s_V_K2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_V_K1, p2s_V_K2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &crc = static_cast<CRC<B>&>(m);
 
@@ -78,29 +81,31 @@ CRC<B>
 		             static_cast<B*>(t[p2s_V_K2].get_dataptr()),
 		             frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p3 = this->create_task("check");
 	auto p3s_V_K = this->template create_socket_in<B>(p3, "V_K", this->K + this->size);
-	this->create_codelet(p3, [p3s_V_K](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p3, [p3s_V_K]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &crc = static_cast<CRC<B>&>(m);
 
 		auto ret = crc._check(static_cast<B*>(t[p3s_V_K].get_dataptr()), frame_id);
 
-		return ret ? runtime::status_t::SUCCESS : runtime::status_t::FAILURE_STOP;
+		return ret ? spu::runtime::status_t::SUCCESS : spu::runtime::status_t::FAILURE_STOP;
 	});
 
 	auto &p4 = this->create_task("check_packed");
 	auto p4s_V_K = this->template create_socket_in<B>(p4, "V_K", this->K + this->size);
-	this->create_codelet(p4, [p4s_V_K](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p4, [p4s_V_K]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &crc = static_cast<CRC<B>&>(m);
 
 		auto ret = crc._check_packed(static_cast<B*>(t[p4s_V_K].get_dataptr()), frame_id);
 
-		return ret ? runtime::status_t::SUCCESS : runtime::status_t::FAILURE_STOP;
+		return ret ? spu::runtime::status_t::SUCCESS : spu::runtime::status_t::FAILURE_STOP;
 	});
 }
 
@@ -108,7 +113,7 @@ template <typename B>
 CRC<B>* CRC<B>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
@@ -176,14 +181,14 @@ bool CRC<B>
 	if (frame_id == -1)
 	{
 		size_t w = 0;
-		while (w < this->get_n_waves() && status[w] == runtime::status_t::SUCCESS)
+		while (w < this->get_n_waves() && status[w] == spu::runtime::status_t::SUCCESS)
 			w++;
 		return w == this->get_n_waves();
 	}
 	else
 	{
 		const auto w = (frame_id % this->get_n_frames()) / this->get_n_frames_per_wave();
-		return status[w] == runtime::status_t::SUCCESS;
+		return status[w] == spu::runtime::status_t::SUCCESS;
 	}
 }
 
@@ -197,14 +202,14 @@ bool CRC<B>
 	if (frame_id == -1)
 	{
 		size_t w = 0;
-		while (w < this->get_n_waves() && status[w] == runtime::status_t::SUCCESS)
+		while (w < this->get_n_waves() && status[w] == spu::runtime::status_t::SUCCESS)
 			w++;
 		return w == this->get_n_waves();
 	}
 	else
 	{
 		const auto w = (frame_id % this->get_n_frames()) / this->get_n_frames_per_wave();
-		return status[w] == runtime::status_t::SUCCESS;
+		return status[w] == spu::runtime::status_t::SUCCESS;
 	}
 }
 
@@ -219,14 +224,14 @@ bool CRC<B>
 	if (frame_id == -1)
 	{
 		size_t w = 0;
-		while (w < this->get_n_waves() && status[w] == runtime::status_t::SUCCESS)
+		while (w < this->get_n_waves() && status[w] == spu::runtime::status_t::SUCCESS)
 			w++;
 		return w == this->get_n_waves();
 	}
 	else
 	{
 		const auto w = (frame_id % this->get_n_frames()) / this->get_n_frames_per_wave();
-		return status[w] == runtime::status_t::SUCCESS;
+		return status[w] == spu::runtime::status_t::SUCCESS;
 	}
 }
 
@@ -240,14 +245,14 @@ bool CRC<B>
 	if (frame_id == -1)
 	{
 		size_t w = 0;
-		while (w < this->get_n_waves() && status[w] == runtime::status_t::SUCCESS)
+		while (w < this->get_n_waves() && status[w] == spu::runtime::status_t::SUCCESS)
 			w++;
 		return w == this->get_n_waves();
 	}
 	else
 	{
 		const auto w = (frame_id % this->get_n_frames()) / this->get_n_frames_per_wave();
-		return status[w] == runtime::status_t::SUCCESS;
+		return status[w] == spu::runtime::status_t::SUCCESS;
 	}
 }
 
@@ -255,21 +260,21 @@ template <typename B>
 void CRC<B>
 ::_build(const B *U_K1, B *U_K2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
 void CRC<B>
 ::_extract(const B *V_K1, B *V_K2, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B>
 bool CRC<B>
 ::_check(const B *V_K, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	return false;
 }
 
@@ -277,7 +282,7 @@ template <typename B>
 bool CRC<B>
 ::_check_packed(const B *V_K, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	return false;
 }
 

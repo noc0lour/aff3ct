@@ -1,7 +1,8 @@
 #include <stdexcept>
 
+#include <streampu.hpp>
+
 #include "Tools/Display/rang_format/rang_format.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Factory/Command_parser.hpp"
 
 using namespace aff3ct;
@@ -40,10 +41,10 @@ void Command_parser
 	}
 	catch(const std::exception& e)
 	{
-		auto save = tools::exception::no_stacktrace;
-		tools::exception::no_stacktrace = true;
+		auto save = spu::tools::exception::no_stacktrace;
+		spu::tools::exception::no_stacktrace = true;
 		errors.push_back(e.what());
-		tools::exception::no_stacktrace = save;
+		spu::tools::exception::no_stacktrace = save;
 	}
 
 	if (read_args.exist(Command_parser::help_tag))

@@ -4,12 +4,13 @@
 #include <regex>
 #include <map>
 
+#include <streampu.hpp>
+
 #ifndef AFF3CT_EXT_STRINGS
 #include "Tools/Documentation/strings.cpp"
 #endif
 #include "Tools/version.h"
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/system_functions.h"
 #include "Tools/Documentation/documentation.h"
 
@@ -31,7 +32,7 @@ cli::Argument_tag extract_tags(const std::string &key, const std::string &prefix
 	{
 		std::stringstream message;
 		message << "'split_key.size()' has to be higher than 0.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto tags = split(split_key[split_key.size()-1], ',');
@@ -40,7 +41,7 @@ cli::Argument_tag extract_tags(const std::string &key, const std::string &prefix
 	{
 		std::stringstream message;
 		message << "'tags.size()' has to be higher than 0.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (size_t t = 0; t < tags.size(); t++)
@@ -94,7 +95,7 @@ void parse_documentation(const std::vector<std::string> &lines)
 				std::stringstream message;
 				message << "'split_line.size()' has to be equal or higher than 2 ('split_line.size()' = "
 				        << split_line.size() << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			key = split_line[1];
@@ -118,11 +119,11 @@ std::string extract_documentation(const std::string &key)
 		std::vector<std::string> lines;
 
 #ifdef AFF3CT_EXT_STRINGS
-		std::string binary_path = get_binary_path();
+		std::string binary_path = cli::get_binary_path();
 		if (!binary_path.empty())
 		{
 			std::string basedir, filename;
-			split_path(binary_path, basedir, filename);
+			cli::split_path(binary_path, basedir, filename);
 
 			std::string aff3ct_version = version();
 			if (!aff3ct_version.empty() && aff3ct_version[0] == 'v')

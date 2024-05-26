@@ -2,7 +2,8 @@
 #include <vector>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/distance/hamming_distance.h"
 #include "Module/Monitor/BFER/Monitor_BFER.hpp"
 
@@ -24,14 +25,15 @@ Monitor_BFER<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p1 = this->create_task("check_errors", (int)mnt::tsk::check_errors);
 	auto p1s_U = this->template create_socket_in<B>(p1, "U", this->get_K());
 	auto p1s_V = this->template create_socket_in<B>(p1, "V", this->get_K());
 
-	this->create_codelet(p1, [p1s_U, p1s_V](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_U, p1s_V]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mnt = static_cast<Monitor_BFER<B>&>(m);
 
@@ -51,8 +53,8 @@ Monitor_BFER<B>
 	auto p2s_BER = this->template create_socket_out<float  >(p2, "BER", 1      );
 	auto p2s_FER = this->template create_socket_out<float  >(p2, "FER", 1      );
 
-	this->create_codelet(p2, [p2s_U, p2s_V, p2s_FRA, p2s_BE, p2s_FE, p2s_BER, p2s_FER](Module &m, runtime::Task &t,
-	                                                                                   const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_U, p2s_V, p2s_FRA, p2s_BE, p2s_FE, p2s_BER, p2s_FER]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &mnt = static_cast<Monitor_BFER<B>&>(m);
 
@@ -80,7 +82,7 @@ Monitor_BFER<B>* Monitor_BFER<B>
 		std::stringstream message;
 		message << "'callback_fe.size()' has to be equal to 0 ('callback_fe.size()' = "
 		        << this->callback_fe.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->callback_check.size())
@@ -88,7 +90,7 @@ Monitor_BFER<B>* Monitor_BFER<B>
 		std::stringstream message;
 		message << "'callback_check.size()' has to be equal to 0 ('callback_check.size()' = "
 		        << this->callback_check.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->callback_fe_limit_achieved.size())
@@ -96,7 +98,7 @@ Monitor_BFER<B>* Monitor_BFER<B>
 		std::stringstream message;
 		message << "'callback_fe_limit_achieved.size()' has to be equal to 0 ('callback_fe_limit_achieved.size()' = "
 		        << this->callback_fe_limit_achieved.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto m = new Monitor_BFER(*this);
@@ -113,7 +115,7 @@ bool Monitor_BFER<B>
 		std::stringstream message;
 		message << "'get_K()' is different than 'm.get_K()' ('get_K()' = " << get_K() << ", 'm.get_K()' = "
 		        << m.get_K() <<").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (get_max_fe() != m.get_max_fe())
@@ -124,7 +126,7 @@ bool Monitor_BFER<B>
 		std::stringstream message;
 		message << "'get_max_fe()' is different than 'm.get_max_fe()' ('this->get_max_fe()' = " << get_max_fe()
 		        << ", 'm.get_max_fe()' = " << m.get_max_fe() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (get_max_n_frames() != m.get_max_n_frames())
@@ -135,7 +137,7 @@ bool Monitor_BFER<B>
 		std::stringstream message;
 		message << "'get_max_n_frames()' is different than 'm.get_max_n_frames()' ('this->get_max_n_frames()' = "
 		        << get_max_n_frames() << ", 'm.get_max_n_frames()' = " << m.get_max_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (get_count_unknown_values() != m.get_count_unknown_values())
@@ -147,7 +149,7 @@ bool Monitor_BFER<B>
 		message << "'get_count_unknown_values()' is different than 'm.get_count_unknown_values()' "
 		        << "('get_count_unknown_values()' = " << get_count_unknown_values()
 		        << ", 'm.get_count_unknown_values()' = " << m.get_count_unknown_values() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return true;

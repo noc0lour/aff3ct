@@ -5,7 +5,8 @@
 #include <limits>
 #include <mipp.h>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_inter_intra.h"
 #include "Tools/Code/Polar/API/internal_functions/functions_polar_inter.h"
 
@@ -114,7 +115,7 @@ void spc_inter<B,R,HI,N_ELMTS>
 			auto j = 0;
 			// while (l_a[j * stride + i] != cur_min_abs[i]) j++;
 			while (std::abs(l_a[j * stride + i]) != cur_min_abs[i]) j++;
-			s_a[j * stride + i] = (s_a[j * stride + i] == 0) ? bit_init<B>() : 0;
+			s_a[j * stride + i] = (s_a[j * stride + i] == 0) ? spu::tools::bit_init<B>() : 0;
 		}
 	}
 }
@@ -155,7 +156,7 @@ void spc_inter<B,R,HI,0>
 #else
 	R prod_sign  [mipp::nElmtsPerRegister<R>()];
 #endif
-	mipp::store<R>(prod_sign,   r_prod_sign);
+	mipp::store<R>(prod_sign, r_prod_sign);
 
 	// sequential part of the SPC
 	for (auto i = 0; i < stride; i++)
@@ -165,7 +166,7 @@ void spc_inter<B,R,HI,0>
 			auto j = 0;
 			// while (l_a[j * stride + i] != cur_min_abs[i]) j++;
 			while (std::abs(l_a[j * stride + i]) != cur_min_abs[i]) j++;
-			s_a[j * stride + i] = (s_a[j * stride + i] == 0) ? bit_init<B>() : 0;
+			s_a[j * stride + i] = (s_a[j * stride + i] == 0) ? spu::tools::bit_init<B>() : 0;
 		}
 	}
 }

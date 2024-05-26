@@ -2,7 +2,7 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 #include "Module/Encoder/RSC/Encoder_RSC_generic_sys.hpp"
 
@@ -24,7 +24,7 @@ Encoder_RSC_generic_sys<B>
 	{
 		std::stringstream message;
 		message << "'poly.size()' has to be equal or greater than 2 ('poly.size()' = " << poly.size() << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (std::floor(std::log2(poly[0])) != std::floor(std::log2(poly[1])))
@@ -32,7 +32,7 @@ Encoder_RSC_generic_sys<B>
 		std::stringstream message;
 		message << "floor(log2('poly[0]')) has to be equal to floor(log2('poly[1]')) ('poly[0]' = " << poly[0]
 		        << ", 'poly[1]' = " << poly[1] << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto s = 0; s < this->n_states; s++)

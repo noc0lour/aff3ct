@@ -2,7 +2,6 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Module/Encoder/BCH/Encoder_BCH_inter.hpp"
 

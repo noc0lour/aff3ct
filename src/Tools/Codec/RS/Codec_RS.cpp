@@ -1,8 +1,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Factory/Module/Puncturer/Puncturer.hpp"
 #include "Factory/Module/Encoder/Encoder.hpp"
 #include "Tools/Codec/RS/Codec_RS.hpp"
@@ -15,7 +15,7 @@ Codec_RS<B,Q>
 ::Codec_RS(const factory::Encoder_RS &enc_params,
            const factory::Decoder_RS &dec_params)
 : Codec_SIHO<B,Q>(enc_params.K, enc_params.N_cw, enc_params.N_cw),
-  GF_poly(new RS_polynomial_generator(next_power_of_2(dec_params.N_cw) -1, dec_params.t))
+  GF_poly(new RS_polynomial_generator(spu::tools::next_power_of_2(dec_params.N_cw) -1, dec_params.t))
 {
 	// ----------------------------------------------------------------------------------------------------- exceptions
 	if (enc_params.K != dec_params.K)
@@ -23,7 +23,7 @@ Codec_RS<B,Q>
 		std::stringstream message;
 		message << "'enc_params.K' has to be equal to 'dec_params.K' ('enc_params.K' = " << enc_params.K
 		        << ", 'dec_params.K' = " << dec_params.K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (enc_params.N_cw != dec_params.N_cw)
@@ -31,7 +31,7 @@ Codec_RS<B,Q>
 		std::stringstream message;
 		message << "'enc_params.N_cw' has to be equal to 'dec_params.N_cw' ('enc_params.N_cw' = " << enc_params.N_cw
 		        << ", 'dec_params.N_cw' = " << dec_params.N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ---------------------------------------------------------------------------------------------------- allocations
@@ -46,7 +46,7 @@ Codec_RS<B,Q>
 	{
 		this->set_encoder(enc_params.build<B>(*GF_poly));
 	}
-	catch (cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		this->set_encoder(static_cast<const factory::Encoder*>(&enc_params)->build<B>());
 	}

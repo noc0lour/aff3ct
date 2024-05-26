@@ -4,8 +4,8 @@
 #include <numeric>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/RS/Encoder_RS.hpp"
 
 using namespace aff3ct;
@@ -35,7 +35,7 @@ Encoder_RS<B>
 		std::stringstream message;
 		message << "'N_rs - K_rs' is different than 'n_rdncy' ('K_rs' = " << K_rs << ", 'N_rs' = " << N_rs
 		        << ", 'n_rdncy' = " << n_rdncy << ", 'N_rs - K_rs' = " << (this->N_rs - this->K_rs) << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 
@@ -44,7 +44,7 @@ Encoder_RS<B>
 		std::stringstream message;
 		message << "The given Galois Field is too big to be stored in a 'S' type ('S' = " << typeid(S).name()
 		        << ", 'GF.get_m()' = " << GF.get_m() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::iota(this->info_bits_pos.begin(), this->info_bits_pos.end(), n_rdncy); // redundancy on the first 'n_rdncy' bits
@@ -91,12 +91,12 @@ template <typename B>
 void Encoder_RS<B>
 ::_encode(const B *U_K, B *X_N, const size_t frame_id)
 {
-	tools::Bit_packer::pack(U_K, this->packed_U_K.data(), this->K, 1, false, this->m);
+	spu::tools::Bit_packer::pack(U_K, this->packed_U_K.data(), this->K, 1, false, this->m);
 
 	// generate the parity bits
 	this->__encode(this->packed_U_K.data(), this->bb.data());
 
-	tools::Bit_packer::unpack(this->bb.data(), X_N, this->n_rdncy_bits, 1, false, this->m);
+	spu::tools::Bit_packer::unpack(this->bb.data(), X_N, this->n_rdncy_bits, 1, false, this->m);
 
 	// copy the sys bits at the end of the codeword
 	std::copy(U_K, U_K + this->K, X_N + this->n_rdncy_bits);
@@ -106,7 +106,7 @@ template <typename B>
 bool Encoder_RS<B>
 ::is_codeword(const B *X_N)
 {
-	tools::Bit_packer::pack(X_N, this->packed_X_N.data(), this->N, 1, false, this->m);
+	spu::tools::Bit_packer::pack(X_N, this->packed_X_N.data(), this->N, 1, false, this->m);
 
 	this->__encode(this->packed_X_N.data() + this->n_rdncy, this->bb.data()); // encode the systematic bits
 

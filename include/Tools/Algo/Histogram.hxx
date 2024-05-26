@@ -1,7 +1,6 @@
 #include <sstream>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Algo/Histogram.hpp"
 
 namespace aff3ct
@@ -25,7 +24,7 @@ Histogram<R>& Histogram<R>
 		std::stringstream message;
 		message << "Histograms do not have the same precision ('this->precision' = " << this->precision
 		        << ", other.precision = " << other.precision << ")." << std::endl;
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	n_values = other.n_values;
@@ -43,7 +42,7 @@ void Histogram<R>
 		std::stringstream message;
 		message << "Histograms do not have the same precision ('this->precision' = " << this->precision
 		        << ", other.precision = " << other.precision << ")." << std::endl;
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto& o : other.hist)
@@ -239,7 +238,7 @@ R Histogram<R>
 	{
 		std::stringstream message;
 		message << "The histogram is empty." << std::endl;
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return uncalibrate_val(hist.begin()->first);
@@ -253,7 +252,7 @@ R Histogram<R>
 	{
 		std::stringstream message;
 		message << "The histogram is empty." << std::endl;
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return uncalibrate_val(hist.rbegin()->first);

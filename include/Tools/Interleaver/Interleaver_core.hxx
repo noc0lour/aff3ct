@@ -2,7 +2,8 @@
 #include <utility>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/Interleaver_core.hpp"
 
 namespace aff3ct
@@ -19,14 +20,14 @@ Interleaver_core<T>
 	{
 		std::stringstream message;
 		message << "'size' has to be greater than 0 ('size' = " << size << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (name.empty())
 	{
 		std::stringstream message;
 		message << "'name' cannot be empty.";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -37,7 +38,7 @@ const std::vector<T>& Interleaver_core<T>
 	if (!this->is_initialized())
 	{
 		std::string message = "The 'init()' method has to be called before trying to get the lookup table.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
 	}
 
 	return pi;
@@ -50,7 +51,7 @@ const std::vector<T>& Interleaver_core<T>
 	if (!this->is_initialized())
 	{
 		std::string message = "The 'init()' method has to be called before trying to get the inverse lookup table.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, std::move(message));
 	}
 
 	return pi_inv;
@@ -78,7 +79,7 @@ void Interleaver_core<T>
 	{
 		std::stringstream message;
 		message << "'n_frames' has to be greater than 0 ('n_frames' = " << size << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto old_n_frames = this->get_n_frames();

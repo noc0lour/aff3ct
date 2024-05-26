@@ -1,7 +1,8 @@
 #include <type_traits>
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/Turbo/Decoder_turbo_std.hpp"
 #include "Module/Decoder/Turbo/Decoder_turbo_fast.hpp"
 #include "Factory/Module/Decoder/Turbo/Decoder_turbo.hpp"
@@ -223,7 +224,7 @@ module::Decoder_turbo<B,Q>* Decoder_turbo<D1,D2>
 		if (this->implem == "FAST") return new module::Decoder_turbo_fast<B,Q>(this->K, this->N_cw, this->n_ite, siso_n, siso_i, itl, this->sub1->buffered);
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <class D1, class D2>

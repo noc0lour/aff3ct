@@ -1,6 +1,7 @@
 #include <utility>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/Repetition/Decoder_repetition_std.hpp"
 #include "Module/Decoder/Repetition/Decoder_repetition_fast.hpp"
@@ -72,7 +73,7 @@ module::Decoder_SIHO<B,Q>* Decoder_repetition
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "REPETITION")
 		{
@@ -81,7 +82,7 @@ module::Decoder_SIHO<B,Q>* Decoder_repetition
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

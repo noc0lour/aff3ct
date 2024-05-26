@@ -1,4 +1,5 @@
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Noise/Sigma.hpp"
 #include "Tools/Noise/Sigma.hpp"
 #include "Tools/Noise/Event_probability.hpp"
@@ -47,7 +48,7 @@ Noise<T>* cast(const Noise<R>& n)
 template <typename R>
 constexpr R unknown_symbol_val()
 {
-	return tools::sat_val<R>();
+	return spu::tools::sat_val<R>();
 }
 
 template <typename R>

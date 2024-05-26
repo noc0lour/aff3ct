@@ -6,8 +6,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Decoder/Polar/SC/Decoder_polar_SC_naive.hpp"
 
@@ -24,11 +24,11 @@ Decoder_polar_SC_naive<B,R,F,G,H>
 	const std::string name = "Decoder_polar_SC_naive";
 	this->set_name(name);
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -36,7 +36,7 @@ Decoder_polar_SC_naive<B,R,F,G,H>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -45,7 +45,7 @@ Decoder_polar_SC_naive<B,R,F,G,H>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->recursive_allocate_nodes_contents(this->polar_tree.get_root(), this->N);
@@ -72,7 +72,7 @@ template <typename B, typename R, tools::proto_f<R> F, tools::proto_g<B,R> G, to
 void Decoder_polar_SC_naive<B,R,F,G,H>
 ::deep_copy(const Decoder_polar_SC_naive<B,R,F,G,H> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	this->recursive_deep_copy(m.polar_tree.get_root(), this->polar_tree.get_root());
 }
 

@@ -3,10 +3,10 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/general_utils.h"
-#include "Tools/Display/rang_format/rang_format.h"
+#include <streampu.hpp>
 
+#include "Tools/Display/rang_format/rang_format.h"
+#include "Tools/general_utils.h"
 #include "Tools/Code/LDPC/AList/AList.hpp"
 
 using namespace aff3ct::tools;
@@ -23,13 +23,13 @@ Sparse_matrix AList
 	}
 	catch (std::exception const& e1)
 	{
-		auto save = exception::no_stacktrace;
-		exception::no_stacktrace = true;
+		auto save = spu::tools::exception::no_stacktrace;
+		spu::tools::exception::no_stacktrace = true;
 
 		std::stringstream message;
 		message << "The given stream does not refer to a AList format file: ";
 		message << std::endl << e1.what();
-		exception::no_stacktrace = save;
+		spu::tools::exception::no_stacktrace = save;
 
 		try
 		{
@@ -39,10 +39,10 @@ Sparse_matrix AList
 		}
 		catch (std::exception const& e2)
 		{
-			auto save = exception::no_stacktrace;
-			exception::no_stacktrace = true;
+			auto save = spu::tools::exception::no_stacktrace;
+			spu::tools::exception::no_stacktrace = true;
 			message << std::endl << e2.what();
-			exception::no_stacktrace = save;
+			spu::tools::exception::no_stacktrace = save;
 
 			try
 			{
@@ -52,12 +52,12 @@ Sparse_matrix AList
 			}
 			catch (std::exception const& e3)
 			{
-				auto save = exception::no_stacktrace;
-				exception::no_stacktrace = true;
+				auto save = spu::tools::exception::no_stacktrace;
+				spu::tools::exception::no_stacktrace = true;
 				message << std::endl << e3.what();
-				exception::no_stacktrace = save;
+				spu::tools::exception::no_stacktrace = save;
 
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 	}
@@ -117,7 +117,7 @@ void AList
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 1 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	N = std::stoi(values[0]);
@@ -140,7 +140,7 @@ std::vector<unsigned> AList
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be equal to 1 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const unsigned size = std::stoi(values[0]);
@@ -152,7 +152,7 @@ std::vector<unsigned> AList
 		std::stringstream message;
 		message << "'values.size()' has to be equal to 'size' ('values.size()' = " << values.size()
 		        << ", 'size' = " << size << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<unsigned> info_bits_pos;
@@ -164,7 +164,7 @@ std::vector<unsigned> AList
 		{
 			std::stringstream message;
 			message << "'pos' already exists in the 'info_bits_pos' vector ('pos' = " << pos << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		info_bits_pos.push_back(pos);
@@ -183,7 +183,7 @@ std::vector<unsigned> AList
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << K << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto pos : info_bits_pos)
@@ -191,7 +191,7 @@ std::vector<unsigned> AList
 		{
 			std::stringstream message;
 			message << "'pos' has to be smaller than 'N' ('pos' = " << pos << ", 'N' = " << N << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 	return info_bits_pos;
@@ -234,7 +234,7 @@ Sparse_matrix AList
 				message << "'n_connections' has to be greater than 0 and smaller or equal to 'rows_max_degree' "
 				        << " ('n_connections' = " << n_connections
 				        << ", 'rows_max_degree' = " << rows_max_degree << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			rows_degree[i] = n_connections;
@@ -252,7 +252,7 @@ Sparse_matrix AList
 				message << "'n_connections' has to be greater than 0 and smaller or equal to 'cols_max_degree' "
 				        << "('n_connections' = " << n_connections
 				        << ", 'cols_max_degree' = " << cols_max_degree << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 
 			// cols_degree[i] = n_connections;
@@ -276,7 +276,7 @@ Sparse_matrix AList
 				{
 					std::stringstream message;
 					message << "'col_index' is wrong ('col_index' = " << col_index << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 		}
@@ -297,7 +297,8 @@ Sparse_matrix AList
 //						try
 //						{
 //							matrix.add_connection(row_index -1, i);
-//							throw runtime_error(__FILE__, __LINE__, __func__, "The input AList is not consistent.");
+//							throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+//							                                "The input AList is not consistent.");
 //						}
 //						catch (std::exception const&)
 //						{
@@ -309,7 +310,7 @@ Sparse_matrix AList
 //				{
 //					std::stringstream message;
 //					message << "'row_index' is wrong ('row_index' = " << row_index << ").";
-//					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+//					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 //				}
 //			}
 //		}
@@ -322,7 +323,7 @@ Sparse_matrix AList
 		message << "'n_rows', 'n_cols', 'rows_max_degree' and 'cols_max_degree' have to be greater than 0 "
 		        << "('n_rows' = " << n_rows << ", 'n_cols' = " << n_cols
 		        << ", 'rows_max_degree' = " << rows_max_degree << ", 'cols_max_degree' = " << cols_max_degree << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -339,7 +340,7 @@ Sparse_matrix AList
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 1 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	unsigned n_rows = 0, n_cols = 0, rows_max_degree = 0, cols_max_degree = 0;
@@ -352,7 +353,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'n_rows' and 'n_cols' have to be greater than 0 ('n_rows' = " << n_rows
 		        << ", 'n_cols' = " << n_cols << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Sparse_matrix matrix(n_rows, n_cols);
@@ -363,7 +364,7 @@ Sparse_matrix AList
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 1 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	rows_max_degree = std::stoi(values[0]);
@@ -374,7 +375,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'rows_max_degree' and 'cols_max_degree' have to be greater than 0 ('rows_max_degree' = "
 		        << rows_max_degree << ", 'cols_max_degree' = " << cols_max_degree << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	tools::getline(stream, line);
@@ -384,7 +385,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'values.size()' has to be greater or equal to 'n_rows' ('values.size()' = " << values.size()
 		        << ", 'n_rows' = " << n_rows << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<unsigned> rows_degree(n_rows);
@@ -404,7 +405,7 @@ Sparse_matrix AList
 			std::stringstream message;
 			message << "'n_connections' has to be smaller than 'rows_max_degree' "
 			        << "('n_connections' = " << n_connections << ", 'rows_max_degree' = " << rows_max_degree << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 
@@ -415,7 +416,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'values.size()' has to be greater or equal to 'n_cols' ('values.size()' = " << values.size()
 		        << ", 'n_cols' = " << n_cols << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// std::vector<unsigned> cols_degree(n_rows);
@@ -427,7 +428,7 @@ Sparse_matrix AList
 			std::stringstream message;
 			message << "'n_connections' has to be smaller than 'cols_max_degree' "
 			        << "('n_connections' = " << n_connections << ", 'cols_max_degree' = " << cols_max_degree << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 		// else
 			// cols_degree[i] = n_connections;
@@ -443,7 +444,7 @@ Sparse_matrix AList
 			std::stringstream message;
 			message << "'values.size()' has to be greater or equal to 'rows_degree[i]' ('values.size()' = "
 			        << values.size() << ", 'i' = " << i << ", 'rows_degree[i]' = " << rows_degree[i] << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (unsigned j = 0; j < rows_max_degree; j++)
@@ -459,7 +460,7 @@ Sparse_matrix AList
 			{
 				std::stringstream message;
 				message << "'col_index' is wrong ('col_index' = " << col_index << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 	}
@@ -475,7 +476,7 @@ Sparse_matrix AList
 //			std::stringstream message;
 //			message << "'values.size()' has to be greater or equal to 'cols_degree[i]' ('values.size()' = "
 //			        << values.size() << ", 'i' = " << i << ", 'cols_degree[i]' = " << cols_degree[i] << ").";
-//			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+//			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 //		}
 //
 //		for (unsigned j = 0; j < cols_max_degree; j++)
@@ -489,7 +490,8 @@ Sparse_matrix AList
 //					try
 //					{
 //						matrix.add_connection(row_index -1, i);
-//						throw runtime_error(__FILE__, __LINE__, __func__, "The input AList file is not consistent.");
+//						throw spu::tools::runtime_error(__FILE__, __LINE__, __func__,
+//						                                "The input AList file is not consistent.");
 //					}
 //					catch (std::exception const&)
 //					{
@@ -501,7 +503,7 @@ Sparse_matrix AList
 //			{
 //				std::stringstream message;
 //				message << "'row_index' is wrong ('row_index' = " << row_index << ").";
-//				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+//				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 //			}
 //		}
 //	}
@@ -521,7 +523,7 @@ Sparse_matrix AList
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 1 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	unsigned n_rows = 0, n_cols = 0;
@@ -534,7 +536,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'n_rows' and 'n_cols' have to be greater than 0 ('n_rows' = " << n_rows
 		        << ", 'n_cols' = " << n_cols << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Sparse_matrix matrix(n_rows, n_cols);
@@ -546,7 +548,7 @@ Sparse_matrix AList
 		std::stringstream message;
 		message << "'values.size()' has to be greater or equal to 'n_rows' ('values.size()' = " << values.size()
 		        << ", 'n_rows' = " << n_rows << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<unsigned> cols_degree(n_cols);
@@ -560,7 +562,7 @@ Sparse_matrix AList
 			std::stringstream message;
 			message << "'n_connections' has to be greater than 0 and smaller than 'n_rows' "
 			        << "('n_connections' = " << n_connections << ", 'n_rows' = " << n_rows << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 
@@ -574,7 +576,7 @@ Sparse_matrix AList
 			std::stringstream message;
 			message << "'values.size()' has to be greater or equal to 'cols_degree[i]' ('values.size()' = "
 			        << values.size() << ", 'i' = " << i << ", 'cols_degree[i]' = " << cols_degree[i] << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (unsigned j = 0; j < cols_degree[i]; j++)

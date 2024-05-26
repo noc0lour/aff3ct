@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Math/utils.h"
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/Update_rule/NMS/Update_rule_NMS.hpp"
 
 namespace aff3ct
@@ -13,20 +13,20 @@ namespace tools
 template <typename R>
 inline R normalize(const R val, const float factor)
 {
-	     if (factor == 0.125f) return tools::div8<R>(val);
-	else if (factor == 0.250f) return tools::div4<R>(val);
-	else if (factor == 0.375f) return tools::div4<R>(val) + tools::div8<R>(val);
-	else if (factor == 0.500f) return tools::div2<R>(val);
-	else if (factor == 0.625f) return tools::div2<R>(val) + tools::div8<R>(val);
-	else if (factor == 0.750f) return tools::div2<R>(val) + tools::div4<R>(val);
-	else if (factor == 0.875f) return tools::div2<R>(val) + tools::div4<R>(val) + tools::div8<R>(val);
+	     if (factor == 0.125f) return spu::tools::div8<R>(val);
+	else if (factor == 0.250f) return spu::tools::div4<R>(val);
+	else if (factor == 0.375f) return spu::tools::div4<R>(val) + spu::tools::div8<R>(val);
+	else if (factor == 0.500f) return spu::tools::div2<R>(val);
+	else if (factor == 0.625f) return spu::tools::div2<R>(val) + spu::tools::div8<R>(val);
+	else if (factor == 0.750f) return spu::tools::div2<R>(val) + spu::tools::div4<R>(val);
+	else if (factor == 0.875f) return spu::tools::div2<R>(val) + spu::tools::div4<R>(val) + spu::tools::div8<R>(val);
 	else if (factor == 1.000f) return val;
 	else
 	{
 		std::stringstream message;
 		message << "'factor' can only be 0.125f, 0.250f, 0.375f, 0.500f, 0.625f, 0.750f, 0.875f or 1.000f ('factor' = "
 		        << factor << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

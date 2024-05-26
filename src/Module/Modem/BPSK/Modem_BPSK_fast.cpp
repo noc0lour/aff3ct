@@ -3,8 +3,9 @@
 #include <type_traits>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/BPSK/Modem_BPSK_fast.hpp"
 
 using namespace aff3ct;
@@ -37,7 +38,7 @@ template <typename B, typename R, typename Q>
 void Modem_BPSK_fast<B,R,Q>
 ::_modulate(const B *X_N1, R *X_N2, const size_t frame_id)
 {
-	throw tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported data type.");
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Unsupported data type.");
 }
 
 namespace aff3ct
@@ -161,10 +162,10 @@ void Modem_BPSK_fast<B,R,Q>
 	else
 	{
 		if (!std::is_same<R,Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 		if (!std::is_floating_point<Q>::value)
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 		if (*CP != this->last_channel_param)
 			this->two_on_square_sigma = (R)2.0 / (*CP * *CP);

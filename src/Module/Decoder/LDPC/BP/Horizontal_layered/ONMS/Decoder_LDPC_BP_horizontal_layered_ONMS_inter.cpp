@@ -4,8 +4,9 @@
 #include <limits>
 #include <cmath>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
 #include "Module/Decoder/LDPC/BP/Horizontal_layered/ONMS/Decoder_LDPC_BP_horizontal_layered_ONMS_inter.hpp"
 
@@ -40,13 +41,13 @@ Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 	tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 
 	if (sizeof(R) == 1)
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "This decoder does not work in 8-bit fixed-point.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "This decoder does not work in 8-bit fixed-point.");
 
 	if (saturation <= 0)
 	{
 		std::stringstream message;
 		message << "'saturation' has to be greater than 0 ('saturation' = " << saturation << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->reset();
@@ -109,7 +110,7 @@ int Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 			std::stringstream message;
 			message << "'normalize_factor' can only be 0.125f, 0.250f, 0.375f, 0.500f, 0.625f, 0.750f, 0.875f or 1.000f"
 			        << " ('normalize_factor' = " << normalize_factor << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else // float or double
@@ -158,7 +159,7 @@ int Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 			std::stringstream message;
 			message << "'normalize_factor' can only be 0.125f, 0.250f, 0.375f, 0.500f, 0.625f, 0.750f, 0.875f or 1.000f"
 			        << " ('normalize_factor' = " << normalize_factor << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else // float or double
@@ -218,7 +219,7 @@ int Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 			std::stringstream message;
 			message << "'normalize_factor' can only be 0.125f, 0.250f, 0.375f, 0.500f, 0.625f, 0.750f, 0.875f or 1.000f"
 			        << " ('normalize_factor' = " << normalize_factor << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else // float or double
@@ -263,7 +264,7 @@ int Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 		this->_decode_single_ite<F>(this->var_nodes[cur_wave], this->branches[cur_wave]);
 
 		// stop criterion
-		if (this->enable_syndrome && (packed_synd = this->_check_syndrome_status(frame_id)) == runtime::status_t::SUCCESS)
+		if (this->enable_syndrome && (packed_synd = this->_check_syndrome_status(frame_id)) == spu::runtime::status_t::SUCCESS)
 		{
 			cur_syndrome_depth++;
 			if (cur_syndrome_depth == this->syndrome_depth)
@@ -427,7 +428,7 @@ int Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B,R>
 		return packed_synd;
 	}
 	else
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 }
 
 template <typename B, typename R>

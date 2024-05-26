@@ -2,8 +2,8 @@
 #include <sstream>
 #include <limits>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Module/Decoder/Generic/ML/Decoder_maximum_likelihood_naive.hpp"
 
@@ -26,7 +26,7 @@ Decoder_maximum_likelihood_naive<B,R>
 	{
 		std::stringstream message;
 		message << "'N' has to be smaller or equal to 64 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// determine the maximum sequence 'x' of codeword bits
@@ -53,7 +53,7 @@ int Decoder_maximum_likelihood_naive<B,R>
 	{
 		std::stringstream message;
 		message << "'encoder->is_sys()' has to be true.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto status = this->_decode_siho_cw(Y_N, this->best_X_N.data(), frame_id);
@@ -87,7 +87,7 @@ int Decoder_maximum_likelihood_naive<B,R>
 			std::fill(this->X_N.begin(), this->X_N.end(), (B)0);
 			auto data = (uint64_t*)this->X_N.data();
 			data[0] = x;
-			tools::Bit_packer::unpack(this->X_N.data(), this->N);
+			spu::tools::Bit_packer::unpack(this->X_N.data(), this->N);
 			if (this->encoder->is_codeword(this->X_N.data()))
 			{
 				// compute the Euclidean distance between the input LLR and the current codeword
@@ -118,7 +118,7 @@ int Decoder_maximum_likelihood_naive<B,R>
 	{
 		std::stringstream message;
 		message << "'encoder->is_sys()' has to be true.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto status = this->_decode_hiho_cw(Y_N, this->best_X_N.data(), frame_id);
@@ -143,7 +143,7 @@ int Decoder_maximum_likelihood_naive<B,R>
 		std::fill(this->X_N.begin(), this->X_N.end(), (B)0);
 		auto data = (uint64_t*)this->X_N.data();
 		data[0] = x;
-		tools::Bit_packer::unpack(this->X_N.data(), this->N);
+		spu::tools::Bit_packer::unpack(this->X_N.data(), this->N);
 		if (this->encoder->is_codeword(this->X_N.data()))
 		{
 			// compute the Hamming distance between the input bits and the current codeword

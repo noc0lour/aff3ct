@@ -2,7 +2,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Puncturer/LDPC/Puncturer_LDPC.hpp"
 
 using namespace aff3ct;
@@ -26,7 +27,7 @@ Puncturer_LDPC<B,Q>
 	{
 		std::stringstream message;
 		message << "'pattern' shouldn't be empty.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	Z = (int)(N_cw/N_pattern);
@@ -34,7 +35,7 @@ Puncturer_LDPC<B,Q>
 	{
 		std::stringstream message;
 		message << "'Z' has to be strictly positive ('Z' = " << Z << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto bit_count = 0; for (auto j = 0; j < N_pattern; j++) bit_count += pattern_bits[j] ? 1 : 0;
@@ -44,7 +45,7 @@ Puncturer_LDPC<B,Q>
 		std::stringstream message;
 		message << "'N' has to be equal to 'Z' * 'bit_count' ('N' = " << this->N << ", Z' = " << Z
 		        << ", 'bit_count' = " << bit_count << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

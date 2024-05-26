@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Interleaver/ARP/Interleaver_core_ARP_DVB_RCS1.hpp"
 
 using namespace aff3ct;
@@ -89,7 +90,7 @@ Interleaver_core_ARP_DVB_RCS1<T>
 			std::stringstream message;
 			message << "There is no ARP parameters for 'size' = " << size
 			        << " (supported sizes are 48, 64, 212, 220, 228, 424, 432, 440, 752, 848, 856, and 864).";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			break;
 	}
 

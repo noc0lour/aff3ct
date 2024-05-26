@@ -2,7 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 #include "Module/Encoder/Polar_MK/Encoder_polar_MK.hpp"
 
@@ -32,7 +33,7 @@ Encoder_polar_MK<B>
 		message << "'frozen_bits.size()' has to be equal to 'N' ("
 		        << "'frozen_bits.size()' = " << this->frozen_bits.size() << ", "
 		        << "'N' = " << this->N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (this->frozen_bits[i] == 0) k++;
@@ -42,7 +43,7 @@ Encoder_polar_MK<B>
 		message << "The number of information bits in the frozen bits is invalid ("
 		        << "'K' = " << this->K << ", "
 		        << "'k' = " << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto ke = 0; ke < (int)this->code.get_kernel_matrices().size(); ke++)

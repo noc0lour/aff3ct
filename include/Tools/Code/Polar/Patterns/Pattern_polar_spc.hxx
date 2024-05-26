@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r1.hpp"
 #include "Tools/Code/Polar/Patterns/Pattern_polar_spc.hpp"
 
@@ -16,7 +17,7 @@ Pattern_polar_spc
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -28,7 +29,7 @@ Pattern_polar_spc
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -47,25 +48,25 @@ polar_node_t Pattern_polar_spc
 	return polar_node_t::SPC;
 }
 
-std::string  Pattern_polar_spc
-::name()       const
+std::string Pattern_polar_spc
+::name() const
 {
 	return "SPC";
 }
 
-std::string  Pattern_polar_spc
+std::string Pattern_polar_spc
 ::short_name() const
 {
 	return "s";
 }
 
-std::string  Pattern_polar_spc
+std::string Pattern_polar_spc
 ::fill_color() const
 {
 	return "#2F3F60";
 }
 
-std::string  Pattern_polar_spc
+std::string Pattern_polar_spc
 ::font_color() const
 {
 	return "#FFFFFF";

@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r0_left.hpp"
 
 namespace aff3ct
@@ -16,7 +17,7 @@ Pattern_polar_r0_left
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -28,7 +29,7 @@ Pattern_polar_r0_left
 	{
 		std::stringstream message;
 		message << "'min_level' has to be equal or greater than 1 ('min_level' = " << min_level << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -95,7 +96,7 @@ int Pattern_polar_r0_left
 	const Pattern_polar_i *pattern_left = node_curr->get_left()->get_contents();
 
 	if (pattern_left == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'pattern_left' can't be null.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'pattern_left' can't be null.");
 
 	int match_val = 0;
 

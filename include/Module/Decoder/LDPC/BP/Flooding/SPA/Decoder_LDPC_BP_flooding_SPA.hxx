@@ -6,7 +6,6 @@
 #include <cmath>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/LDPC/BP/Flooding/SPA/Decoder_LDPC_BP_flooding_SPA.hpp"
 
 namespace aff3ct

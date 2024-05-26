@@ -10,9 +10,7 @@
 #include <vector>
 #include <memory>
 
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
-#include "Module/Module.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {
@@ -39,11 +37,11 @@ namespace module
  * Please use Coset for inheritance (instead of Coset).
  */
 template <typename B, typename D>
-class Coset : public Module
+class Coset : public spu::module::Module
 {
 public:
-	inline runtime::Task&   operator[](const cst::tsk        t);
-	inline runtime::Socket& operator[](const cst::sck::apply s);
+	inline spu::runtime::Task&   operator[](const cst::tsk        t);
+	inline spu::runtime::Socket& operator[](const cst::sck::apply s);
 
 protected:
 	const int size; /*!< Size of the input data */

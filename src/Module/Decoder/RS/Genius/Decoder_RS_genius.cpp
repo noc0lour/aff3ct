@@ -2,11 +2,11 @@
 #include <sstream>
 #include <algorithm>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Tools/Perf/distance/distance.h"
 #include "Tools/Perf/distance/Bitwise_diff.h"
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Algo/Bit_packer/Bit_packer.hpp"
 #include "Module/Decoder/RS/Genius/Decoder_RS_genius.hpp"
 
 using namespace aff3ct;
@@ -27,7 +27,7 @@ Decoder_RS_genius<B,R>
 	{
 		std::stringstream message;
 		message << "The given 'encoder' has to be memorizing its generated code words.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -35,7 +35,7 @@ template <typename B, typename R>
 int Decoder_RS_genius<B,R>
 ::_decode(S *Y_N, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -56,8 +56,8 @@ int Decoder_RS_genius<B,R>
 {
 	auto& X_N = encoder.get_X_N(frame_id);
 
-	tools::Bit_packer::pack(X_N.data(), this->X_Ns.data(), this->N, 1, false, this->m);
-	tools::Bit_packer::pack(Y_N,        this->YH_N.data(), this->N, 1, false, this->m);
+	spu::tools::Bit_packer::pack(X_N.data(), this->X_Ns.data(), this->N, 1, false, this->m);
+	spu::tools::Bit_packer::pack(Y_N,        this->YH_N.data(), this->N, 1, false, this->m);
 	// auto n_error = this->hamming_distance();
 
 	auto n_error = (int) tools::distance<B,tools::Bitwise_diff<B,true>>(this->X_Ns.data(), this->YH_N.data(), this->N_rs);
@@ -80,8 +80,8 @@ int Decoder_RS_genius<B,R>
 {
 	auto& X_N = encoder.get_X_N(frame_id);
 
-	tools::Bit_packer::pack(X_N.data(), this->X_Ns.data(), this->N, 1, false, this->m);
-	tools::Bit_packer::pack(Y_N,        this->YH_N.data(), this->N, 1, false, this->m);
+	spu::tools::Bit_packer::pack(X_N.data(), this->X_Ns.data(), this->N, 1, false, this->m);
+	spu::tools::Bit_packer::pack(Y_N,        this->YH_N.data(), this->N, 1, false, this->m);
 	auto n_error = hamming_distance();
 
 	// int n_error = (int)tools::hamming_distance(X_N.data(), Y_N, this->N);

@@ -1,7 +1,8 @@
 #include <sstream>
 #include <vector>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/User_pdf_noise_generator.hpp"
 
 namespace aff3ct
@@ -40,7 +41,7 @@ void User_pdf_noise_generator<R>
 		std::stringstream message;
 		message << "'signal' and 'noise' must have the same size ('signal.size()' = " << signal.size()
 		        << " and 'noise.size()' = " << noise.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->generate(signal.data(), noise.data(), (unsigned)noise.size(), noise_power);

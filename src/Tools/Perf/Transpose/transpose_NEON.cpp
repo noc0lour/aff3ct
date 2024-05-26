@@ -2,7 +2,8 @@
 
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Transpose/transpose_NEON.h"
 
 #define DATA_TYPE  trans_TYPE
@@ -44,7 +45,7 @@ void aff3ct::tools::uchar_transpose_neon(const DATA_TYPE *src, DATA_TYPE *dst, i
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 16 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int N = n / 16; // NOMBRE DE PAQUET (128 bits) PAR TRAME
@@ -214,7 +215,7 @@ void aff3ct::tools::uchar_itranspose_neon(const DATA_TYPE *src, DATA_TYPE *dst, 
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 16 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int N = n / 16; // NOMBRE DE PAQUET (128 bits) PAR TRAME

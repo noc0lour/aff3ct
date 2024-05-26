@@ -5,8 +5,8 @@
 #include <limits>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Intra/Decoder_RSC_BCJR_intra.hpp"
 
 namespace aff3ct
@@ -75,7 +75,7 @@ Decoder_RSC_BCJR_intra<B,R>
 
 	for (unsigned i = 0; i < req_trellis.size(); i++)
 		if (trellis[i] != req_trellis[i])
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
 
 	// init alpha values
 	RSC_BCJR_intra_init<R>::apply(alpha);
@@ -85,7 +85,7 @@ template <typename B, typename R>
 Decoder_RSC_BCJR_intra<B,R>* Decoder_RSC_BCJR_intra<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R>
@@ -93,13 +93,13 @@ int Decoder_RSC_BCJR_intra<B,R>
 ::_decode_siso_alt(const R *sys, const R *par, R *ext, const size_t frame_id)
 {
 	if (!mipp::isAligned(sys))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'sys' is misaligned memory.");
 
 	if (!mipp::isAligned(par))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'par' is misaligned memory.");
 
 	if (!mipp::isAligned(ext))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'ext' is misaligned memory.");
 
 	this->compute_gamma   (sys, par);
 	this->compute_alpha   (        );

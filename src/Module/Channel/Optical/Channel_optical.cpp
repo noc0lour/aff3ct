@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/Standard/User_pdf_noise_generator_std.hpp"
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/Fast/User_pdf_noise_generator_fast.hpp"
@@ -10,7 +12,6 @@
 #ifdef AFF3CT_CHANNEL_MKL
 #include "Tools/Algo/Draw_generator/User_pdf_noise_generator/MKL/User_pdf_noise_generator_MKL.hpp"
 #endif
-#include "Tools/Exception/exception.hpp"
 #include "Module/Channel/Optical/Channel_optical.hpp"
 
 using namespace aff3ct;
@@ -53,7 +54,7 @@ tools::User_pdf_noise_generator<R>* create_user_pdf_noise_generator(const tools:
 		default:
 			std::stringstream message;
 			message << "Unsupported 'implem' ('implem' = " << (int)implem << ").";
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	};
 }
 
@@ -83,7 +84,7 @@ template <typename R>
 void Channel_optical<R>
 ::deep_copy(const Channel_optical<R> &m)
 {
-	Module::deep_copy(m);
+	spu::module::Module::deep_copy(m);
 	if (m.pdf_noise_generator != nullptr) this->pdf_noise_generator.reset(m.pdf_noise_generator->clone());
 }
 

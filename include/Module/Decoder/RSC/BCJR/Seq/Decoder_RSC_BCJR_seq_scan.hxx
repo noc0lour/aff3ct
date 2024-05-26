@@ -2,7 +2,8 @@
 #include <limits>
 #include <string>
 
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_fast.hpp"
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq_scan.hpp"
 
@@ -117,7 +118,7 @@ struct RSC_BCJR_seq_scan_normalize1 <signed char>
 		const auto norm_val = metrics[0][0];
 		for (auto k = 0; k < 8; k++)
 			for (auto l = 0; l < 8; l++)
-				metrics[l][k] = tools::saturate<signed char>(metrics[l][k] - norm_val, -63, +63);
+				metrics[l][k] = spu::tools::saturate<signed char>(metrics[l][k] - norm_val, -63, +63);
 	}
 };
 
@@ -161,14 +162,14 @@ struct RSC_BCJR_seq_scan_normalize2 <signed char>
 	{
 		// normalization & saturation
 		const auto norm_val = ab0;
-		ab0 = tools::saturate<signed char>(ab0 - norm_val, -63, +63);
-		ab1 = tools::saturate<signed char>(ab1 - norm_val, -63, +63);
-		ab2 = tools::saturate<signed char>(ab2 - norm_val, -63, +63);
-		ab3 = tools::saturate<signed char>(ab3 - norm_val, -63, +63);
-		ab4 = tools::saturate<signed char>(ab4 - norm_val, -63, +63);
-		ab5 = tools::saturate<signed char>(ab5 - norm_val, -63, +63);
-		ab6 = tools::saturate<signed char>(ab6 - norm_val, -63, +63);
-		ab7 = tools::saturate<signed char>(ab7 - norm_val, -63, +63);
+		ab0 = spu::tools::saturate<signed char>(ab0 - norm_val, -63, +63);
+		ab1 = spu::tools::saturate<signed char>(ab1 - norm_val, -63, +63);
+		ab2 = spu::tools::saturate<signed char>(ab2 - norm_val, -63, +63);
+		ab3 = spu::tools::saturate<signed char>(ab3 - norm_val, -63, +63);
+		ab4 = spu::tools::saturate<signed char>(ab4 - norm_val, -63, +63);
+		ab5 = spu::tools::saturate<signed char>(ab5 - norm_val, -63, +63);
+		ab6 = spu::tools::saturate<signed char>(ab6 - norm_val, -63, +63);
+		ab7 = spu::tools::saturate<signed char>(ab7 - norm_val, -63, +63);
 	}
 };
 

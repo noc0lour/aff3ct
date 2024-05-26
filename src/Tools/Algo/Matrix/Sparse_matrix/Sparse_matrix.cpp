@@ -3,7 +3,8 @@
 #include <sstream>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Matrix/Sparse_matrix/Sparse_matrix.hpp"
 
 using namespace aff3ct;
@@ -34,7 +35,7 @@ void Sparse_matrix
 		std::stringstream message;
 		message << "('row_index';'col_index') connection already exists ('row_index' = " << row_index
 		        << ", 'col_index' = " << col_index << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->row_to_cols[row_index].push_back((uint32_t)col_index);
@@ -106,7 +107,7 @@ void Sparse_matrix
 		        << "('row_index' = " << row_index << ", 'col_index' = " << col_index
 		        << ", found in row = " << std::boolalpha << row_found
 		        << ", found in col = " << col_found << std::noboolalpha << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 	else if (row_found && col_found)
 		this->n_connections--;

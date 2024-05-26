@@ -6,9 +6,10 @@
 #include <limits>
 #include <memory>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
 #include "Tools/Perf/Reorderer/Reorderer.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/BCH/Fast/Decoder_BCH_fast.hpp"
 
 using namespace aff3ct;
@@ -41,7 +42,7 @@ Decoder_BCH_fast<B,R>
 		std::stringstream message;
 		message << "'N - K' is different than 'GF_poly.get_n_rdncy()' ('K' = " << K << ", 'N' = " << N
 		        << ", 'GF_poly.get_n_rdncy()' = " << GF_poly.get_n_rdncy() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N_p2_1*2 >= std::numeric_limits<B>::max() || std::is_unsigned<B>::value)
@@ -49,7 +50,7 @@ Decoder_BCH_fast<B,R>
 		std::stringstream message;
 		message << "'N_p2_1'*2 must be less than 'std::numeric_limits<B>::max()' and 'B' must be signed ('N_p2_1'*2 = "
 		        << this->N_p2_1*2 << ", 'std::numeric_limits<B>::max()' = " << +std::numeric_limits<B>::max() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->last_is_codeword.resize(this->n_frames + mipp::N<B>()); // in case where only the last frame_id is called to prevent memory leak

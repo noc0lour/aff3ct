@@ -1,5 +1,6 @@
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Puncturer/NO/Puncturer_NO.hpp"
 #include "Module/Puncturer/Turbo_DB/Puncturer_turbo_DB.hpp"
 #include "Factory/Module/Puncturer/Turbo_DB/Puncturer_turbo_DB.hpp"
@@ -56,7 +57,7 @@ module::Puncturer<B,Q>* Puncturer_turbo_DB
 {
 	if (this->type == "TURBO_DB") return new module::Puncturer_turbo_DB<B,Q>(this->K, this->N);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

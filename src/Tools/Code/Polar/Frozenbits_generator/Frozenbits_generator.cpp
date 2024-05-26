@@ -5,8 +5,9 @@
 #include <numeric>
 #include <ios>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/noise_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator.hpp"
 
 using namespace aff3ct;
@@ -51,7 +52,7 @@ const tools::Noise<>& Frozenbits_generator
 	{
 		std::stringstream message;
 		message << "'noise' should not be nullptr.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->noise;
@@ -65,7 +66,7 @@ void Frozenbits_generator
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	this->evaluate();
@@ -115,11 +116,11 @@ void Frozenbits_generator
 	{
 		std::stringstream message;
 		message << "'noise' should not be nullptr.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 	if (!this->noise->is_set())
 	{
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'noise' is not set.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'noise' is not set.");
 	}
 }
 
@@ -148,7 +149,7 @@ void Frozenbits_generator
 	{
 		std::stringstream message;
 		message << "Impossible to open the '" << dump_channels_full_path << "' file to dump the Polar best channels.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	file << this->N << std::endl;

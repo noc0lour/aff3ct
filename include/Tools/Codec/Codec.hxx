@@ -1,7 +1,6 @@
 #include <sstream>
 
 #include "Tools/Noise/noise_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Interleaver/Interleaver.hpp"
 #include "Tools/Codec/Codec.hpp"
 
@@ -19,35 +18,35 @@ Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N <= 0)
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N_cw <= 0)
 	{
 		std::stringstream message;
 		message << "'N_cw' has to be greater than 0 ('N_cw' = " << N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (K > N)
 	{
 		std::stringstream message;
 		message << "'K' has to be smaller or equal to 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N > N_cw)
 	{
 		std::stringstream message;
 		message << "'N' has to be smaller or equal to 'N_cw' ('N' = " << N << ", 'N_cw' = " << N_cw << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -55,7 +54,7 @@ template <typename B, typename Q>
 Codec<B,Q>* Codec<B,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -75,7 +74,7 @@ Interleaver_core<>& Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'interleaver_core' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->interleaver_core;
@@ -89,7 +88,7 @@ module::Encoder<B>& Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'encoder' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->encoder;
@@ -103,7 +102,7 @@ module::Puncturer<B,Q>& Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'puncturer' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->puncturer;
@@ -117,7 +116,7 @@ module::Extractor<B,Q>& Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'extractor' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->extractor;
@@ -131,7 +130,7 @@ const Noise<>& Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'noise' should not be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return *this->noise;
@@ -161,7 +160,7 @@ size_t Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'encoder' is NULL.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return this->encoder->get_n_frames();
@@ -193,7 +192,7 @@ void Codec<B,Q>
 	{
 		std::stringstream message;
 		message << "'noise' should not be nullptr.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

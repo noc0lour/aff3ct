@@ -5,6 +5,8 @@
 #include <cassert>
 #include <ios>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Sigma.hpp"
 #include "Tools/Reporter/Noise/Reporter_noise.hpp"
 
@@ -44,7 +46,7 @@ Reporter_noise<R>
 }
 
 template <typename R>
-Reporter::report_t Reporter_noise<R>
+spu::tools::Reporter::report_t Reporter_noise<R>
 ::report(bool final)
 {
 	assert(this->cols_groups.size() == 1);

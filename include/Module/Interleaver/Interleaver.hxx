@@ -2,7 +2,6 @@
 #include <sstream>
 #include <mipp.h>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Interleaver/Interleaver.hpp"
 
 namespace aff3ct
@@ -11,44 +10,44 @@ namespace module
 {
 
 template <typename D, typename T>
-runtime::Task& Interleaver<D,T>
+spu::runtime::Task& Interleaver<D,T>
 ::operator[](const itl::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename D, typename T>
-runtime::Socket& Interleaver<D,T>
+spu::runtime::Socket& Interleaver<D,T>
 ::operator[](const itl::sck::interleave s)
 {
-	return Module::operator[]((size_t)itl::tsk::interleave)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)itl::tsk::interleave)[(size_t)s];
 }
 
 template <typename D, typename T>
-runtime::Socket& Interleaver<D,T>
+spu::runtime::Socket& Interleaver<D,T>
 ::operator[](const itl::sck::interleave_reordering s)
 {
-	return Module::operator[]((size_t)itl::tsk::interleave_reordering)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)itl::tsk::interleave_reordering)[(size_t)s];
 }
 
 template <typename D, typename T>
-runtime::Socket& Interleaver<D,T>
+spu::runtime::Socket& Interleaver<D,T>
 ::operator[](const itl::sck::deinterleave s)
 {
-	return Module::operator[]((size_t)itl::tsk::deinterleave)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)itl::tsk::deinterleave)[(size_t)s];
 }
 
 template <typename D, typename T>
-runtime::Socket& Interleaver<D,T>
+spu::runtime::Socket& Interleaver<D,T>
 ::operator[](const itl::sck::deinterleave_reordering s)
 {
-	return Module::operator[]((size_t)itl::tsk::deinterleave_reordering)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)itl::tsk::deinterleave_reordering)[(size_t)s];
 }
 
 template <typename D, typename T>
 Interleaver<D,T>
 ::Interleaver(const tools::Interleaver_core<T> &core)
-: Module(),
+: spu::module::Module(),
   core(core)
 {
 	const std::string name = "Interleaver_" + core.get_name();
@@ -59,7 +58,8 @@ Interleaver<D,T>
 	auto &p1 = this->create_task("interleave");
 	auto p1s_nat = this->template create_socket_in <D>(p1, "nat", this->core.get_size());
 	auto p1s_itl = this->template create_socket_out<D>(p1, "itl", this->core.get_size());
-	this->create_codelet(p1, [p1s_nat, p1s_itl](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_nat, p1s_itl]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &itl = static_cast<Interleaver<D,T>&>(m);
 
@@ -68,13 +68,14 @@ Interleaver<D,T>
 		                itl.core.get_lut(),
 		                frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("interleave_reordering");
 	auto p2s_nat = this->template create_socket_in <D>(p2, "nat", this->core.get_size());
 	auto p2s_itl = this->template create_socket_out<D>(p2, "itl", this->core.get_size());
-	this->create_codelet(p2, [p2s_nat, p2s_itl](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_nat, p2s_itl]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &itl = static_cast<Interleaver<D,T>&>(m);
 
@@ -83,13 +84,14 @@ Interleaver<D,T>
 		                           itl.core.get_lut(),
 		                           frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p3 = this->create_task("deinterleave");
 	auto p3s_itl = this->template create_socket_in <D>(p3, "itl", this->core.get_size());
 	auto p3s_nat = this->template create_socket_out<D>(p3, "nat", this->core.get_size());
-	this->create_codelet(p3, [p3s_itl, p3s_nat](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p3, [p3s_itl, p3s_nat]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &itl = static_cast<Interleaver<D,T>&>(m);
 
@@ -98,13 +100,14 @@ Interleaver<D,T>
 		                itl.core.get_lut_inv(),
 		                frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p4 = this->create_task("deinterleave_reordering");
 	auto p4s_itl = this->template create_socket_in <D>(p4, "itl", this->core.get_size());
 	auto p4s_nat = this->template create_socket_out<D>(p4, "nat", this->core.get_size());
-	this->create_codelet(p4, [p4s_itl, p4s_nat](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p4, [p4s_itl, p4s_nat]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &itl = static_cast<Interleaver<D,T>&>(m);
 
@@ -113,7 +116,7 @@ Interleaver<D,T>
 		                           itl.core.get_lut_inv(),
 		                           frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	this->set_n_frames(core.get_n_frames());
@@ -287,7 +290,7 @@ void Interleaver<D,T>
 {
 	const auto old_n_frames_per_wave = this->get_n_frames_per_wave();
 	if (old_n_frames_per_wave != n_frames_per_wave)
-		Module::set_n_frames_per_wave(n_frames_per_wave);
+		spu::module::Module::set_n_frames_per_wave(n_frames_per_wave);
 }
 
 }

@@ -11,7 +11,8 @@
 #include <mutex>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_TV.hpp"
 
 using namespace aff3ct::tools;
@@ -49,7 +50,7 @@ void Frozenbits_generator_TV
 	{
 		std::stringstream message;
 		message << "The following directory does not exist: '" + awgn_codes_dir + "'.";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 	else
 	{
@@ -76,7 +77,7 @@ void Frozenbits_generator_TV
 					mutex_create_folder.unlock();
 					std::stringstream message;
 					message << "Impossible to create '" + sub_folder + "'.";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 			mutex_create_folder.unlock();
@@ -108,7 +109,7 @@ void Frozenbits_generator_TV
 						mutex_write_file.unlock();
 						std::stringstream message;
 						message << "Can't open '" << filename << "' file.";
-						throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+						throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 					}
 				}
 				else
@@ -116,14 +117,14 @@ void Frozenbits_generator_TV
 					mutex_write_file.unlock();
 					std::stringstream message;
 					message << "The following command failed: '" << cmd << "'.";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 			mutex_write_file.unlock();
 #else
 			std::stringstream message;
 			message << "Can't open '" << filename <<"' file.";
-			throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 #endif
 		}
 	}

@@ -3,10 +3,11 @@
 #include <sstream>
 #include <cmath>
 
+#include <streampu.hpp>
+
 #include "Factory/Factory.hpp"
 #include "Tools/Display/rang_format/rang_format.h"
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Factory/Header.hpp"
 
 using namespace aff3ct;
@@ -73,7 +74,7 @@ void aff3ct::tools::Header::print_parameters(const std::vector<factory::Factory*
 			std::stringstream message;
 			message << "'prefixes.size()' has to be equal to 'short_names.size()' ('prefixes.size()' = "
 			        << prefixes.size() << ", 'short_names.size()' = " << short_names.size() << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		bool print_first_title = false;

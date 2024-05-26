@@ -4,7 +4,8 @@
 #include <mpi.h>
 #endif
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Factory/Simulation/Simulation.hpp"
 
@@ -146,7 +147,7 @@ void Simulation
 		std::stringstream message;
 		message << "'max_n_threads_global' has to be greater than 0 ('max_n_threads_global' = "
 		        << max_n_threads_global << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// ensure that all the MPI processes have a different seed (crucial for the Monte-Carlo method)

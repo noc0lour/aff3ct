@@ -2,8 +2,9 @@
 #include <sstream>
 #include <vector>
 
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/Documentation/documentation.h"
 #include "Module/Puncturer/NO/Puncturer_NO.hpp"
 #include "Module/Puncturer/LDPC/Puncturer_LDPC.hpp"
@@ -56,7 +57,7 @@ std::vector<bool> generate_punct_vector(const std::string &pattern)
 		std::stringstream message;
 		message << "'pattern' shouldn't be null and should be delimited by a comma ('pattern' = " << pattern
 		        << ", 'str_array.size()' = " << str_array.size() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<bool> pattern_vector(N_pattern, true);
@@ -115,7 +116,7 @@ module::Puncturer<B,Q>* Puncturer_LDPC
 {
 	if (this->type == "LDPC") return new module::Puncturer_LDPC<B,Q>(this->K, this->N, this->N_cw, this->pattern);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

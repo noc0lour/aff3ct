@@ -5,7 +5,8 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/general_utils.h"
 #include "Module/Encoder/User/Encoder_user.hpp"
 
@@ -27,7 +28,7 @@ std::vector<uint32_t> read_info_bits_pos(std::istream &stream)
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be equal to 1 ('values.size()' = " << values.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const uint32_t size = std::stoi(values[0]);
@@ -39,7 +40,7 @@ std::vector<uint32_t> read_info_bits_pos(std::istream &stream)
 		std::stringstream message;
 		message << "'values.size()' has to be equal to 'size' ('values.size()' = " << values.size()
 		        << ", 'size' = " << size << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<uint32_t> info_bits_pos;
@@ -51,7 +52,7 @@ std::vector<uint32_t> read_info_bits_pos(std::istream &stream)
 		{
 			std::stringstream message;
 			message << "'pos' already exists in the 'info_bits_pos' vector ('pos' = " << pos << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		info_bits_pos.push_back(pos);
@@ -69,7 +70,7 @@ Encoder_user<B>
 	this->set_name(name);
 
 	if (filename.empty())
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");
 
 	std::ifstream file(filename.c_str(), std::ios::in);
 
@@ -86,7 +87,7 @@ Encoder_user<B>
 			std::stringstream message;
 			message << "'n_cw', 'src_size' and 'cw_size' have to be greater than 0 ('n_cw' = " << n_cw
 			        << ", 'src_size' = " << src_size << ", 'cw_size' = " << cw_size << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		if (cw_size < src_size)
@@ -94,7 +95,7 @@ Encoder_user<B>
 			std::stringstream message;
 			message << "'cw_size' has to be equal or greater than 'src_size' ('cw_size' = " << cw_size
 			        << ", 'src_size' = " << src_size << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		this->codewords.resize(n_cw);
@@ -117,7 +118,7 @@ Encoder_user<B>
 			message << "The number of information bits or the codeword size is wrong "
 			        << "(read: {" << src_size << "," << cw_size << "}, "
 			        << "expected: {" << this->K << "," << this->N << "}).";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		try
@@ -134,14 +135,14 @@ Encoder_user<B>
 			std::stringstream message;
 			message << "'this->info_bits_pos.size()' has to be equal to 'this->K' ('this->info_bits_pos.size()' = "
 			        << this->info_bits_pos.size() << ", 'this->K' = " << this->K << ").";
-			throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 	}
 	else
 	{
 		std::stringstream message;
 		message << "Can't open '" + filename + "' file.";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	cw_counter %= (int)codewords.size();
@@ -171,7 +172,7 @@ template <typename B>
 bool Encoder_user<B>
 ::is_sys() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

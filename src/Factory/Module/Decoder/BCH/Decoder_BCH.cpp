@@ -2,7 +2,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Decoder/BCH/Standard/Decoder_BCH_std.hpp"
 #include "Module/Decoder/BCH/Genius/Decoder_BCH_genius.hpp"
@@ -58,7 +59,7 @@ void Decoder_BCH
 	{
 		std::stringstream message;
 		message << "The Galois Field order is null (because N_cw = " << this->N_cw << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (vals.exist({p+"-corr-pow", "T"}))
@@ -96,7 +97,7 @@ module::Decoder_SIHO<B,Q>* Decoder_BCH
 	{
 		return Decoder::build<B,Q>(encoder);
 	}
-	catch (tools::cannot_allocate const&)
+	catch (spu::tools::cannot_allocate const&)
 	{
 		if (this->type == "ALGEBRAIC")
 		{
@@ -110,7 +111,7 @@ module::Decoder_SIHO<B,Q>* Decoder_BCH
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

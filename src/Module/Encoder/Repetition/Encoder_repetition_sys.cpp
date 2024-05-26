@@ -2,7 +2,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Repetition/Encoder_repetition_sys.hpp"
 
 using namespace aff3ct;
@@ -20,7 +21,7 @@ Encoder_repetition_sys<B>
 	{
 		std::stringstream message;
 		message << "'K' has to be a multiple of 'N' ('K' = " << K << ", 'N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (!buffered_encoding)

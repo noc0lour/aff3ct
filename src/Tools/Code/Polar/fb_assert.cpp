@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/fb_assert.h"
 
 void aff3ct::tools::fb_assert(const std::vector<bool>& frozen_bits, const int K, const int N)
@@ -10,7 +11,7 @@ void aff3ct::tools::fb_assert(const std::vector<bool>& frozen_bits, const int K,
 		std::stringstream message;
 		message << "The frozen_bits size is invalid ('N' = " << N << ", 'Size' = "
 		        << frozen_bits.size() << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0;
@@ -21,6 +22,6 @@ void aff3ct::tools::fb_assert(const std::vector<bool>& frozen_bits, const int K,
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }

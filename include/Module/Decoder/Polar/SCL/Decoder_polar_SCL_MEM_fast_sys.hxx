@@ -8,8 +8,8 @@
 #include <limits>
 #include <cmath>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r0.hpp"
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r0_left.hpp"
 #include "Tools/Code/Polar/Patterns/Pattern_polar_r1.hpp"
@@ -73,13 +73,13 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 //	static_assert(API_polar::get_n_frames() == 1, "The inter-frame API_polar is not supported.");
 
 	if (API_polar::get_n_frames() != 1)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "The inter-frame API_polar is not supported.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "The inter-frame API_polar is not supported.");
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -87,14 +87,14 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
-	if (this->L <= 0 || !tools::is_power_of_2(this->L))
+	if (this->L <= 0 || !spu::tools::is_power_of_2(this->L))
 	{
 		std::stringstream message;
 		message << "'L' has to be a positive power of 2 ('L' = " << L << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N < mipp::nElReg<R>() * 2)
@@ -102,7 +102,7 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'N' has to be equal or greater than 'mipp::nElReg<R>()' * 2 ('N' = " << N
 		        << ", 'mipp::nElReg<R>()' = " << mipp::nElReg<R>() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -111,7 +111,7 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	metrics_vec[0].resize(L * 2);
@@ -157,13 +157,13 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 //	static_assert(API_polar::get_n_frames() == 1, "The inter-frame API_polar is not supported.");
 
 	if (API_polar::get_n_frames() != 1)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "The inter-frame API_polar is not supported.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "The inter-frame API_polar is not supported.");
 
-	if (!tools::is_power_of_2(this->N))
+	if (!spu::tools::is_power_of_2(this->N))
 	{
 		std::stringstream message;
 		message << "'N' has to be a power of 2 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N != (int)frozen_bits.size())
@@ -171,14 +171,14 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'frozen_bits.size()' has to be equal to 'N' ('frozen_bits.size()' = " << frozen_bits.size()
 		        << ", 'N' = " << N << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
-	if (this->L <= 0 || !tools::is_power_of_2(this->L))
+	if (this->L <= 0 || !spu::tools::is_power_of_2(this->L))
 	{
 		std::stringstream message;
 		message << "'L' has to be a positive power of 2 ('L' = " << L << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->N < mipp::nElReg<R>() * 2)
@@ -186,7 +186,7 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "'N' has to be equal or greater than 'mipp::nElReg<R>()' * 2 ('N' = " << N
 		        << ", 'mipp::nElReg<R>()' = " << mipp::nElReg<R>() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto k = 0; for (auto i = 0; i < this->N; i++) if (frozen_bits[i] == 0) k++;
@@ -195,7 +195,7 @@ Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		std::stringstream message;
 		message << "The number of information bits in the frozen_bits is invalid ('K' = " << K << ", 'k' = "
 		        << k << ").";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	metrics_vec[0].resize(L * 2);
@@ -269,10 +269,10 @@ int Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::_decode_siho(const R *Y_N, B *V_K, const size_t frame_id)
 {
 	if (!API_polar::isAligned(Y_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
 
 	if (!API_polar::isAligned(V_K))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'V_K' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'V_K' is misaligned memory.");
 
 //	auto t_load = std::chrono::steady_clock::now(); // ----------------------------------------------------------- LOAD
 	this->init_buffers();
@@ -299,10 +299,10 @@ int Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::_decode_siho_cw(const R *Y_N, B *V_N, const size_t frame_id)
 {
 	if (!API_polar::isAligned(Y_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'Y_N' is misaligned memory.");
 
 	if (!API_polar::isAligned(V_N))
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "'V_N' is misaligned memory.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'V_N' is misaligned memory.");
 
 //	auto t_load = std::chrono::steady_clock::now(); // ----------------------------------------------------------- LOAD
 	this->init_buffers();
@@ -828,7 +828,7 @@ template <typename B, typename R, class API_polar>
 void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::flip_bits_r1(const int old_path, const int new_path, const int dup, const int off_s, const int n_elmts)
 {
-	constexpr B b = tools::bit_init<B>();
+	constexpr B b = spu::tools::bit_init<B>();
 
 	switch (dup)
 	{
@@ -846,7 +846,7 @@ void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		s[new_path][off_s + bit_flips[2 * old_path +1]] = !s[old_path][off_s + bit_flips[2 * old_path +1]] ? b : 0;
 		break;
 	default:
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "Flip bits error on rate 1 node.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Flip bits error on rate 1 node.");
 		break;
 	}
 }
@@ -855,7 +855,7 @@ template <typename B, typename R, class API_polar>
 void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::update_paths_rep(const int r_d, const int off_l, const int off_s, const int n_elmts)
 {
-	constexpr B b = tools::bit_init<B>();
+	constexpr B b = spu::tools::bit_init<B>();
 
 	// generate the two possible candidates
 	for (auto i = 0; i < n_active_paths; i++)
@@ -931,7 +931,7 @@ template <int REV_D, int N_ELMTS>
 void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::update_paths_rep(const int off_l, const int off_s)
 {
-	constexpr B b = tools::bit_init<B>();
+	constexpr B b = spu::tools::bit_init<B>();
 
 	// generate the two possible candidates
 	for (auto i = 0; i < n_active_paths; i++)
@@ -1229,7 +1229,7 @@ template <typename B, typename R, class API_polar>
 void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 ::flip_bits_spc(const int old_path, const int new_path, const int dup, const int off_s, const int n_elmts)
 {
-	constexpr B b = tools::bit_init<B>();
+	constexpr B b = spu::tools::bit_init<B>();
 
 	switch(dup)
 	{
@@ -1278,7 +1278,7 @@ void Decoder_polar_SCL_MEM_fast_sys<B,R,API_polar>
 		s[new_path][off_s + bit_flips[4 * old_path +3]] = s[old_path][off_s + bit_flips[4 * old_path +3]] ? 0 : b;
 		break;
 	default:
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, "Flip bits error on SPC node.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "Flip bits error on SPC node.");
 		break;
 	}
 }

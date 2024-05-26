@@ -1,7 +1,8 @@
 #include <utility>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Module/Channel/NO/Channel_NO.hpp"
 #include "Module/Channel/User/Channel_user.hpp"
@@ -133,12 +134,12 @@ module::Channel<R>* Channel
 	else if (this->implem == "GSL" ) impl = tools::Event_generator_implem::GSL;
 #endif
 	else
-		throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+		throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 
 	if (type == "BEC") return new module::Channel_binary_erasure  <R>(this->N, impl, this->seed);
 	if (type == "BSC") return new module::Channel_binary_symmetric<R>(this->N, impl, this->seed);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -155,13 +156,13 @@ module::Channel<R>* Channel
 	else if (this->implem == "GSL" ) impl = tools::Gaussian_noise_generator_implem::GSL;
 #endif
 	else
-		throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+		throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 
 	if (type == "AWGN"         ) return new module::Channel_AWGN_LLR         <R>(this->N,                            impl, this->seed,                   this->add_users);
 	if (type == "RAYLEIGH"     ) return new module::Channel_Rayleigh_LLR     <R>(this->N, this->complex,             impl, this->seed,                   this->add_users);
 	if (type == "RAYLEIGH_USER") return new module::Channel_Rayleigh_LLR_user<R>(this->N, this->complex, this->path, impl, this->seed, this->gain_occur, this->add_users);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -178,11 +179,11 @@ module::Channel<R>* Channel
 	else if (implem == "GSL" ) impl = tools::User_pdf_noise_generator_implem::GSL;
 #endif
 	else
-		throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+		throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 
 	if (type == "OPTICAL") return new module::Channel_optical<R>(this->N, dist, impl, this->seed);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -191,11 +192,11 @@ module::Channel<R>* Channel
 {
 	try	{
 		return build_gaussian<R>();
-	} catch (tools::cannot_allocate&) {}
+	} catch (spu::tools::cannot_allocate&) {}
 
 	try	{
 		return build_event<R>();
-	} catch (tools::cannot_allocate&) {}
+	} catch (spu::tools::cannot_allocate&) {}
 
 	if (type == "USER"    ) return new module::Channel_user    <R>(this->N, this->path, this->add_users);
 	if (type == "USER_ADD") return new module::Channel_user_add<R>(this->N, this->path, this->add_users);
@@ -203,7 +204,7 @@ module::Channel<R>* Channel
 	if (type == "USER_BSC") return new module::Channel_user_bs <R>(this->N, this->path                 );
 	if (type == "NO"      ) return new module::Channel_NO      <R>(this->N,             this->add_users);
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename R>
@@ -212,7 +213,7 @@ module::Channel<R>* Channel
 {
 	try	{
 		return build_userpdf<R>(dist);
-	} catch (tools::cannot_allocate&) {}
+	} catch (spu::tools::cannot_allocate&) {}
 
 	return build<R>();
 }

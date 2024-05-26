@@ -2,8 +2,9 @@
 #include <sstream>
 #include <string>
 
+#include <streampu.hpp>
+
 #include "Tools/Perf/common/hard_decide.h"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/BCH/Standard/Decoder_BCH_std.hpp"
 
 using namespace aff3ct;
@@ -32,7 +33,7 @@ Decoder_BCH_std<B, R>
 		std::stringstream message;
 		message << "'N - K' is different than 'GF_poly.get_n_rdncy()' ('K' = " << K << ", 'N' = " << N
 		        << ", 'GF_poly.get_n_rdncy()' = " << GF_poly.get_n_rdncy() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -195,7 +196,7 @@ int Decoder_BCH_std<B, R>
 					{
 						std::stringstream message;
 						message << "The polynomial seems not to be primitive.";
-						throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+						throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 					}
 					loc[count++] = this->N_p2_1 - i;
 				}
@@ -210,16 +211,16 @@ int Decoder_BCH_std<B, R>
 					if (loc[i] < this->N)
 						Y_N[loc[i]] ^= 1;
 
-				return runtime::status_t::SUCCESS;
+				return spu::runtime::status_t::SUCCESS;
 			}
 			else
-				return runtime::status_t::FAILURE;
+				return spu::runtime::status_t::FAILURE;
 		}
 		else
-			return runtime::status_t::FAILURE;
+			return spu::runtime::status_t::FAILURE;
 	}
 	else
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 }
 
 

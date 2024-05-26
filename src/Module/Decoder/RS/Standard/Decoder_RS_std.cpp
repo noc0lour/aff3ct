@@ -1,7 +1,6 @@
 #include <string>
 #include <algorithm>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Decoder/RS/Standard/Decoder_RS_std.hpp"
 
 using namespace aff3ct;

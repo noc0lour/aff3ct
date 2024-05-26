@@ -4,8 +4,9 @@
 #include <string>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/Code/LDPC/AList/AList.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Tools/general_utils.h"
 #include "Tools/Code/LDPC/QC/QC.hpp"
 
@@ -23,7 +24,7 @@ Sparse_matrix QC
 	{
 		std::stringstream message;
 		message << "The given stream does not refer to a QC format file.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
@@ -39,7 +40,7 @@ Sparse_matrix QC
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 2 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	unsigned N_red = 0, M_red = 0, Z = 0;
@@ -53,7 +54,7 @@ Sparse_matrix QC
 		std::stringstream message;
 		message << "'N_red', 'M_red' and 'Z' have to be greater than 0 ('N_red' = " << N_red
 		        << ", 'M_red' = " << M_red << ", 'Z' = " << Z << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::vector<mipp::vector<int16_t>> H_red(M_red, mipp::vector<int16_t>(N_red, -1));
@@ -68,7 +69,7 @@ Sparse_matrix QC
 			std::stringstream message;
 			message << "'values.size()' has to be greater or equal to 'N_red' ('values.size()' = "
 			        << values.size() << ", 'i' = " << i << ", 'N_red' = " << N_red << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		for (unsigned j = 0; j < N_red; j++)
@@ -130,7 +131,7 @@ std::vector<bool> QC
 			std::stringstream message;
 			message << "'values.size()' has to be greater or equal to 'N_red' ('values.size()' = "
 			        << values.size() << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 		else
 			N_red = (unsigned)values.size();
@@ -145,7 +146,7 @@ std::vector<bool> QC
 	{
 		std::stringstream message;
 		message << "Something went wrong when trying to read the LDPC puncturing pattern.";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return pattern;
@@ -168,7 +169,7 @@ void QC
 	{
 		std::stringstream message;
 		message << "'values.size()' has to be greater than 2 ('values.size()' = " << values.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	unsigned N_red = 0, M_red = 0, Z = 0;
@@ -182,7 +183,7 @@ void QC
 		std::stringstream message;
 		message << "'N_red', 'M_red' and 'Z' have to be greater than 0 ('N_red' = " << N_red
 		        << ", 'M_red' = " << M_red << ", 'Z' = " << Z << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	N = N_red * Z;

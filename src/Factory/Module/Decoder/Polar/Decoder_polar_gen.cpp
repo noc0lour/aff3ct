@@ -1,7 +1,7 @@
 #include <sstream>
 #include <memory>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 /* // GENERATED DECODERS // */
 
@@ -783,7 +783,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 #endif
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -862,7 +862,7 @@ module::Decoder_SIHO<B,Q>* Decoder_polar
 		}
 	}
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 const std::vector<bool>& Decoder_polar
@@ -1081,7 +1081,7 @@ const std::vector<bool>& Decoder_polar
 
 	std::stringstream message;
 	message << "'implem' frozen bits does not exist ('implem' = " << implem << ").";
-	throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+	throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 }
 
 // ==================================================================================== explicit template instantiation

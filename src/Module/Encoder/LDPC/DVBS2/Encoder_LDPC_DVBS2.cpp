@@ -1,8 +1,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
-
 #include "Module/Encoder/LDPC/DVBS2/Encoder_LDPC_DVBS2.hpp"
 
 using namespace aff3ct;

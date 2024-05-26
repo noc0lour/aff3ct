@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Turbo/Post_processing_SISO/Flip_and_check/Flip_and_check_DB.hpp"
 
 using namespace aff3ct;
@@ -24,7 +25,7 @@ Flip_and_check_DB<B,R>
 		std::stringstream message;
 		message << "The FNC double binary does not support an inter frame level > 1 "
 		        << "('n_frames' = " << this->n_frames << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	// generation of the array that will be used to flip the bits
@@ -158,7 +159,7 @@ void Flip_and_check_DB<B,R>
 		std::stringstream message;
 		message << "The FNC double binary does not support an inter frame level > 1 "
 		        << "('n_frames' = " << n_frames << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto old_n_frames = this->get_n_frames();

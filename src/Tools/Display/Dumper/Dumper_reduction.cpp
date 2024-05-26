@@ -2,7 +2,7 @@
 #include <fstream>
 #include <ios>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
 
 #include "Tools/Display/Dumper/Dumper_reduction.hpp"
 
@@ -31,7 +31,7 @@ void Dumper_reduction
 				std::stringstream message;
 				message << "'n_buff_cur' should be equal to 'n_buff_ref' ('n_buff_cur' = " << n_buff_cur
 				        << ", 'n_buff_ref' = " << n_buff_ref << ").";
-				throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+				throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 			}
 		}
 
@@ -60,7 +60,7 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'size_cur' should be equal to 'size_ref' ('size_cur' = " << size_cur
 					        << ", 'size_ref' = " << size_ref << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (sizeof_cur != sizeof_ref)
@@ -68,7 +68,7 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'sizeof_cur' should be equal to 'sizeof_ref' ('sizeof_cur' = " << sizeof_cur
 					        << ", 'sizeof_ref' = " << sizeof_ref << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (type_cur != type_ref)
@@ -76,7 +76,7 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'type_cur' should be equal to 'type_ref' ('type_cur' = " << type_cur.name()
 					        << ", 'type_ref' = " << type_ref.name()  << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (ext_cur != ext_ref)
@@ -84,7 +84,7 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'ext_cur' should be equal to 'ext_ref' ('ext_cur' = " << ext_cur
 					        << ", 'ext_ref' = " << ext_ref << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (bin_cur != bin_ref)
@@ -92,14 +92,14 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'bin_cur' should be equal to 'bin_ref' ('bin_cur' = " << bin_cur
 					        << ", 'bin_ref' = " << bin_ref << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (head_cur != head_ref)
 				{
 					std::stringstream message;
 					message << "'head_cur' should be equal to 'head_ref'.";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 
 				if (fra_cur != fra_ref)
@@ -107,7 +107,7 @@ void Dumper_reduction
 					std::stringstream message;
 					message << "'fra_cur' should be equal to 'fra_ref' ('fra_cur' = " << fra_cur
 					        << ", 'fra_ref' = " << fra_ref << ").";
-					throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+					throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 				}
 			}
 		}
@@ -116,14 +116,14 @@ void Dumper_reduction
 	{
 		std::stringstream message;
 		message << "'dumpers.size()' should be greater than 0 ('dumpers.size()' = " << dumpers.size() << ").";
-		throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 
 void Dumper_reduction
 ::add(const size_t frame_id)
 {
-	throw invalid_argument(__FILE__, __LINE__, __func__, "This method can't be called on this class.");
+	throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "This method can't be called on this class.");
 }
 
 void Dumper_reduction
@@ -132,7 +132,7 @@ void Dumper_reduction
 	this->checks();
 
 	if (base_path.empty())
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'base_path' can't be empty.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'base_path' can't be empty.");
 
 	this->buffer             .resize(dumpers[0]->buffer.size());
 	this->registered_data_ptr.resize(dumpers[0]->registered_data_ptr.size());

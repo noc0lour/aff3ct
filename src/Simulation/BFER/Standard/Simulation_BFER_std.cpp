@@ -5,14 +5,13 @@
 #include <random>
 #include <string>
 
-#include "Runtime/Sequence/Sequence.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Display/rang_format/rang_format.h"
-#include "Tools/Interface/Interface_set_seed.hpp"
 #include "Tools/Interface/Interface_get_set_noise.hpp"
 #include "Tools/Interface/Interface_notify_noise_update.hpp"
 #include "Tools/Interface/Interface_get_set_frozen_bits.hpp"
 #include "Tools/Display/Dumper/Dumper.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Factory/Module/Coset/Coset.hpp"
 #include "Factory/Tools/Codec/Codec.hpp"
 #include "Factory/Tools/Codec/Codec_SIHO.hpp"
@@ -34,10 +33,10 @@ Simulation_BFER_std<B,R,Q>
 }
 
 template <typename B, typename R, typename Q>
-std::unique_ptr<module::Source<B>> Simulation_BFER_std<B,R,Q>
+std::unique_ptr<spu::module::Source<B>> Simulation_BFER_std<B,R,Q>
 ::build_source()
 {
-	auto src = std::unique_ptr<module::Source<B>>(params_BFER_std.src->build<B>());
+	auto src = std::unique_ptr<spu::module::Source<B>>(params_BFER_std.src->build<B>());
 	src->set_n_frames(this->params.n_frames);
 	return src;
 }
@@ -166,22 +165,22 @@ void Simulation_BFER_std<B,R,Q>
 	auto &mnt = *this->monitor_er;
 	auto &mni = *this->monitor_mi;
 
-	std::vector<Module*> modules = {&src, &crc, &enc, &pct, &mdm, &chn, &qnt, &csr, &dec, &csb, &mnt, &mni};
+	std::vector<spu::module::Module*> modules = {&src, &crc, &enc, &pct, &mdm, &chn, &qnt, &csr, &dec, &csb, &mnt, &mni};
 	for (auto& mod : modules)
 		for (auto& tsk : mod->tasks)
 			tsk->set_autoalloc(true);
 
 	if (this->params_BFER_std.src->type == "AZCW")
 	{
-		auto src_data = (uint8_t*)(src[src::sck::generate::out_data].get_dataptr());
-		auto crc_data = (uint8_t*)(crc[crc::sck::build   ::U_K2    ].get_dataptr());
-		auto enc_data = (uint8_t*)(enc[enc::sck::encode  ::X_N     ].get_dataptr());
-		auto pct_data = (uint8_t*)(pct[pct::sck::puncture::X_N2    ].get_dataptr());
+		auto src_data = (uint8_t*)(src[spu::module::src::sck::generate::out_data].get_dataptr());
+		auto crc_data = (uint8_t*)(crc[             crc::sck::build   ::U_K2    ].get_dataptr());
+		auto enc_data = (uint8_t*)(enc[             enc::sck::encode  ::X_N     ].get_dataptr());
+		auto pct_data = (uint8_t*)(pct[             pct::sck::puncture::X_N2    ].get_dataptr());
 
-		auto src_bytes = src[src::sck::generate::out_data].get_databytes();
-		auto crc_bytes = crc[crc::sck::build   ::U_K2    ].get_databytes();
-		auto enc_bytes = enc[enc::sck::encode  ::X_N     ].get_databytes();
-		auto pct_bytes = pct[pct::sck::puncture::X_N2    ].get_databytes();
+		auto src_bytes = src[spu::module::src::sck::generate::out_data].get_databytes();
+		auto crc_bytes = crc[             crc::sck::build   ::U_K2    ].get_databytes();
+		auto enc_bytes = enc[             enc::sck::encode  ::X_N     ].get_databytes();
+		auto pct_bytes = pct[             pct::sck::puncture::X_N2    ].get_databytes();
 
 		std::fill(src_data, src_data + src_bytes, 0);
 		std::fill(crc_data, crc_data + crc_bytes, 0);
@@ -195,14 +194,14 @@ void Simulation_BFER_std<B,R,Q>
 	else
 	{
 		if (this->params_BFER_std.crc->type != "NO")
-			crc[crc::sck::build::U_K1] = src[src::sck::generate::out_data];
+			crc[crc::sck::build::U_K1] = src[spu::module::src::sck::generate::out_data];
 
 		if (this->params_BFER_std.cdc->enc->type != "NO")
 		{
 			if (this->params_BFER_std.crc->type != "NO")
 				enc[enc::sck::encode::U_K] = crc[crc::sck::build::U_K2];
 			else
-				enc[enc::sck::encode::U_K] = src[src::sck::generate::out_data];
+				enc[enc::sck::encode::U_K] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (this->params_BFER_std.cdc->pct != nullptr && this->params_BFER_std.cdc->pct->type != "NO")
@@ -212,7 +211,7 @@ void Simulation_BFER_std<B,R,Q>
 			else if (this->params_BFER_std.crc->type != "NO")
 				pct[pct::sck::puncture::X_N1] = crc[crc::sck::build::U_K2];
 			else
-				pct[pct::sck::puncture::X_N1] = src[src::sck::generate::out_data];
+				pct[pct::sck::puncture::X_N1] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (this->params_BFER_std.cdc->pct != nullptr && this->params_BFER_std.cdc->pct->type != "NO")
@@ -222,7 +221,7 @@ void Simulation_BFER_std<B,R,Q>
 		else if (this->params_BFER_std.crc->type != "NO")
 			mdm[mdm::sck::modulate::X_N1] = crc[crc::sck::build::U_K2];
 		else
-			mdm[mdm::sck::modulate::X_N1] = src[src::sck::generate::out_data];
+			mdm[mdm::sck::modulate::X_N1] = src[spu::module::src::sck::generate::out_data];
 	}
 
 	const auto is_rayleigh = this->params_BFER_std.chn->type.find("RAYLEIGH") != std::string::npos;
@@ -361,7 +360,7 @@ void Simulation_BFER_std<B,R,Q>
 		else if (this->params_BFER_std.crc->type != "NO")
 			csr[cst::sck::apply::ref] = crc[crc::sck::build::U_K2];
 		else
-			csr[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+			csr[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 
 		if (this->params_BFER_std.cdc->pct != nullptr && this->params_BFER_std.cdc->pct->type != "NO")
 			csr[cst::sck::apply::in] = pct[pct::sck::depuncture::Y_N2];
@@ -395,7 +394,7 @@ void Simulation_BFER_std<B,R,Q>
 			else if (this->params_BFER_std.crc->type != "NO")
 				csb[cst::sck::apply::ref] = crc[crc::sck::build::U_K2];
 			else
-				csb[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+				csb[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 
 			csb[cst::sck::apply::in] = dec[dec::sck::decode_siho_cw::V_N];
 		}
@@ -406,7 +405,7 @@ void Simulation_BFER_std<B,R,Q>
 			if (this->params_BFER_std.crc->type != "NO")
 				csb[cst::sck::apply::ref] = crc[crc::sck::build::U_K2];
 			else
-				csb[cst::sck::apply::ref] = src[src::sck::generate::out_data];
+				csb[cst::sck::apply::ref] = src[spu::module::src::sck::generate::out_data];
 
 			csb[cst::sck::apply::in] = dec[dec::sck::decode_siho::V_K];
 
@@ -482,7 +481,7 @@ void Simulation_BFER_std<B,R,Q>
 			else if (this->params_BFER_std.crc->type != "NO")
 				mnt[mnt::sck::check_errors::U] = crc[crc::sck::build::U_K2];
 			else
-				mnt[mnt::sck::check_errors::U] = src[src::sck::generate::out_data];
+				mnt[mnt::sck::check_errors::U] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (this->params_BFER_std.coset)
@@ -495,7 +494,7 @@ void Simulation_BFER_std<B,R,Q>
 		if (this->params_BFER_std.src->type == "AZCW")
 			mnt[mnt::sck::check_errors::U] = enc[enc::sck::encode::X_N].get_dataptr();
 		else
-			mnt[mnt::sck::check_errors::U] = src[src::sck::generate::out_data];
+			mnt[mnt::sck::check_errors::U] = src[spu::module::src::sck::generate::out_data];
 		if (this->params_BFER_std.crc->type != "NO")
 			mnt[mnt::sck::check_errors::V] = crc[crc::sck::extract::V_K2];
 		else if (this->params_BFER_std.coset)
@@ -517,7 +516,7 @@ void Simulation_BFER_std<B,R,Q>
 			else if (this->params_BFER_std.crc->type != "NO")
 				mni[mnt::sck::get_mutual_info::X] = crc[crc::sck::build::U_K2];
 			else
-				mni[mnt::sck::get_mutual_info::X] = src[src::sck::generate::out_data];
+				mni[mnt::sck::get_mutual_info::X] = src[spu::module::src::sck::generate::out_data];
 		}
 
 		if (mdm.is_demodulator())
@@ -544,31 +543,31 @@ void Simulation_BFER_std<B,R,Q>
 	const auto is_optical = this->params_BFER_std.chn->type == "OPTICAL" && this->params_BFER_std.mdm->rop_est_bits > 0;
 	const auto t = this->params_BFER.n_threads;
 	if (this->params_BFER_std.src->type != "AZCW")
-		this->sequence.reset(new runtime::Sequence((*this->source)[module::src::tsk::generate], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->source)[spu::module::src::tsk::generate], t));
 	else if (this->params_BFER_std.chn->type != "NO")
 	{
 		if (is_rayleigh)
-			this->sequence.reset(new runtime::Sequence((*this->channel)[module::chn::tsk::add_noise_wg], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->channel)[module::chn::tsk::add_noise_wg], t));
 		else
-			this->sequence.reset(new runtime::Sequence((*this->channel)[module::chn::tsk::add_noise], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->channel)[module::chn::tsk::add_noise], t));
 	}
 	else if (this->modem->is_demodulator())
 	{
 		if (is_rayleigh || is_optical)
-			this->sequence.reset(new runtime::Sequence((*this->modem)[module::mdm::tsk::demodulate_wg], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->modem)[module::mdm::tsk::demodulate_wg], t));
 		else
-			this->sequence.reset(new runtime::Sequence((*this->modem)[module::mdm::tsk::demodulate], t));
+			this->sequence.reset(new spu::runtime::Sequence((*this->modem)[module::mdm::tsk::demodulate], t));
 	}
 	else if (this->modem->is_filter())
-		this->sequence.reset(new runtime::Sequence((*this->modem)[module::mdm::tsk::filter], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->modem)[module::mdm::tsk::filter], t));
 	else if (this->params_BFER_std.qnt->type != "NO")
-		this->sequence.reset(new runtime::Sequence((*this->quantizer)[module::qnt::tsk::process], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->quantizer)[module::qnt::tsk::process], t));
 	else if (this->params_BFER_std.cdc->pct != nullptr && this->params_BFER_std.cdc->pct->type != "NO")
-		this->sequence.reset(new runtime::Sequence(this->codec->get_puncturer()[module::pct::tsk::puncture], t));
+		this->sequence.reset(new spu::runtime::Sequence(this->codec->get_puncturer()[module::pct::tsk::puncture], t));
 	else if (this->params_BFER_std.coset)
-		this->sequence.reset(new runtime::Sequence((*this->coset_real)[module::cst::tsk::apply], t));
+		this->sequence.reset(new spu::runtime::Sequence((*this->coset_real)[module::cst::tsk::apply], t));
 	else
-		this->sequence.reset(new runtime::Sequence(this->codec->get_decoder_siho()[module::dec::tsk::decode_siho], t));
+		this->sequence.reset(new spu::runtime::Sequence(this->codec->get_decoder_siho()[module::dec::tsk::decode_siho], t));
 
 	// set the noise
 	this->codec->set_noise(*this->noise);
@@ -582,7 +581,7 @@ void Simulation_BFER_std<B,R,Q>
 
 	// set different seeds in the modules that uses PRNG
 	std::mt19937 prng(params_BFER_std.local_seed);
-	for (auto &m : this->sequence->template get_modules<tools::Interface_set_seed>())
+	for (auto &m : this->sequence->template get_modules<spu::tools::Interface_set_seed>())
 		m->set_seed(prng());
 
 	auto fb_modules = this->sequence->template get_modules<tools::Interface_get_set_frozen_bits>();
@@ -607,17 +606,17 @@ void Simulation_BFER_std<B,R,Q>
 	{
 		std::stringstream message;
 		message << "Uniform interleaver is not supported at this time in the simulations";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (this->params_BFER_std.err_track_enable)
 	{
-		auto sources = this->sequence->template get_modules<module::Source<B>>();
+		auto sources = this->sequence->template get_modules<spu::module::Source<B>>();
 		for (size_t tid = 0; tid < (size_t)this->params_BFER.n_threads; tid++)
 		{
 			auto &source  = sources.size() ? *sources[tid] : *this->source;
-			auto src_data = (B*)(source[module::src::sck::generate::out_data].get_dataptr());
-			auto src_bytes = source[module::src::sck::generate::out_data].get_databytes();
+			auto src_data = (B*)(source[spu::module::src::sck::generate::out_data].get_dataptr());
+			auto src_bytes = source[spu::module::src::sck::generate::out_data].get_databytes();
 			auto src_size = (src_bytes / sizeof(B)) / this->params_BFER_std.n_frames;
 			this->dumper[tid]->register_data(src_data,
 			                                 (unsigned int)src_size,

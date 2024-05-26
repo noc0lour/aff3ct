@@ -1,7 +1,8 @@
 #include <utility>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Documentation/documentation.h"
 #include "Tools/types.h"
 #include "Module/CRC/NO/CRC_NO.hpp"
@@ -110,7 +111,7 @@ module::CRC<B>* CRC
 	}
 	else                             return new module::CRC_NO              <B>(K            );
 
-	throw tools::cannot_allocate(__FILE__, __LINE__, __func__);
+	throw spu::tools::cannot_allocate(__FILE__, __LINE__, __func__);
 }
 
 // ==================================================================================== explicit template instantiation

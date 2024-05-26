@@ -1,7 +1,8 @@
 #include <fstream>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Code/Polar/Frozenbits_generator/Frozenbits_generator_file.hpp"
 
 using namespace aff3ct::tools;
@@ -29,7 +30,8 @@ void Frozenbits_generator_file
 ::evaluate()
 {
 	if(!load_channels_file(this->filename, this->best_channels))
-		throw invalid_argument(__FILE__, __LINE__, __func__, "'" + filename + "' file does not exist.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__,
+		                                   "'" + filename + "' file does not exist.");
 }
 
 bool Frozenbits_generator_file
@@ -50,14 +52,14 @@ bool Frozenbits_generator_file
 		{
 			std::stringstream message;
 			message << "'std::stoi' did not work, something went wrong when reading the file.";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		if ((size_t)std::stoi(trash) != best_channels.size())
 		{
 			std::stringstream message;
 			message << "'trash' has to be equal to 'N' ('trash' = " << trash << ", 'N' = " << this->N << ").";
-			throw runtime_error(__FILE__, __LINE__, __func__, message.str());
+			throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 		}
 
 		in_code >> trash; // type

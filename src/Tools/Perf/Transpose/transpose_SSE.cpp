@@ -4,7 +4,8 @@
 #include <xmmintrin.h>
 #include <immintrin.h>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Perf/Transpose/transpose_SSE.h"
 
 using namespace aff3ct;
@@ -61,7 +62,7 @@ void aff3ct::tools::uchar_transpose_sse(const __m128i *src, __m128i *dst, int n)
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 16 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int N = n /16; // NOMBRE DE PAQUET (128 bits) PAR TRAME
@@ -196,7 +197,7 @@ void aff3ct::tools::uchar_itranspose_sse(const __m128i *src, __m128i *dst, int n
 	{
 		std::stringstream message;
 		message << "'n' has to be divisible by 16 ('n' = " << n << ").";
-		throw invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const int N = n /16; // NOMBRE DE PAQUET (128 bits) PAR TRAME

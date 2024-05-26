@@ -1,7 +1,6 @@
 #include <string>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
 #include "Module/Extractor/Extractor.hpp"
 
 namespace aff3ct
@@ -10,44 +9,44 @@ namespace module
 {
 
 template <typename B, typename Q>
-runtime::Task& Extractor<B,Q>
+spu::runtime::Task& Extractor<B,Q>
 ::operator[](const ext::tsk t)
 {
-	return Module::operator[]((size_t)t);
+	return spu::module::Module::operator[]((size_t)t);
 }
 
 template <typename B, typename Q>
-runtime::Socket& Extractor<B,Q>
+spu::runtime::Socket& Extractor<B,Q>
 ::operator[](const ext::sck::get_sys_llr s)
 {
-	return Module::operator[]((size_t)ext::tsk::get_sys_llr)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)ext::tsk::get_sys_llr)[(size_t)s];
 }
 
 template <typename B, typename Q>
-runtime::Socket& Extractor<B,Q>
+spu::runtime::Socket& Extractor<B,Q>
 ::operator[](const ext::sck::get_sys_bit s)
 {
-	return Module::operator[]((size_t)ext::tsk::get_sys_bit)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)ext::tsk::get_sys_bit)[(size_t)s];
 }
 
 template <typename B, typename Q>
-runtime::Socket& Extractor<B,Q>
+spu::runtime::Socket& Extractor<B,Q>
 ::operator[](const ext::sck::get_sys_and_par_llr s)
 {
-	return Module::operator[]((size_t)ext::tsk::get_sys_and_par_llr)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)ext::tsk::get_sys_and_par_llr)[(size_t)s];
 }
 
 template <typename B, typename Q>
-runtime::Socket& Extractor<B,Q>
+spu::runtime::Socket& Extractor<B,Q>
 ::operator[](const ext::sck::add_sys_and_ext_llr s)
 {
-	return Module::operator[]((size_t)ext::tsk::add_sys_and_ext_llr)[(size_t)s];
+	return spu::module::Module::operator[]((size_t)ext::tsk::add_sys_and_ext_llr)[(size_t)s];
 }
 
 template <typename B, typename Q>
 Extractor<B,Q>
 ::Extractor(const int K, const int N, const int tail_length)
-: Module(),
+: spu::module::Module(),
   K(K), N(N), tail_length(tail_length)
 {
 	const std::string name = "Extractor";
@@ -58,27 +57,28 @@ Extractor<B,Q>
 	{
 		std::stringstream message;
 		message << "'K' has to be greater than 0 ('K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N <= 0)
 	{
 		std::stringstream message;
 		message << "'N' has to be greater than 0 ('N' = " << N << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (tail_length < 0)
 	{
 		std::stringstream message;
 		message << "'tail_length' has to be greater or equal to 0 ('tail_length' = " << tail_length << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	auto &p1 = this->create_task("get_sys_llr");
 	auto p1s_Y_N = this->template create_socket_in <Q>(p1, "Y_N", this->N);
 	auto p1s_Y_K = this->template create_socket_out<Q>(p1, "Y_K", this->K);
-	this->create_codelet(p1, [p1s_Y_N, p1s_Y_K](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p1, [p1s_Y_N, p1s_Y_K]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &ext = static_cast<Extractor<B,Q>&>(m);
 
@@ -86,13 +86,14 @@ Extractor<B,Q>
 		                 static_cast<Q*>(t[p1s_Y_K].get_dataptr()),
 		                 frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p2 = this->create_task("get_sys_bit");
 	auto p2s_Y_N = this->template create_socket_in <Q>(p2, "Y_N", this->N);
 	auto p2s_V_K = this->template create_socket_out<B>(p2, "V_K", this->K);
-	this->create_codelet(p2, [p2s_Y_N, p2s_V_K](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p2, [p2s_Y_N, p2s_V_K]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &ext = static_cast<Extractor<B,Q>&>(m);
 
@@ -100,7 +101,7 @@ Extractor<B,Q>
 		                 static_cast<B*>(t[p2s_V_K].get_dataptr()),
 		                 frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	const auto tb_2 = this->tail_length / 2;
@@ -108,7 +109,8 @@ Extractor<B,Q>
 	auto p3s_Y_N = this->template create_socket_in <Q>(p3, "Y_N", this->N                 );
 	auto p3s_sys = this->template create_socket_out<Q>(p3, "sys", this->K           + tb_2);
 	auto p3s_par = this->template create_socket_out<Q>(p3, "par", this->N - this->K - tb_2);
-	this->create_codelet(p3, [&p3s_Y_N, &p3s_sys, &p3s_par](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p3, [&p3s_Y_N, &p3s_sys, &p3s_par]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &ext = static_cast<Extractor<B,Q>&>(m);
 
@@ -117,14 +119,15 @@ Extractor<B,Q>
 		                         static_cast<Q*>(t[p3s_par].get_dataptr()),
 		                         frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 
 	auto &p4 = this->create_task("add_sys_and_ext_llr");
 	auto p4s_ext  = this->template create_socket_in <Q>(p4, "ext",  this->K);
 	auto p4s_Y_N1 = this->template create_socket_in <Q>(p4, "Y_N1", this->N);
 	auto p4s_Y_N2 = this->template create_socket_out<Q>(p4, "Y_N2", this->N);
-	this->create_codelet(p4, [p4s_ext, p4s_Y_N1, p4s_Y_N2](Module &m, runtime::Task &t, const size_t frame_id) -> int
+	this->create_codelet(p4, [p4s_ext, p4s_Y_N1, p4s_Y_N2]
+		(spu::module::Module &m, spu::runtime::Task &t, const size_t frame_id) -> int
 	{
 		auto &ext = static_cast<Extractor<B,Q>&>(m);
 
@@ -133,7 +136,7 @@ Extractor<B,Q>
 		                         static_cast<Q*>(t[p4s_Y_N2].get_dataptr()),
 		                         frame_id);
 
-		return runtime::status_t::SUCCESS;
+		return spu::runtime::status_t::SUCCESS;
 	});
 }
 
@@ -141,7 +144,7 @@ template <typename B, typename Q>
 Extractor<B,Q>* Extractor<B,Q>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename Q>
@@ -236,7 +239,7 @@ void Extractor<B,Q>
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << this->K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto i = 0; i < this->K; i++)
@@ -253,7 +256,7 @@ void Extractor<B,Q>
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << this->K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto i = 0; i < this->K; i++)
@@ -270,7 +273,7 @@ void Extractor<B,Q>
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << this->K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	const auto K = this->K;
@@ -298,7 +301,7 @@ void Extractor<B,Q>
 		std::stringstream message;
 		message << "'info_bits_pos.size()' has to be equal to 'K' ('info_bits_pos.size()' = " << info_bits_pos.size()
 		        << ", 'K' = " << this->K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	std::copy(Y_N1, Y_N1 + this->N, Y_N2);

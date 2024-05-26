@@ -1,8 +1,8 @@
 #include <limits>
 #include <string>
 
-#include "Tools/Exception/exception.hpp"
-#include "Tools/Math/utils.h"
+#include <streampu.hpp>
+
 #include "Module/Decoder/RSC/BCJR/Seq/Decoder_RSC_BCJR_seq.hpp"
 
 namespace aff3ct
@@ -96,7 +96,7 @@ Decoder_RSC_BCJR_seq<B,R>
 
 	for (unsigned i = 0; i < req_trellis.size(); i++)
 		if (trellis[i] != req_trellis[i])
-			throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
+			throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Unsupported trellis.");
 
 	for (auto i = 0; i < 8; i++) alpha[i].resize(K +4);
 	for (auto i = 0; i < 8; i++) beta [i].resize(K +4);
@@ -109,7 +109,7 @@ template <typename B, typename R>
 Decoder_RSC_BCJR_seq<B,R>* Decoder_RSC_BCJR_seq<B,R>
 ::clone() const
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 // =================================================================================================== sys/par division
@@ -118,7 +118,7 @@ struct RSC_BCJR_seq_div_or_not
 {
 	static R apply(R m)
 	{
-		return tools::div2<R>(m);
+		return spu::tools::div2<R>(m);
 	}
 };
 
@@ -148,7 +148,7 @@ struct RSC_BCJR_seq_post <short, RD>
 	static short compute(const RD &post)
 	{
 		// (WW) work only for max-log-MAP !!!
-		return tools::div2<RD>(post);
+		return spu::tools::div2<RD>(post);
 	}
 };
 
@@ -157,7 +157,7 @@ struct RSC_BCJR_seq_post <signed char, RD>
 {
 	static signed char compute(const RD &post)
 	{
-		return (signed char)tools::saturate<RD>(post, -63, 63);
+		return (signed char)spu::tools::saturate<RD>(post, -63, 63);
 	}
 };
 
@@ -227,7 +227,7 @@ struct RSC_BCJR_seq_normalize <signed char>
 		// normalization & saturation
 		auto norm_val = metrics[0][i];
 		for (auto j = 0; j < 8; j++)
-			metrics[j][i] = tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
+			metrics[j][i] = spu::tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
 	}
 
 	static void apply(signed char metrics[8][mipp::nElReg<signed char>()], const int &i)
@@ -235,7 +235,7 @@ struct RSC_BCJR_seq_normalize <signed char>
 		// normalization & saturation
 		auto norm_val = metrics[0][i];
 		for (auto j = 0; j < 8; j++)
-			metrics[j][i] = tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
+			metrics[j][i] = spu::tools::saturate<signed char>(metrics[j][i] - norm_val, -63, +63);
 	}
 
 	static void apply(signed char metrics[8], const int &i)
@@ -243,7 +243,7 @@ struct RSC_BCJR_seq_normalize <signed char>
 		// normalization & saturation
 		auto norm_val = metrics[0];
 		for (auto j = 0; j < 8; j++)
-			metrics[j] = tools::saturate<signed char>(metrics[j] - norm_val, -63, +63);
+			metrics[j] = spu::tools::saturate<signed char>(metrics[j] - norm_val, -63, +63);
 	}
 };
 }

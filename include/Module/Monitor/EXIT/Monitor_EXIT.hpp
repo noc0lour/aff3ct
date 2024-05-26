@@ -11,8 +11,6 @@
 #include <functional>
 
 #include "Tools/Algo/Callback/Callback.hpp"
-#include "Runtime/Task/Task.hpp"
-#include "Runtime/Socket/Socket.hpp"
 #include "Module/Monitor/Monitor.hpp"
 
 namespace aff3ct
@@ -23,8 +21,8 @@ template <typename B = int, typename R = float>
 class Monitor_EXIT : public Monitor
 {
 public:
-	inline runtime::Task&   operator[](const mnt::tsk                    t);
-	inline runtime::Socket& operator[](const mnt::sck::check_mutual_info s);
+	inline spu::runtime::Task&   operator[](const mnt::tsk                    t);
+	inline spu::runtime::Socket& operator[](const mnt::sck::check_mutual_info s);
 
 protected:
 	struct Attributes

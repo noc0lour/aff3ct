@@ -2,7 +2,8 @@
 #include <sstream>
 #include <typeinfo>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Noise/Sigma.hpp"
 
 using namespace aff3ct;
@@ -66,7 +67,7 @@ const R Sigma<R>
 	{
 		std::stringstream message;
 		message << "'ebn0' is not set.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return this->ebn0;
@@ -80,7 +81,7 @@ const R Sigma<R>
 	{
 		std::stringstream message;
 		message << "'esn0' is not set.";
-		throw tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	return this->esn0;
@@ -104,7 +105,7 @@ void Sigma<R>
 	{
 		std::stringstream message;
 		message << "The SIGMA noise 'value' has to be greater than 0 ('value' = " << value << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }
 

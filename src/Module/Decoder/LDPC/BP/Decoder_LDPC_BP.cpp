@@ -1,6 +1,7 @@
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Decoder/LDPC/BP/Decoder_LDPC_BP.hpp"
 
 using namespace aff3ct;
@@ -21,14 +22,14 @@ Decoder_LDPC_BP
 	{
 		std::stringstream message;
 		message << "'n_ite' has to be greater than 0 ('n_ite' = " << n_ite << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (syndrome_depth <= 0)
 	{
 		std::stringstream message;
 		message << "'syndrome_depth' has to be greater than 0 ('syndrome_depth' = " << syndrome_depth << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (N != (int)this->H.get_n_rows())
@@ -36,6 +37,6 @@ Decoder_LDPC_BP
 		std::stringstream message;
 		message << "'N' is not compatible with the H matrix ('N' = " << N << ", 'H.get_n_rows()' = "
 		        << this->H.get_n_rows() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 }

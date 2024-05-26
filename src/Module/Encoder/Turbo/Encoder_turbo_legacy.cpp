@@ -2,7 +2,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Module/Encoder/Turbo/Encoder_turbo_legacy.hpp"
 
 using namespace aff3ct;
@@ -24,7 +25,7 @@ Encoder_turbo_legacy<B>
 		std::stringstream message;
 		message << "'N' - 2 * 'sub_enc.tail_length()' has to be equal to 3 * 'K' ('N' = " << N
 		        << ", 'sub_enc.tail_length()' = " << sub_enc.tail_length() << ", 'K' = " << K << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if ((int)pi.get_core().get_size() != K)
@@ -32,7 +33,7 @@ Encoder_turbo_legacy<B>
 		std::stringstream message;
 		message << "'pi.get_core().get_size()' has to be equal to 'K' ('pi.get_core().get_size()' = "
 		        << pi.get_core().get_size() << ", 'K' = " << K << ").";
-		throw tools::length_error(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::length_error(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	if (sub_enc.get_n_frames() != pi.get_n_frames())
@@ -40,7 +41,7 @@ Encoder_turbo_legacy<B>
 		std::stringstream message;
 		message << "'sub_enc.get_n_frames()' has to be equal to 'pi.get_n_frames()' ('sub_enc.get_n_frames()' = "
 		        << sub_enc.get_n_frames() << ", 'pi.get_n_frames()' = " << pi.get_n_frames() << ").";
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
 	}
 
 	for (auto k = 0; k < this->K; k++)

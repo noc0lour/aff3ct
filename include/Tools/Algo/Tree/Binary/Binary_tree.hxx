@@ -1,4 +1,5 @@
-#include "Tools/Exception/exception.hpp"
+#include <streampu.hpp>
+
 #include "Tools/Algo/Tree/Binary/Binary_tree.hpp"
 
 namespace aff3ct
@@ -60,9 +61,9 @@ void Binary_tree<T>
 ::recursive_copy(const Binary_node<T> *nref, Binary_node<T> *nclone)
 {
 	if (nref == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'nref' can't be nullptr.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'nref' can't be nullptr.");
 	if (nclone == nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'nclone' can't be nullptr.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'nclone' can't be nullptr.");
 
 	nclone->set_contents(nref->get_contents());
 
@@ -98,9 +99,9 @@ void Binary_tree<T>
 ::create_nodes(Binary_node<T>* cur_node, int cur_depth, std::vector<int> &lanes)
 {
 	if (cur_node->left != nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'cur_node->left' can't be null.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'cur_node->left' can't be null.");
 	if (cur_node->right != nullptr)
-		throw runtime_error(__FILE__, __LINE__, __func__, "'cur_node->right' can't be null.");
+		throw spu::tools::runtime_error(__FILE__, __LINE__, __func__, "'cur_node->right' can't be null.");
 
 	if (cur_depth < this->depth)
 	{

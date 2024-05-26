@@ -10,8 +10,9 @@
 #include <complex>
 #include <mipp.h>
 
+#include <streampu.hpp>
+
 #include "Tools/Noise/Noise.hpp"
-#include "Tools/Exception/exception.hpp"
 #include "Module/Modem/Generic/Modem_generic_fast.hpp"
 
 namespace aff3ct
@@ -47,14 +48,14 @@ template <typename B, typename R, typename Q, tools::proto_max<Q> MAX, tools::pr
 void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_tdemodulate(const float *CP, const Q *Y_N1, const Q *Y_N2, Q *Y_N3, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename B, typename R, typename Q, tools::proto_max<Q> MAX, tools::proto_max_i<Q> MAXI>
 void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_tdemodulate_wg(const float *CP, const R *H_N, const Q *Y_N1, const Q *Y_N2, Q *Y_N3, const size_t frame_id)
 {
-	throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+	throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 }
 
 template <typename Q, typename I, tools::proto_max_i<Q> MAXI>
@@ -135,7 +136,7 @@ struct demodulate_complex_SIMD
 	                      const int nbr_symbols,
 	                      const Q inv_sigma2)
 	{
-		throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+		throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	}
 };
 
@@ -178,10 +179,10 @@ void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_demodulate_complex(const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	const auto size_vec_loop = demodulate_complex_SIMD<Q, MAXI>::compute(Y_N1,
 	                                                                     Y_N2,
@@ -300,7 +301,7 @@ struct demodulate_wg_complex_SIMD
 	                      const int nbr_symbols,
 	                      const Q inv_sigma2)
 	{
-		throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+		throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	}
 };
 
@@ -345,10 +346,10 @@ void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_demodulate_wg_complex(const R *H_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	const auto size_vec_loop = demodulate_wg_complex_SIMD<R, Q, MAXI>::compute(H_N,
 	                                                                           Y_N1,
@@ -456,7 +457,7 @@ struct demodulate_real_SIMD
 	                      const int nbr_symbols,
 	                      const Q inv_sigma2)
 	{
-		throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+		throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	}
 };
 
@@ -499,10 +500,10 @@ void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_demodulate_real(const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	const auto size_vec_loop = demodulate_real_SIMD<Q, MAXI>::compute(Y_N1,
 	                                                                  Y_N2,
@@ -609,7 +610,7 @@ struct demodulate_wg_real_SIMD
 	                      const int nbr_symbols,
 	                      const Q inv_sigma2)
 	{
-		throw tools::unimplemented_error(__FILE__, __LINE__, __func__);
+		throw spu::tools::unimplemented_error(__FILE__, __LINE__, __func__);
 	}
 };
 
@@ -654,10 +655,10 @@ void Modem_generic_fast<B,R,Q,MAX,MAXI>
 ::_demodulate_wg_real(const R *H_N, const Q *Y_N1, Q *Y_N2, const size_t frame_id)
 {
 	if (!std::is_same<R,Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'R' and 'Q' have to be the same.");
 
 	if (!std::is_floating_point<Q>::value)
-		throw tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
+		throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "Type 'Q' has to be float or double.");
 
 	const auto size_vec_loop = demodulate_wg_real_SIMD<R, Q, MAXI>::compute(H_N,
 	                                                                        Y_N1,

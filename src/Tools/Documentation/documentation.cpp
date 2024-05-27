@@ -10,7 +10,6 @@
 #endif
 #include "Tools/Documentation/documentation.h"
 #include "Tools/general_utils.h"
-#include "Tools/system_functions.h"
 #include "Tools/version.h"
 
 using namespace aff3ct;

@@ -432,13 +432,25 @@ macro(aff3ct_target_link_libraries privacy lib)
     endif(AFF3CT_COMPILE_STATIC_LIB)
 endmacro()
 
+# cpptrace
+if (AFF3CT_INCLUDE_SPU_LIB)
+    if(SPU_STACKTRACE OR SPU_STACKTRACE_SEGFAULT)
+        aff3ct_target_link_libraries(PUBLIC cpptrace::cpptrace)
+    endif()
+else()
+    find_package(cpptrace CONFIG 0.4.1)
+    if (cpptrace_FOUND)
+        message(STATUS "AFF3CT - Library found: cpptrace")
+        aff3ct_target_link_libraries(PUBLIC cpptrace::cpptrace)
+    endif()
+endif()
+
 # StreamPU
 if (NOT AFF3CT_INCLUDE_SPU_LIB)
-    find_package(StreamPU CONFIG 1.0.0 REQUIRED)
-    if(StreamPU_FOUND)
-        message(STATUS "AFF3CT - Library found: StreamPU")
-        aff3ct_target_link_libraries(PUBLIC SPU::spu-static-lib)
-    endif()
+    find_package(StreamPU CONFIG 0.1.0 REQUIRED)
+    message(STATUS "AFF3CT - Library found: StreamPU")
+    target_link_libraries(aff3ct-obj PUBLIC spu::spu-static-lib)
+    aff3ct_target_link_libraries(PUBLIC spu::spu-static-lib)
 endif()
 
 # GSL
@@ -508,13 +520,6 @@ if(AFF3CT_MPI)
 
     endif(MPI_CXX_FOUND)
 endif(AFF3CT_MPI)
-
-if (AFF3CT_INCLUDE_SPU_LIB)
-    # cpptrace
-    if(SPU_STACKTRACE OR SPU_STACKTRACE_SEGFAULT)
-        aff3ct_target_link_libraries(PUBLIC cpptrace::cpptrace)
-    endif()
-endif()
 
 # Threads
 set(CMAKE_THREAD_PREFER_PTHREAD ON)

@@ -64,7 +64,7 @@ analysis-clang:
       - clang_reports/
   only:
     - master
-    - development
+    - devel
   tags:
     - x86_64
     - linux
@@ -106,7 +106,7 @@ analysis-git-submodules:
     - docker
   only:
     - master
-    - development
+    - devel
   script:
     - source ./ci/tools/git-branch.sh
     - ./ci/analysis-git-submodule.sh
@@ -928,7 +928,7 @@ deploy-sonarqube-linux:
     - no_proxy
   only:
     - master
-    - development
+    - devel
   allow_failure: true
   script:
     - export REPORTS_DIR="clang_reports"
@@ -954,7 +954,7 @@ deploy-builds-linux:
     - no_proxy
   only:
     - master
-    - development
+    - devel
   artifacts:
      name: builds
      when: always
@@ -998,7 +998,7 @@ deploy-upload-ppa:
     - no_proxy
   only:
     - master
-    - development
+    - devel
     - ppa_upload
   artifacts:
     name: ppa_files
@@ -1037,4 +1037,4 @@ pages:
       - public
     expire_in: 30 days
   only:
-    - development
+    - devel

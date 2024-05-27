@@ -158,6 +158,7 @@ template<typename B>
 int
 Encoder_RSC_DB<B>::calc_state_trans(const int in_state, const int in, int& par)
 {
+    // clang-format off
     std::vector<int> FF(n_ff, 0);
 
     for (auto i = 0; i < n_ff; i++)
@@ -187,6 +188,7 @@ Encoder_RSC_DB<B>::calc_state_trans(const int in_state, const int in, int& par)
         next_state = (next_state << 1) | FF[i];
 
     return next_state;
+    // clang-format on
 }
 
 template<typename B>
@@ -197,6 +199,7 @@ Encoder_RSC_DB<B>::__encode_from_state(const B* U_K,
                                        const int init_state,
                                        int& end_state)
 {
+    // clang-format off
     auto j = 0; // cur offset in X_N buffer
     auto state = init_state;
     for (auto i = 0; i < this->K; i += 2)
@@ -213,6 +216,7 @@ Encoder_RSC_DB<B>::__encode_from_state(const B* U_K,
         X_N[j++] = (parity) & 1;
     }
     end_state = state;
+    // clang-format on
 }
 
 template<typename B>
@@ -279,6 +283,7 @@ template<typename B>
 bool
 Encoder_RSC_DB<B>::is_codeword(const B* X_N)
 {
+    // clang-format off
     int circ_state = 0;
     if (this->buffered_encoding)
         for (auto i = 0; i < this->K; i += 2)
@@ -315,6 +320,7 @@ Encoder_RSC_DB<B>::is_codeword(const B* X_N)
     if (init_state != state) return false;
 
     return true;
+    // clang-format on
 }
 
 template<typename B>

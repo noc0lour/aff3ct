@@ -9,9 +9,7 @@
 #include <string>
 #include <vector>
 
-#ifndef _MSC_VER
 #include <streampu.hpp>
-#endif
 
 namespace aff3ct
 {

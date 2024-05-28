@@ -9,10 +9,10 @@
 #ifndef DECODER_VITERBI_SIHO_HPP_
 #define DECODER_VITERBI_SIHO_HPP_
 
-#include <vector>
 #include <array>
-#include <iomanip>
 #include <cmath>
+#include <iomanip>
+#include <vector>
 
 #include "Module/Decoder/Decoder_SIHO.hpp"
 
@@ -27,10 +27,10 @@ namespace module
  * \brief Uses Viterbi's algorithm on a convolutional code.
  *
  */
-template <typename B = int, typename R = int>
-class Decoder_Viterbi_SIHO: public Decoder_SIHO<B, R>
+template<typename B = int, typename R = int>
+class Decoder_Viterbi_SIHO : public Decoder_SIHO<B, R>
 {
-public:
+  public:
     /*!
      * \brief Constructor.
      */
@@ -41,12 +41,12 @@ public:
      */
     ~Decoder_Viterbi_SIHO() = default;
 
-    virtual Decoder_Viterbi_SIHO<B,R>* clone() const;
-    
-protected:
+    virtual Decoder_Viterbi_SIHO<B, R>* clone() const;
+
+  protected:
     virtual int _decode_siho(const R* Y_N, B* X_N, const size_t frame_id);
 
-private:
+  private:
     void _reset();
     void _forward_pass(const R* Y_N);
     void setup();
@@ -54,9 +54,7 @@ private:
     size_t _argmin(double* ptr, size_t size);
     size_t _argmin(std::vector<double> data);
 
-
-
-private:
+  private:
     int m_n_states;                          // Nb d'etats de l'encodeur
     int m_n_memories;                        // Nb memoires
     int m_K;                                 // taille des messages

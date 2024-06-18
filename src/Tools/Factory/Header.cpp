@@ -26,7 +26,7 @@ aff3ct::tools::Header::print_parameters(std::string grp_key,
         stream << rang::tag::comment << "* " << rang::style::bold << rang::style::underline << grp_name
                << rang::style::reset << " ";
         for (auto i = 0; i < 46 - (int)grp_name.length(); i++)
-            std::cout << "-";
+            stream << "-";
         stream << std::endl;
     }
     else if (key.size() > 1)
@@ -34,7 +34,7 @@ aff3ct::tools::Header::print_parameters(std::string grp_key,
         stream << rang::tag::comment << "   " << rang::style::bold << rang::style::underline << grp_name
                << rang::style::reset << " ";
         for (auto i = 0; i < 45 - (int)grp_name.length(); i++)
-            std::cout << "-";
+            stream << "-";
         stream << std::endl;
     }
 

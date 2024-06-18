@@ -111,7 +111,7 @@ aff3ct::tools::Header::print_parameters(const std::vector<factory::Factory*>& fa
                 if (print_head && (std::find(dup_h.begin(), dup_h.end(), h) == dup_h.end() ||
                                    std::find(dup_n.begin(), dup_n.end(), n) == dup_n.end()))
                 {
-                    aff3ct::tools::Header::print_parameters(prefixes[i], n, h, max_n_chars);
+                    aff3ct::tools::Header::print_parameters(prefixes[i], n, h, max_n_chars, stream);
 
                     dup_h.push_back(h);
                     dup_n.push_back(n);

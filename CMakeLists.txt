@@ -447,7 +447,7 @@ endif()
 
 # StreamPU
 if (NOT AFF3CT_INCLUDE_SPU_LIB)
-    find_package(StreamPU CONFIG 1.0.0 REQUIRED)
+    find_package(StreamPU CONFIG 1.0.1 REQUIRED)
     message(STATUS "AFF3CT - Library found: StreamPU")
     target_link_libraries(aff3ct-obj PUBLIC spu::spu-static-lib)
     aff3ct_target_link_libraries(PUBLIC spu::spu-static-lib)

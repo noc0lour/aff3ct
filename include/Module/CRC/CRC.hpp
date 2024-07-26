@@ -63,7 +63,7 @@ enum class check_packed : size_t
  * Please use CRC for inheritance (instead of CRC).
  */
 template<typename B = int>
-class CRC : public spu::module::Module
+class CRC : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const crc::tsk t);

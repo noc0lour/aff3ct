@@ -75,7 +75,7 @@ template<typename B, typename R, tools::proto_f<R> F, tools::proto_g<B, R> G, to
 void
 Decoder_polar_SC_naive<B, R, F, G, H>::deep_copy(const Decoder_polar_SC_naive<B, R, F, G, H>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     this->recursive_deep_copy(m.polar_tree.get_root(), this->polar_tree.get_root());
 }
 

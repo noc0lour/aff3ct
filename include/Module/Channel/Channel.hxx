@@ -32,7 +32,7 @@ Channel<R>::operator[](const chn::sck::add_noise_wg s)
 
 template<typename R>
 Channel<R>::Channel(const int N)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , N(N)
   , noised_data(this->N * this->n_frames, 0)
 {
@@ -188,7 +188,7 @@ Channel<R>::set_n_frames(const size_t n_frames)
     const auto old_n_frames = this->get_n_frames();
     if (old_n_frames != n_frames)
     {
-        spu::module::Module::set_n_frames(n_frames);
+        spu::module::Stateful::set_n_frames(n_frames);
 
         const auto old_noised_data_size = this->noised_data.size();
         const auto new_noised_data_size = (old_noised_data_size / old_n_frames) * n_frames;

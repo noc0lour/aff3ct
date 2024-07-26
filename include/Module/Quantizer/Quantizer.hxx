@@ -24,7 +24,7 @@ Quantizer<R, Q>::operator[](const qnt::sck::process s)
 
 template<typename R, typename Q>
 Quantizer<R, Q>::Quantizer(const int N)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , N(N)
 {
     const std::string name = "Quantizer";

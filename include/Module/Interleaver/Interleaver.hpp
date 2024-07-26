@@ -58,7 +58,7 @@ enum class deinterleave_reordering : size_t
 }
 
 template<typename D = int32_t, typename T = uint32_t>
-class Interleaver : public spu::module::Module
+class Interleaver : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const itl::tsk t);

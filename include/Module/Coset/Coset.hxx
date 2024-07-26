@@ -24,7 +24,7 @@ Coset<B, D>::operator[](const cst::sck::apply s)
 
 template<typename B, typename D>
 Coset<B, D>::Coset(const int size)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , size(size)
 {
     const std::string name = "Coset";

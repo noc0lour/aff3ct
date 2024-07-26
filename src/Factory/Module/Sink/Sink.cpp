@@ -2,8 +2,6 @@
 #include <utility>
 
 #include "Factory/Module/Sink/Sink.hpp"
-#include "Module/Sink/NO/Sink_NO.hpp"
-#include "Module/Sink/User/Sink_user_binary.hpp"
 #include "Tools/Documentation/documentation.h"
 
 using namespace aff3ct;

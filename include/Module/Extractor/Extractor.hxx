@@ -45,7 +45,7 @@ Extractor<B, Q>::operator[](const ext::sck::add_sys_and_ext_llr s)
 
 template<typename B, typename Q>
 Extractor<B, Q>::Extractor(const int K, const int N, const int tail_length)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , K(K)
   , N(N)
   , tail_length(tail_length)

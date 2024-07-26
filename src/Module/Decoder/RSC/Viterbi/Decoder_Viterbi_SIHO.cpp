@@ -111,7 +111,7 @@ Decoder_Viterbi_SIHO<B, R>::setup()
  */
 template<typename B, typename R>
 void
-Decoder_Viterbi_SIHO<B, R>::_reset()
+Decoder_Viterbi_SIHO<B, R>::__reset()
 {
     std::fill(m_P.begin(), m_P.end(), DOUBLE_INF);
     std::fill(m_backwards_path.begin(), m_backwards_path.end(), 0);
@@ -255,7 +255,7 @@ template<typename B, typename R>
 int
 Decoder_Viterbi_SIHO<B, R>::_decode_siho(const R* Y_N, B* V_K, const size_t frame_id)
 {
-    _reset();
+    __reset();
     _forward_pass(Y_N);
     _backwards_pass(V_K);
 

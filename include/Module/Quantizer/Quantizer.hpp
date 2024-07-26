@@ -45,7 +45,7 @@ enum class process : size_t
  * If Q is a floating-point representation then the Quantizer does nothing more than a cast.
  */
 template<typename R = float, typename Q = int>
-class Quantizer : public spu::module::Module
+class Quantizer : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const qnt::tsk t);

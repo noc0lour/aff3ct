@@ -46,7 +46,7 @@ Interleaver<D, T>::operator[](const itl::sck::deinterleave_reordering s)
 
 template<typename D, typename T>
 Interleaver<D, T>::Interleaver(const tools::Interleaver_core<T>& core)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , core(core)
 {
     const std::string name = "Interleaver_" + core.get_name();
@@ -302,7 +302,7 @@ void
 Interleaver<D, T>::set_n_frames_per_wave(const size_t n_frames_per_wave)
 {
     const auto old_n_frames_per_wave = this->get_n_frames_per_wave();
-    if (old_n_frames_per_wave != n_frames_per_wave) spu::module::Module::set_n_frames_per_wave(n_frames_per_wave);
+    if (old_n_frames_per_wave != n_frames_per_wave) spu::module::Stateful::set_n_frames_per_wave(n_frames_per_wave);
 }
 
 }

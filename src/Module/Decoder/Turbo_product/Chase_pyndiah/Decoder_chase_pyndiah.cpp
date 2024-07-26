@@ -116,7 +116,7 @@ template<typename B, typename R>
 void
 Decoder_chase_pyndiah<B, R>::deep_copy(const Decoder_chase_pyndiah<B, R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.dec != nullptr) this->dec.reset(m.dec->clone());
     if (m.enc != nullptr) this->enc.reset(m.enc->clone());
 }

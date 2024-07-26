@@ -75,7 +75,7 @@ template<typename B>
 void
 Encoder_turbo<B>::deep_copy(const Encoder_turbo<B>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.enco_n != nullptr) this->enco_n.reset(m.enco_n->clone());
     if (m.enco_i != nullptr) this->enco_i.reset(m.enco_i->clone());
     if (m.pi != nullptr) this->pi.reset(m.pi->clone());

@@ -51,7 +51,7 @@ enum class depuncture : size_t
  * Please use Puncturer for inheritance (instead of Puncturer)
  */
 template<typename B = int, typename Q = float>
-class Puncturer : public spu::module::Module
+class Puncturer : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const pct::tsk t);

@@ -111,7 +111,7 @@ enum class decode_siho_cw : size_t
 }
 
 class Decoder
-  : public spu::module::Module
+  : public spu::module::Stateful
   , public spu::tools::Interface_set_seed
   , public spu::tools::Interface_reset
 {

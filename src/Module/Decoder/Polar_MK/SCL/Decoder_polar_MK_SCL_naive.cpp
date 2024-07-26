@@ -162,7 +162,7 @@ template<typename B, typename R>
 void
 Decoder_polar_MK_SCL_naive<B, R>::deep_copy(const Decoder_polar_MK_SCL_naive<B, R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     this->leaves_array.clear();
     for (auto i = 0; i < L; i++)
     {

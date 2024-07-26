@@ -80,7 +80,7 @@ template<typename R>
 void
 Channel_binary_symmetric<R>::deep_copy(const Channel_binary_symmetric<R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.event_generator != nullptr) this->event_generator.reset(m.event_generator->clone());
 }
 

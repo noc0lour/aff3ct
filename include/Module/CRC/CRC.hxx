@@ -39,7 +39,7 @@ CRC<B>::operator[](const crc::sck::check s)
 
 template<typename B>
 CRC<B>::CRC(const int K, const int size)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , K(K)
   , size(size)
 {

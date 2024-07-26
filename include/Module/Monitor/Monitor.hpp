@@ -67,7 +67,7 @@ enum class check_mutual_info : size_t
  * Please use Monitor for inheritance (instead of Monitor).
  */
 class Monitor
-  : public spu::module::Module
+  : public spu::module::Stateful
   , public spu::tools::Interface_reset
   , public spu::tools::Interface_is_done
 {

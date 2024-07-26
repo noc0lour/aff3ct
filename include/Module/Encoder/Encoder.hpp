@@ -45,7 +45,7 @@ enum class encode : size_t
  */
 template<typename B = int>
 class Encoder
-  : public spu::module::Module
+  : public spu::module::Stateful
   , public spu::tools::Interface_set_seed
 {
   public:

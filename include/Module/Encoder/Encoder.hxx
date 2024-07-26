@@ -26,7 +26,7 @@ Encoder<B>::operator[](const enc::sck::encode s)
 
 template<typename B>
 Encoder<B>::Encoder(const int K, const int N)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , K(K)
   , N(N)
   , sys(true)

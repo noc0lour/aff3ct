@@ -129,7 +129,7 @@ template<typename B, typename R>
 void
 Decoder_turbo<B, R>::deep_copy(const Decoder_turbo<B, R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.siso_n != nullptr) this->siso_n.reset(dynamic_cast<Decoder_SISO<B, R>*>(m.siso_n->clone()));
     if (m.siso_i != nullptr) this->siso_i.reset(dynamic_cast<Decoder_SISO<B, R>*>(m.siso_i->clone()));
     if (m.pi != nullptr) this->pi.reset(m.pi->clone());

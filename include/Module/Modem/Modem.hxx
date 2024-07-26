@@ -67,7 +67,7 @@ Modem<B, R, Q>::operator[](const mdm::sck::tdemodulate_wg s)
 
 template<typename B, typename R, typename Q>
 Modem<B, R, Q>::Modem(const int N, const int N_mod, const int N_fil)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , N(N)
   , N_mod(N_mod)
   , N_fil(N_fil)
@@ -105,7 +105,7 @@ Modem<B, R, Q>::Modem(const int N, const int N_mod, const int N_fil)
 
 template<typename B, typename R, typename Q>
 Modem<B, R, Q>::Modem(const int N, const int N_mod)
-  : Module()
+  : spu::module::Stateful()
   , N(N)
   , N_mod(N_mod)
   , N_fil(N_mod)
@@ -136,7 +136,7 @@ Modem<B, R, Q>::Modem(const int N, const int N_mod)
 
 template<typename B, typename R, typename Q>
 Modem<B, R, Q>::Modem(const int N)
-  : Module()
+  : spu::module::Stateful()
   , N(N)
   , N_mod(N)
   , N_fil(N)

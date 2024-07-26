@@ -59,7 +59,7 @@ class Decoder_Viterbi_list_parallel : public Decoder_SIHO<B, Q>
     virtual int _decode_siho(const Q* Y_N, B* X_N, const size_t frame_id);
 
   private:
-    void _reset();
+    void __reset();
     void _forward_pass(const Q* Y_N);
     void __forward_pass(const Q* Y_N);
     void __forward_pass_closing(const Q* Y_N);

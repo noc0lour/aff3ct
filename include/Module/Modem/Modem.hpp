@@ -99,7 +99,7 @@ enum class tdemodulate_wg : size_t
  * Please use Modem for inheritance (instead of Modem)
  */
 template<typename B = int, typename R = float, typename Q = R>
-class Modem : public spu::module::Module
+class Modem : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const mdm::tsk t);

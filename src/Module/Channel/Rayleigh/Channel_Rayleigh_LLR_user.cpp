@@ -126,7 +126,7 @@ template<typename R>
 void
 Channel_Rayleigh_LLR_user<R>::deep_copy(const Channel_Rayleigh_LLR_user<R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.gaussian_generator != nullptr) this->gaussian_generator.reset(m.gaussian_generator->clone());
 }
 

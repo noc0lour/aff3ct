@@ -93,7 +93,7 @@ template<typename B, typename R, tools::proto_f<R> F, tools::proto_g<B, R> G>
 void
 Decoder_polar_SCL_naive<B, R, F, G>::deep_copy(const Decoder_polar_SCL_naive<B, R, F, G>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     this->leaves_array.clear();
     for (auto i = 0; i < L; i++)
     {

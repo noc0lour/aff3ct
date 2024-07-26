@@ -47,7 +47,7 @@ class Decoder_Viterbi_SIHO : public Decoder_SIHO<B, R>
     virtual int _decode_siho(const R* Y_N, B* X_N, const size_t frame_id);
 
   private:
-    void _reset();
+    void __reset();
     void _forward_pass(const R* Y_N);
     void setup();
     void _backwards_pass(B* X_N);

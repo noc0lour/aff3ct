@@ -9,7 +9,7 @@ using namespace aff3ct;
 using namespace aff3ct::module;
 
 Decoder ::Decoder(const int K, const int N)
-  : Module()
+  : spu::module::Stateful()
   , K(K)
   , N(N)
   , auto_reset(true)

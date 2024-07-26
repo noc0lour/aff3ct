@@ -5,9 +5,9 @@
 #ifndef SOURCE_RANDOM_FAST_HPP_
 #define SOURCE_RANDOM_FAST_HPP_
 
-#include "Module/Source/Source.hpp"
 #include "Tools/Algo/PRNG/PRNG_MT19937.hpp"
 #include "Tools/Algo/PRNG/PRNG_MT19937_simd.hpp"
+#include <streampu.hpp>
 
 namespace aff3ct
 {

@@ -7,10 +7,10 @@
 
 #include <cli.hpp>
 #include <map>
+#include <streampu.hpp>
 #include <string>
 
 #include "Factory/Factory.hpp"
-#include "Module/Sink/Sink.hpp"
 #include "Tools/Factory/Header.hpp"
 
 namespace aff3ct

@@ -81,7 +81,7 @@ template<typename R>
 void
 Channel_optical<R>::deep_copy(const Channel_optical<R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.pdf_noise_generator != nullptr) this->pdf_noise_generator.reset(m.pdf_noise_generator->clone());
 }
 

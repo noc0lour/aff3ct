@@ -31,7 +31,7 @@ Puncturer<B, Q>::operator[](const pct::sck::depuncture s)
 
 template<typename B, typename Q>
 Puncturer<B, Q>::Puncturer(const int K, const int N, const int N_cw)
-  : spu::module::Module()
+  : spu::module::Stateful()
   , K(K)
   , N(N)
   , N_cw(N_cw)

@@ -58,7 +58,7 @@ enum class add_sys_and_ext_llr : size_t
 }
 
 template<typename B = int, typename Q = float>
-class Extractor : public spu::module::Module
+class Extractor : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const ext::tsk t);

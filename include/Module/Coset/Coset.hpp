@@ -46,7 +46,7 @@ enum class apply : size_t
  * Please use Coset for inheritance (instead of Coset).
  */
 template<typename B, typename D>
-class Coset : public spu::module::Module
+class Coset : public spu::module::Stateful
 {
   public:
     inline spu::runtime::Task& operator[](const cst::tsk t);

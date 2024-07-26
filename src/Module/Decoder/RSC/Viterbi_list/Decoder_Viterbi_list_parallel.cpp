@@ -147,7 +147,7 @@ Decoder_Viterbi_list_parallel<B, Q>::setup()
  */
 template<typename B, typename Q>
 void
-Decoder_Viterbi_list_parallel<B, Q>::_reset()
+Decoder_Viterbi_list_parallel<B, Q>::__reset()
 {
     std::fill(m_P.begin(), m_P.end(), gDOUBLE_INF);
     std::fill(m_backwards_path.begin(), m_backwards_path.end(), -1);
@@ -469,7 +469,7 @@ template<typename B, typename Q>
 int
 Decoder_Viterbi_list_parallel<B, Q>::_decode_siho(const Q* Y_N, B* X_N, const size_t frame_id)
 {
-    _reset();
+    __reset();
     _forward_pass(Y_N);
     _backwards_pass(X_N);
     return 0;

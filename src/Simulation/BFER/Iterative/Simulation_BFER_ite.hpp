@@ -7,15 +7,8 @@
 #include "Module/Channel/Channel.hpp"
 #include "Module/Coset/Coset.hpp"
 #include "Module/Interleaver/Interleaver.hpp"
-#include "Module/Iterator/Iterator.hpp"
 #include "Module/Modem/Modem.hpp"
 #include "Module/Quantizer/Quantizer.hpp"
-#include "Module/Source/Source.hpp"
-#include "Module/Switcher/Switcher.hpp"
-
-#include "Module/Binaryop/Binaryop.hpp"
-#include "Module/Reducer/Reducer.hpp"
-#include "Module/Unaryop/Unaryop.hpp"
 
 #include "Factory/Simulation/BFER/BFER_ite.hpp"
 #include "Simulation/BFER/Simulation_BFER.hpp"

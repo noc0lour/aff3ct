@@ -57,7 +57,7 @@ enum class add_noise_wg : size_t
  */
 template<typename R = float>
 class Channel
-  : public spu::module::Module
+  : public spu::module::Stateful
   , public spu::tools::Interface_set_seed
 {
   public:

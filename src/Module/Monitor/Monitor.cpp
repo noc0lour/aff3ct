@@ -7,7 +7,7 @@ using namespace aff3ct;
 using namespace aff3ct::module;
 
 Monitor ::Monitor()
-  : Module()
+  : spu::module::Stateful()
 {
     const std::string name = "Monitor";
     this->set_name(name);

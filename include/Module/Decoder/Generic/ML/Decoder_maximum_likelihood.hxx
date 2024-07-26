@@ -52,7 +52,7 @@ template<typename B, typename R>
 void
 Decoder_maximum_likelihood<B, R>::deep_copy(const Decoder_maximum_likelihood<B, R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     if (m.encoder != nullptr) this->encoder.reset(m.encoder->clone());
 }
 

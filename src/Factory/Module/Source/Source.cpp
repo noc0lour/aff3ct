@@ -2,11 +2,7 @@
 #include <utility>
 
 #include "Factory/Module/Source/Source.hpp"
-#include "Module/Source/AZCW/Source_AZCW.hpp"
-#include "Module/Source/Random/Source_random.hpp"
 #include "Module/Source/Random/Source_random_fast.hpp"
-#include "Module/Source/User/Source_user.hpp"
-#include "Module/Source/User/Source_user_binary.hpp"
 #include "Tools/Documentation/documentation.h"
 
 using namespace aff3ct;

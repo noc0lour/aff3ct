@@ -80,7 +80,7 @@ template<typename R>
 void
 Channel_binary_erasure<R>::deep_copy(const Channel_binary_erasure<R>& m)
 {
-    spu::module::Module::deep_copy(m);
+    spu::module::Stateful::deep_copy(m);
     this->event_generator.reset(m.event_generator->clone());
 }
 

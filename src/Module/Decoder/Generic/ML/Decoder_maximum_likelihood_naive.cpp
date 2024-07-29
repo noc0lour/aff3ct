@@ -22,6 +22,8 @@ Decoder_maximum_likelihood_naive<B, R>::Decoder_maximum_likelihood_naive(const i
 {
     const std::string name = "Decoder_maximum_likelihood_naive";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N > 64)
     {

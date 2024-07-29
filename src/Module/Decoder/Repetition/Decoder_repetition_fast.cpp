@@ -14,6 +14,8 @@ Decoder_repetition_fast<B, R>::Decoder_repetition_fast(const int& K, const int& 
 {
     const std::string name = "Decoder_repetition_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->K % mipp::nElReg<R>())
     {

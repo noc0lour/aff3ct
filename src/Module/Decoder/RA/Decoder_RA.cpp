@@ -27,6 +27,8 @@ Decoder_RA<B, R>::Decoder_RA(const int& K, const int& N, const Interleaver<R>& i
 {
     const std::string name = "Decoder_RA";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (max_iter <= 0)
     {

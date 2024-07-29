@@ -22,6 +22,8 @@ Decoder_RSC_BCJR_inter_very_fast<B, R, MAX>::Decoder_RSC_BCJR_inter_very_fast(
 {
     const std::string name = "Decoder_RSC_BCJR_inter_very_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, tools::proto_max_i<R> MAX>

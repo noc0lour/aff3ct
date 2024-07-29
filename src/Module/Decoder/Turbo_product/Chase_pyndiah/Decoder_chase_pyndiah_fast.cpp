@@ -21,6 +21,8 @@ Decoder_chase_pyndiah_fast<B, R>::Decoder_chase_pyndiah_fast(const int K,
 {
     const std::string name = "Decoder_chase_pyndiah_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

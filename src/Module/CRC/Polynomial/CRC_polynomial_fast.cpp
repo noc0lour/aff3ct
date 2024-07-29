@@ -15,6 +15,8 @@ CRC_polynomial_fast<B>::CRC_polynomial_fast(const int K, const std::string& poly
 {
     const std::string name = "CRC_polynomial_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->size > 32)
     {

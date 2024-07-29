@@ -12,6 +12,8 @@ Encoder_AZCW<B>::Encoder_AZCW(const int K, const int N)
 {
     const std::string name = "Encoder_AZCW";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

@@ -17,6 +17,8 @@ CRC_polynomial_inter<B>::CRC_polynomial_inter(const int K, const std::string& po
     const std::string name = "CRC_polynomial_inter";
     this->set_name(name);
     this->set_n_frames_per_wave(mipp::nElReg<B>());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

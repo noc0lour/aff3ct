@@ -25,6 +25,8 @@ Decoder_LDPC_BP_peeling<B, R>::Decoder_LDPC_BP_peeling(const int K,
 {
     const std::string name = "Decoder_LDPC_BP_peeling";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 }

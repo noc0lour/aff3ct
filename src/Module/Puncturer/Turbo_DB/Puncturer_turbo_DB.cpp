@@ -15,6 +15,8 @@ Puncturer_turbo_DB<B, Q>::Puncturer_turbo_DB(const int& K, const int& N)
 {
     const std::string name = "Puncturer_turbo_DB";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     float rate = (float)K / (float)N;
 

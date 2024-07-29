@@ -14,6 +14,8 @@ Channel_NO<R>::Channel_NO(const int N, const bool add_users)
 {
     const std::string name = "Channel_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (add_users) this->set_single_wave(true);
 }

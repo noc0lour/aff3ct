@@ -14,6 +14,8 @@ Puncturer_LDPC<B, Q>::Puncturer_LDPC(const int& K, const int& N, const int& N_cw
 {
     const std::string name = "Puncturer_LDPC";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     auto N_pattern = (int)pattern.size();
     pattern_bits = pattern;

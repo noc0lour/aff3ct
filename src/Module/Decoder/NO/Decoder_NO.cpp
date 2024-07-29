@@ -13,6 +13,8 @@ Decoder_NO<B, R>::Decoder_NO(const int K)
 {
     const std::string name = "Decoder_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

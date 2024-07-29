@@ -20,6 +20,8 @@ Monitor_MI<B, R>::Monitor_MI(const int N, const unsigned max_n_trials)
     const std::string name = "Monitor_MI";
     this->set_name(name);
     this->set_single_wave(true);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N <= 0)
     {

@@ -49,6 +49,8 @@ Decoder_Viterbi_list_parallel<B, Q>::Decoder_Viterbi_list_parallel(const int K,
 {
     const std::string name = "Decoder_Viterbi_list_parallel";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->setup();
 }

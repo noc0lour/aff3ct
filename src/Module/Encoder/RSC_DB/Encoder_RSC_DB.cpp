@@ -18,6 +18,8 @@ Encoder_RSC_DB<B>::Encoder_RSC_DB(const int& K, const int& N, const std::string 
 {
     const std::string name = "Encoder_RSC_DB";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N != 2 * K)
     {

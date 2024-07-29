@@ -23,6 +23,8 @@ Encoder_polar_MK<B>::Encoder_polar_MK(const int& K,
 {
     const std::string name = "Encoder_polar_MK";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     this->set_sys(false);
 
     for (auto ke = 0; ke < (int)this->code.get_kernel_matrices().size(); ke++)

@@ -20,6 +20,8 @@ Encoder_RSC_generic_sys<B>::Encoder_RSC_generic_sys(const int& K,
 {
     const std::string name = "Encoder_RSC_generic_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (poly.size() < 2)
     {

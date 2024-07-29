@@ -23,6 +23,8 @@ Channel_optical<R>::Channel_optical(const int N, const tools::User_pdf_noise_gen
 {
     const std::string name = "Channel_optical";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>
@@ -66,6 +68,8 @@ Channel_optical<R>::Channel_optical(const int N,
 {
     const std::string name = "Channel_optical";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>

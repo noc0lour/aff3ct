@@ -24,6 +24,8 @@ Encoder_LDPC_from_H<B>::Encoder_LDPC_from_H(const int K,
 {
     const std::string name = "Encoder_LDPC_from_H";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->H = _H.turn(tools::Matrix::Way::HORIZONTAL);
 

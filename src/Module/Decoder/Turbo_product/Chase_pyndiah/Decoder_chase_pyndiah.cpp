@@ -49,6 +49,8 @@ Decoder_chase_pyndiah<B, R>::Decoder_chase_pyndiah(const int K,
 {
     const std::string name = "Decoder_chase_pyndiah";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (n_least_reliable_positions <= 0 || n_least_reliable_positions >= N_np)
     {

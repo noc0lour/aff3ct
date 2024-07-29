@@ -54,6 +54,9 @@ Decoder_polar_SC_naive<B, R, F, G, H>::Decoder_polar_SC_naive(const int& K,
 
     this->recursive_allocate_nodes_contents(this->polar_tree.get_root(), this->N);
     this->recursive_initialize_frozen_bits(this->polar_tree.get_root(), frozen_bits);
+
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, tools::proto_f<R> F, tools::proto_g<B, R> G, tools::proto_h<B, R> H>

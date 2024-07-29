@@ -37,6 +37,8 @@ Modem_SCMA<B, R, Q, PSI>::Modem_SCMA(const int N,
     this->set_name(name);
     this->set_n_frames((size_t)CB.get_number_of_users());
     this->set_single_wave(true);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (n_ite <= 0)
     {

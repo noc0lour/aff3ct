@@ -10,6 +10,8 @@ Encoder_polar_sys<B>::Encoder_polar_sys(const int& K, const int& N, const std::v
 {
     const std::string name = "Encoder_polar_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     this->set_sys(true);
 }
 

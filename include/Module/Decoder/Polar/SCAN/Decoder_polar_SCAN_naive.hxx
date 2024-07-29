@@ -37,6 +37,8 @@ Decoder_polar_SCAN_naive<B, R, F, V, H, I, S>::Decoder_polar_SCAN_naive(const in
 {
     const std::string name = "Decoder_polar_SCAN_naive";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (!spu::tools::is_power_of_2(this->N))
     {

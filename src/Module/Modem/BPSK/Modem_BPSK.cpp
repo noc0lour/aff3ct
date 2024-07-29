@@ -17,6 +17,8 @@ Modem_BPSK<B, R, Q>::Modem_BPSK(const int N, const bool disable_sig2)
 {
     const std::string name = "Modem_BPSK";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (disable_sig2) this->set_demodulator(false);
 }

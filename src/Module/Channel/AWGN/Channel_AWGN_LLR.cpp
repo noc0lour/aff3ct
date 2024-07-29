@@ -26,6 +26,8 @@ Channel_AWGN_LLR<R>::Channel_AWGN_LLR(const int N,
 {
     const std::string name = "Channel_AWGN_LLR";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (add_users) this->set_single_wave(true);
 }
@@ -70,6 +72,8 @@ Channel_AWGN_LLR<R>::Channel_AWGN_LLR(const int N,
 {
     const std::string name = "Channel_AWGN_LLR";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (add_users) this->set_single_wave(true);
 }

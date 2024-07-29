@@ -19,6 +19,8 @@ Modem_OOK_optical<B, R, Q>::Modem_OOK_optical(const int N, const tools::Distribu
 {
     const std::string name = "Modem_OOK_optical";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename Q>

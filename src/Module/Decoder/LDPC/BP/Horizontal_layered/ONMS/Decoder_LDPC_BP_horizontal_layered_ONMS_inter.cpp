@@ -38,6 +38,8 @@ Decoder_LDPC_BP_horizontal_layered_ONMS_inter<B, R>::Decoder_LDPC_BP_horizontal_
     const std::string name = "Decoder_LDPC_BP_horizontal_layered_ONMS_inter";
     this->set_name(name);
     this->set_n_frames_per_wave(mipp::N<R>());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 

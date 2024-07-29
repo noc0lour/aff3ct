@@ -33,6 +33,8 @@ Decoder_LDPC_BP_flooding_SPA<B, R>::Decoder_LDPC_BP_flooding_SPA(const int K,
 {
     const std::string name = "Decoder_LDPC_BP_flooding_SPA";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

@@ -12,6 +12,8 @@ Extractor_LDPC<B, Q>::Extractor_LDPC(const int K, const int N, const std::vector
 {
     const std::string name = "Extractor_LDPC";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename Q>

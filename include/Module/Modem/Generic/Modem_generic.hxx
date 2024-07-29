@@ -29,6 +29,8 @@ Modem_generic<B, R, Q, MAX>::Modem_generic(const int N, const tools::Constellati
 {
     const std::string name = "Modem_generic<" + cstl.get_name() + ">";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename Q, tools::proto_max<Q> MAX>

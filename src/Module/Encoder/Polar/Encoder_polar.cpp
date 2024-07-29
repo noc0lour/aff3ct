@@ -18,6 +18,8 @@ Encoder_polar<B>::Encoder_polar(const int& K, const int& N, const std::vector<bo
 {
     const std::string name = "Encoder_polar";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     this->set_sys(false);
 
     if (this->N != (int)frozen_bits.size())

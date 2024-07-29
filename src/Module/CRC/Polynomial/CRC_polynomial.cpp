@@ -18,6 +18,8 @@ CRC_polynomial<B>::CRC_polynomial(const int K, const std::string& poly_key, cons
 {
     const std::string name = "CRC_polynomial";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (poly_key.empty())
         throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'poly_key' can't be empty, choose a CRC.");

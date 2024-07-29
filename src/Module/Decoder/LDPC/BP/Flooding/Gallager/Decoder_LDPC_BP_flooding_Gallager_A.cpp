@@ -32,6 +32,8 @@ Decoder_LDPC_BP_flooding_Gallager_A<B, R>::Decoder_LDPC_BP_flooding_Gallager_A(
 {
     const std::string name = "Decoder_LDPC_BP_flooding_Gallager_A";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 

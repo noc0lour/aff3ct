@@ -14,6 +14,8 @@ Source_random_fast<B>::Source_random_fast(const int K, const int seed)
 {
     const std::string name = "Source_random_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     mipp::vector<int> seeds(mipp::nElReg<int>());
     for (auto i = 0; i < mipp::nElReg<int>(); i++)

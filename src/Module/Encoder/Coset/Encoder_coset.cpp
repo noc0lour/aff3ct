@@ -14,6 +14,8 @@ Encoder_coset<B>::Encoder_coset(const int K, const int N, const int seed)
 {
     const std::string name = "Encoder_coset";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

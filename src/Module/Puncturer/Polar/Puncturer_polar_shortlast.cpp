@@ -18,6 +18,8 @@ Puncturer_polar_shortlast<B, Q>::Puncturer_polar_shortlast(const int& K,
 {
     const std::string name = "Puncturer_polar_shortlast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (fb_generator.get_K() != K)
     {

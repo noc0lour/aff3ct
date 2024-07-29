@@ -14,6 +14,8 @@ Channel_user_add<R>::Channel_user_add(const int N, const std::string& filename, 
 {
     const std::string name = "Channel_user_add";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>

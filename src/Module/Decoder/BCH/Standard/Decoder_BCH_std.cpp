@@ -28,6 +28,8 @@ Decoder_BCH_std<B, R>::Decoder_BCH_std(const int& K, const int& N, const tools::
 {
     const std::string name = "Decoder_BCH_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if ((this->N - this->K) != GF_poly.get_n_rdncy())
     {

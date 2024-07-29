@@ -11,6 +11,8 @@ CRC_NO<B>::CRC_NO(const int K)
 {
     const std::string name = "CRC_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

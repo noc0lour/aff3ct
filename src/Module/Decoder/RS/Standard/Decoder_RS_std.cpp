@@ -23,6 +23,8 @@ Decoder_RS_std<B, R>::Decoder_RS_std(const int& K, const int& N, const tools::RS
 {
     const std::string name = "Decoder_RS_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

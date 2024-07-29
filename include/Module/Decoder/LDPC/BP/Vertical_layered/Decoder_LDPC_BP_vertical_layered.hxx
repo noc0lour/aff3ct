@@ -34,6 +34,8 @@ Decoder_LDPC_BP_vertical_layered<B, R, Update_rule>::Decoder_LDPC_BP_vertical_la
 {
     const std::string name = "Decoder_LDPC_BP_vertical_layered<" + this->up_rule.get_name() + ">";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 

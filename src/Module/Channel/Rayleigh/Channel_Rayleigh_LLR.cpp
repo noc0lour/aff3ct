@@ -31,6 +31,8 @@ Channel_Rayleigh_LLR<R>::Channel_Rayleigh_LLR(const int N,
 {
     const std::string name = "Channel_Rayleigh_LLR";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (complex && (N % 2))
     {
@@ -85,6 +87,8 @@ Channel_Rayleigh_LLR<R>::Channel_Rayleigh_LLR(const int N,
 {
     const std::string name = "Channel_Rayleigh_LLR";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (complex && (N % 2))
     {

@@ -10,6 +10,8 @@ Quantizer_NO<R, Q>::Quantizer_NO(const int N)
 {
     const std::string name = "Quantizer_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R, typename Q>

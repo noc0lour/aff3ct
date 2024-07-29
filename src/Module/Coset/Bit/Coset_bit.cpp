@@ -10,6 +10,8 @@ Coset_bit<B, D>::Coset_bit(const int size)
 {
     const std::string name = "Coset_bit";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename D>

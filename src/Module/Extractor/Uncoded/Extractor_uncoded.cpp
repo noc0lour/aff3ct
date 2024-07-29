@@ -13,6 +13,8 @@ Extractor_uncoded<B, Q>::Extractor_uncoded(const int K)
 {
     const std::string name = "Extractor_uncoded";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     std::iota(info_bits_pos.begin(), info_bits_pos.end(), 0);
 }
 

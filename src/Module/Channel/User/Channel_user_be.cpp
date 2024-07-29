@@ -13,6 +13,8 @@ Channel_user_be<R>::Channel_user_be(const int N, const std::string& filename)
 {
     const std::string name = "Channel_user_be";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>

@@ -25,6 +25,8 @@ Channel_binary_erasure<R>::Channel_binary_erasure(const int N, const tools::Even
 {
     const std::string name = "Channel_binary_erasure";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>
@@ -65,6 +67,8 @@ Channel_binary_erasure<R>::Channel_binary_erasure(const int N,
 {
     const std::string name = "Channel_binary_erasure";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename R>

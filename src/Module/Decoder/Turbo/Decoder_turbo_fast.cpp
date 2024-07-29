@@ -21,6 +21,8 @@ Decoder_turbo_fast<B, R>::Decoder_turbo_fast(const int& K,
 {
     const std::string name = "Decoder_turbo_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

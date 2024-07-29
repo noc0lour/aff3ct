@@ -16,6 +16,8 @@ Modem_OOK_AWGN<B, R, Q>::Modem_OOK_AWGN(const int N, const bool disable_sig2)
 {
     const std::string name = "Modem_OOK_AWGN";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename Q>

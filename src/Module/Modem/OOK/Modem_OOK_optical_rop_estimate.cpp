@@ -24,6 +24,8 @@ Modem_OOK_optical_rop_estimate<B, R, Q>::Modem_OOK_optical_rop_estimate(const in
 {
     const std::string name = "Modem_OOK_optical_rop_estimate";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     init();
 }

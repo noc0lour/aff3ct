@@ -22,18 +22,16 @@ Decoder_turbo_product<B, R>::Decoder_turbo_product(const int& n_ite,
   , pi(pi.clone())
   , cp_r(cp_r.clone())
   , cp_c(cp_c.clone())
-  ,
-
-  Y_N_i(this->N)
+  , Y_N_i(this->N)
   , Y_N_pi(this->N)
   , V_K_i(this->K)
   , V_N_i(this->N)
-  ,
-
-  Y_N_cha_i(pi.get_core().get_size())
+  , Y_N_cha_i(pi.get_core().get_size())
 {
     const std::string name = "Decoder_turbo_product";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (n_ite <= 0)
     {

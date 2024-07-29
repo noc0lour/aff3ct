@@ -18,6 +18,8 @@ Decoder_RSC_BCJR_seq_very_fast<B, R, RD, MAX1, MAX2>::Decoder_RSC_BCJR_seq_very_
 {
     const std::string name = "Decoder_RSC_BCJR_seq_very_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->K % mipp::nElReg<R>())
     {

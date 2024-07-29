@@ -21,6 +21,8 @@ Puncturer_turbo<B, Q>::Puncturer_turbo(const int& K,
 {
     const std::string name = "Puncturer_turbo";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (tail_bits < 0)
     {

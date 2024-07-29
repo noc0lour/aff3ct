@@ -25,6 +25,8 @@ Encoder_turbo<B>::Encoder_turbo(const int& K,
 {
     const std::string name = "Encoder_turbo";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N - (enco_n.tail_length() + enco_i.tail_length()) != 3 * K)
     {

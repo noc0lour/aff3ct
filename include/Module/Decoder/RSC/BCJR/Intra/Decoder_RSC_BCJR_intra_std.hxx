@@ -21,6 +21,8 @@ Decoder_RSC_BCJR_intra_std<B, R, MAX>::Decoder_RSC_BCJR_intra_std(const int& K,
 {
     const std::string name = "Decoder_RSC_BCJR_intra_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (mipp::nElReg<R>() != 8)
     {

@@ -27,6 +27,8 @@ Decoder_polar_SCF_naive<B, R, F, G, H>::Decoder_polar_SCF_naive(const int& K,
 {
     const std::string name = "Decoder_polar_SCF_naive";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->crc->get_size() > K)
     {

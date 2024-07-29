@@ -53,6 +53,8 @@ Modem_CPM<B, R, Q, MAX>::Modem_CPM(const int N,
 {
     const std::string name = "Modem_CPM";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->set_filter(true);
 

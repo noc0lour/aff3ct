@@ -27,6 +27,8 @@ Encoder_turbo_DB<B>::Encoder_turbo_DB(const int& K,
 {
     const std::string name = "Encoder_turbo_DB";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (K % 2)
     {

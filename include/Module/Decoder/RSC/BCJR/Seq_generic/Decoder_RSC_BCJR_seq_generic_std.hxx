@@ -23,6 +23,8 @@ Decoder_RSC_BCJR_seq_generic_std<B, R, RD, MAX1, MAX2>::Decoder_RSC_BCJR_seq_gen
 {
     const std::string name = "Decoder_RSC_BCJR_seq_generic_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename RD, tools::proto_max<R> MAX1, tools::proto_max<RD> MAX2>

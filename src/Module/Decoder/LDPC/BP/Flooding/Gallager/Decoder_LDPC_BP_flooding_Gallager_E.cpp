@@ -22,6 +22,8 @@ Decoder_LDPC_BP_flooding_Gallager_E<B, R>::Decoder_LDPC_BP_flooding_Gallager_E(
 {
     const std::string name = "Decoder_LDPC_BP_flooding_Gallager_E";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

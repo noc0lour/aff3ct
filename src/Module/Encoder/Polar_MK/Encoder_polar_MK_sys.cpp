@@ -16,6 +16,8 @@ Encoder_polar_MK_sys<B>::Encoder_polar_MK_sys(const int& K,
 {
     const std::string name = "Encoder_polar_MK_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     this->set_sys(true);
 
     if (!this->code.can_be_systematic())

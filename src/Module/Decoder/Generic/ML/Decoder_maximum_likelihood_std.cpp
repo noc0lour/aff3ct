@@ -23,6 +23,8 @@ Decoder_maximum_likelihood_std<B, R>::Decoder_maximum_likelihood_std(const int K
 {
     const std::string name = "Decoder_maximum_likelihood_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (K > 64)
     {

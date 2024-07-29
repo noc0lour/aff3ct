@@ -13,6 +13,8 @@ Encoder_LDPC_DVBS2<B>::Encoder_LDPC_DVBS2(const tools::dvbs2_values& dvbs2)
 {
     const std::string name = "Encoder_LDPC_DVBS2";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

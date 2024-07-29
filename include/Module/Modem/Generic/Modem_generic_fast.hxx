@@ -27,6 +27,8 @@ Modem_generic_fast<B, R, Q, MAX, MAXI>::Modem_generic_fast(const int N,
 {
     const std::string name = "Modem_generic_fast<" + this->cstl.get_name() + ">";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     for (size_t i = 0; i < this->cstl.size(); i++)
     {

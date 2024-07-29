@@ -19,6 +19,8 @@ Decoder_polar_SCL_naive_CA<B, R, F, G>::Decoder_polar_SCL_naive_CA(const int& K,
 {
     const std::string name = "Decoder_polar_SCL_naive_CA";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->crc->get_size() > K)
     {

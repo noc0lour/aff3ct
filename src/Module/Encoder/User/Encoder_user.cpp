@@ -70,6 +70,8 @@ Encoder_user<B>::Encoder_user(const int K, const int N, const std::string& filen
 {
     const std::string name = "Encoder_user";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (filename.empty())
         throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");

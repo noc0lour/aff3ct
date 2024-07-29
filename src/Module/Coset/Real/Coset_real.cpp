@@ -10,6 +10,8 @@ Coset_real<B, D>::Coset_real(const int size)
 {
     const std::string name = "Coset_real";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename D>

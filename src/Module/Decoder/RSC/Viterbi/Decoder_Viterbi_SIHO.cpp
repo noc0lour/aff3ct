@@ -30,6 +30,8 @@ Decoder_Viterbi_SIHO<B, R>::Decoder_Viterbi_SIHO(const int K,
 {
     const std::string name = "Decoder_Viterbi_SIHO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->setup();
 }

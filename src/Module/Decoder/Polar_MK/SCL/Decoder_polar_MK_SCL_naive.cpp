@@ -130,6 +130,9 @@ Decoder_polar_MK_SCL_naive<B, R>::Decoder_polar_MK_SCL_naive(
 
         this->lambdas = lambdas;
     }
+
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

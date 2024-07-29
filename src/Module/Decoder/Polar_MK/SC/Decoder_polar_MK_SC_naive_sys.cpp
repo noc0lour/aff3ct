@@ -19,6 +19,8 @@ Decoder_polar_MK_SC_naive_sys<B, R>::Decoder_polar_MK_SC_naive_sys(
 {
     const std::string name = "Decoder_polar_MK_SC_sys_naive";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (!this->code.can_be_systematic())
     {

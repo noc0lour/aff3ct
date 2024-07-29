@@ -14,6 +14,8 @@ Extractor_RSC<B, Q>::Extractor_RSC(const int K, const int N, const int tail_leng
 {
     const std::string name = "Extractor_RSC";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (buffered_encoding)
         for (auto i = 0; i < K; i++)

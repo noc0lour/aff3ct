@@ -14,6 +14,8 @@ Encoder_LDPC<B>::Encoder_LDPC(const int K, const int N)
 {
     const std::string name = "Encoder_LDPC";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

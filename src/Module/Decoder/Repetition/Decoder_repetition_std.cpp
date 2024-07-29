@@ -11,6 +11,8 @@ Decoder_repetition_std<B, R>::Decoder_repetition_std(const int& K, const int& N,
 {
     const std::string name = "Decoder_repetition_std";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R>

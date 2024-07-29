@@ -22,6 +22,8 @@ Decoder_polar_ASCL_MEM_fast_CA_sys<B, R, API_polar>::Decoder_polar_ASCL_MEM_fast
 {
     const std::string name = "Decoder_polar_ASCL_MEM_fast_CA_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, class API_polar>
@@ -42,6 +44,8 @@ Decoder_polar_ASCL_MEM_fast_CA_sys<B, R, API_polar>::Decoder_polar_ASCL_MEM_fast
 {
     const std::string name = "Decoder_polar_ASCL_MEM_fast_CA_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, class API_polar>

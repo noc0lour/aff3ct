@@ -58,6 +58,8 @@ Decoder_LDPC_BP_horizontal_layered_inter<B, R, Update_rule>::Decoder_LDPC_BP_hor
     const std::string name = "Decoder_LDPC_BP_horizontal_layered_inter<" + this->up_rule.get_name() + ">";
     this->set_name(name);
     this->set_n_frames_per_wave(mipp::N<R>());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     tools::check_LUT(info_bits_pos, "info_bits_pos", (size_t)K);
 

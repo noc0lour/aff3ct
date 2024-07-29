@@ -20,6 +20,8 @@ Encoder_turbo_legacy<B>::Encoder_turbo_legacy(const int& K,
 {
     const std::string name = "Encoder_turbo_legacy";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N - 2 * sub_enc.tail_length() != 3 * K)
     {

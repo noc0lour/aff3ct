@@ -13,6 +13,8 @@ Extractor_polar<B, Q>::Extractor_polar(const int K, const int N, const std::vect
 {
     const std::string name = "Extractor_polar";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->set_frozen_bits(frozen_bits);
 }

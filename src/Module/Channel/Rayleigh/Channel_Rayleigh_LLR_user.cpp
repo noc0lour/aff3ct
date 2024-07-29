@@ -37,6 +37,8 @@ Channel_Rayleigh_LLR_user<R>::Channel_Rayleigh_LLR_user(const int N,
 {
     const std::string name = "Channel_Rayleigh_LLR_user";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (complex || add_users)
         throw spu::tools::invalid_argument(
@@ -99,6 +101,8 @@ Channel_Rayleigh_LLR_user<R>::Channel_Rayleigh_LLR_user(const int N,
 {
     const std::string name = "Channel_Rayleigh_LLR_user";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (complex || add_users)
         throw spu::tools::invalid_argument(

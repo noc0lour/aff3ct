@@ -36,6 +36,8 @@ Decoder_turbo_DB<B, R>::Decoder_turbo_DB(const int& K,
     const std::string name = "Decoder_turbo_DB";
     this->set_name(name);
     this->set_n_frames(siso_n.get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (K % 2)
     {

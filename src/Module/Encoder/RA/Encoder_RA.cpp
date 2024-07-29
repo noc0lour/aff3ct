@@ -18,6 +18,8 @@ Encoder_RA<B>::Encoder_RA(const int& K, const int& N, const Interleaver<B>& inte
 {
     const std::string name = "Encoder_RA";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
     this->set_sys(false);
 
     if (N % K)

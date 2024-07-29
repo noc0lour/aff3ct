@@ -13,6 +13,8 @@ Modem_OOK<B, R, Q>::Modem_OOK(const int N)
 {
     const std::string name = "Modem_OOK";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename Q>

@@ -29,6 +29,8 @@ Decoder_polar_SCL_naive<B, R, F, G>::Decoder_polar_SCL_naive(const int& K,
 {
     const std::string name = "Decoder_polar_SCL_naive";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (!spu::tools::is_power_of_2(this->N))
     {

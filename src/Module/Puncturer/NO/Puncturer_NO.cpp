@@ -11,6 +11,8 @@ Puncturer_NO<B, Q>::Puncturer_NO(const int K, const int N)
 {
     const std::string name = "Puncturer_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename Q>

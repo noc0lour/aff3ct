@@ -19,6 +19,8 @@ Channel_user<R>::Channel_user(const int N, const std::string& filename, const bo
 {
     const std::string name = "Channel_user";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (filename.empty())
         throw spu::tools::invalid_argument(__FILE__, __LINE__, __func__, "'filename' should not be empty.");

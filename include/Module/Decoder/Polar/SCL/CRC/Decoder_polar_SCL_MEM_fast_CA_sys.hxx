@@ -25,6 +25,8 @@ Decoder_polar_SCL_MEM_fast_CA_sys<B, R, API_polar>::Decoder_polar_SCL_MEM_fast_C
 {
     const std::string name = "Decoder_polar_SCL_MEM_fast_CA_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->crc->get_size() > K)
     {
@@ -52,6 +54,8 @@ Decoder_polar_SCL_MEM_fast_CA_sys<B, R, API_polar>::Decoder_polar_SCL_MEM_fast_C
 {
     const std::string name = "Decoder_polar_SCL_MEM_fast_CA_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->crc->get_size() > K)
     {

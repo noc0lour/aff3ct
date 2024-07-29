@@ -21,6 +21,8 @@ Decoder_polar_MK_SCL_naive_CA_sys<B, R>::Decoder_polar_MK_SCL_naive_CA_sys(
 {
     const std::string name = "Decoder_polar_MK_SCL_naive_CA_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (!this->code.can_be_systematic())
     {

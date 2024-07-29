@@ -67,6 +67,8 @@ Decoder_RSC_BCJR_inter_intra_fast_x2_SSE<B, R, MAX>::Decoder_RSC_BCJR_inter_intr
 {
     const std::string name = "Decoder_RSC_BCJR_inter_intra_fast_x2_SSE";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (mipp::nElReg<R>() != 16)
     {

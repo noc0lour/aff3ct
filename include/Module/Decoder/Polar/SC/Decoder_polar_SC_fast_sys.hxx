@@ -177,6 +177,8 @@ Decoder_polar_SC_fast_sys<B, R, API_polar>::Decoder_polar_SC_fast_sys(const int&
     const std::string name = "Decoder_polar_SC_fast_sys";
     this->set_name(name);
     this->set_n_frames_per_wave(API_polar::get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     static_assert(sizeof(B) == sizeof(R), "");
 
@@ -226,6 +228,8 @@ Decoder_polar_SC_fast_sys<B, R, API_polar>::Decoder_polar_SC_fast_sys(
     const std::string name = "Decoder_polar_SC_fast_sys";
     this->set_name(name);
     this->set_n_frames_per_wave(API_polar::get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     static_assert(sizeof(B) == sizeof(R), "");
 

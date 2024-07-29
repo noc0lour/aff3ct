@@ -10,6 +10,8 @@ Encoder_RSC3_CPE_sys<B>::Encoder_RSC3_CPE_sys(const int& K, const int& N, const 
 {
     const std::string name = "Encoder_RSC3_CPE_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

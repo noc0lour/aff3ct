@@ -17,16 +17,14 @@ Encoder_turbo_product<B>::Encoder_turbo_product(const Encoder<B>& enc_r,
   , pi(pi.clone())
   , enc_r(enc_r.clone())
   , enc_c(enc_c.clone())
-  ,
-
-  parity_extended(this->N == (enc_r.get_N() + 1) * (enc_c.get_N() + 1))
-  ,
-
-  X_N_i(this->N)
+  , parity_extended(this->N == (enc_r.get_N() + 1) * (enc_c.get_N() + 1))
+  , X_N_i(this->N)
 {
     const std::string name = "Encoder_turbo_product";
     this->set_name(name);
     this->set_n_frames(pi.get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if ((parity_extended && this->N != (enc_r.get_N() + 1) * (enc_c.get_N() + 1)) ||
         (!parity_extended && this->N != enc_r.get_N() * enc_c.get_N()))

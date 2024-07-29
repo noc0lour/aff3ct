@@ -62,14 +62,15 @@ Decoder_polar_SCL_MEM_fast_sys<B, R, API_polar>::Decoder_polar_SCL_MEM_fast_sys(
   , n_array_ref_s(L, std::vector<int>(m))
   , path_2_array_s(L, std::vector<int>(m))
   , sorter(N)
-  ,
-  // sorter_simd      (N),
-  best_idx(L)
+  //, sorter_simd(N)
+  , best_idx(L)
   , l_tmp(N)
 {
     const std::string name = "Decoder_polar_SCL_MEM_fast_sys";
     this->set_name(name);
     this->set_n_frames_per_wave(API_polar::get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     static_assert(sizeof(B) == sizeof(R), "Sizes of the bits and reals have to be identical.");
     //	static_assert(API_polar::get_n_frames() == 1, "The inter-frame API_polar is not supported.");
@@ -153,14 +154,15 @@ Decoder_polar_SCL_MEM_fast_sys<B, R, API_polar>::Decoder_polar_SCL_MEM_fast_sys(
   , n_array_ref_s(L, std::vector<int>(m))
   , path_2_array_s(L, std::vector<int>(m))
   , sorter(N)
-  ,
-  // sorter_simd      (N),
-  best_idx(L)
+  //, sorter_simd(N)
+  , best_idx(L)
   , l_tmp(N)
 {
     const std::string name = "Decoder_polar_SCL_MEM_fast_sys";
     this->set_name(name);
     this->set_n_frames_per_wave(API_polar::get_n_frames());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     static_assert(sizeof(B) == sizeof(R), "Sizes of the bits and reals have to be identical.");
     //	static_assert(API_polar::get_n_frames() == 1, "The inter-frame API_polar is not supported.");

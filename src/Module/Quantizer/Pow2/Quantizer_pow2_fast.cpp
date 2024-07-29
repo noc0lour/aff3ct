@@ -19,6 +19,8 @@ Quantizer_pow2_fast<R, Q>::Quantizer_pow2_fast(const int N, const short& fixed_p
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (sizeof(Q) * 8 <= (unsigned)fixed_point_pos)
     {
@@ -43,6 +45,8 @@ Quantizer_pow2_fast<float, float>::Quantizer_pow2_fast(const int N, const short&
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -61,6 +65,8 @@ Quantizer_pow2_fast<double, double>::Quantizer_pow2_fast(const int N, const shor
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -75,6 +81,8 @@ Quantizer_pow2_fast<R, Q>::Quantizer_pow2_fast(const int N, const short& fixed_p
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (fixed_point_pos <= 0)
     {
@@ -137,6 +145,8 @@ Quantizer_pow2_fast<float, float>::Quantizer_pow2_fast(const int N,
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -157,6 +167,8 @@ Quantizer_pow2_fast<double, double>::Quantizer_pow2_fast(const int N,
 {
     const std::string name = "Quantizer_pow2_fast";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }

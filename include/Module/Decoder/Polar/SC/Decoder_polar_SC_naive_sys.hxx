@@ -15,6 +15,8 @@ Decoder_polar_SC_naive_sys<B, R, F, G, H>::Decoder_polar_SC_naive_sys(const int&
 {
     const std::string name = "Decoder_polar_SC_naive_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, tools::proto_f<R> F, tools::proto_g<B, R> G, tools::proto_h<B, R> H>

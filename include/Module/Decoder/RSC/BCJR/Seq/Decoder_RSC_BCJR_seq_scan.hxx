@@ -21,6 +21,8 @@ Decoder_RSC_BCJR_seq_scan<B, R, RD>::Decoder_RSC_BCJR_seq_scan(const int& K,
 {
     const std::string name = "Decoder_RSC_BCJR_seq_scan";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, typename RD>

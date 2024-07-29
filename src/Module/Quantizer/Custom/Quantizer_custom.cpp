@@ -17,6 +17,8 @@ Quantizer_custom<R, Q>::Quantizer_custom(const int N)
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 namespace aff3ct
@@ -32,6 +34,8 @@ Quantizer_custom<float, float>::Quantizer_custom(const int N)
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -49,6 +53,8 @@ Quantizer_custom<double, double>::Quantizer_custom(const int N)
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -62,6 +68,8 @@ Quantizer_custom<R, Q>::Quantizer_custom(const int N, const short& saturation_po
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (sizeof(Q) * 8 < (unsigned)saturation_pos)
     {
@@ -85,6 +93,8 @@ Quantizer_custom<float, float>::Quantizer_custom(const int N, const short& satur
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -102,6 +112,8 @@ Quantizer_custom<double, double>::Quantizer_custom(const int N, const short& sat
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -115,6 +127,8 @@ Quantizer_custom<R, Q>::Quantizer_custom(const int N, const float min_max)
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 namespace aff3ct
@@ -130,6 +144,8 @@ Quantizer_custom<float, float>::Quantizer_custom(const int N, const float min_ma
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -147,6 +163,8 @@ Quantizer_custom<double, double>::Quantizer_custom(const int N, const float min_
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 }
 }
@@ -160,6 +178,8 @@ Quantizer_custom<R, Q>::Quantizer_custom(const int N, const float min_max, const
 {
     const std::string name = "Quantizer_custom";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (sizeof(Q) * 8 < (unsigned)saturation_pos)
     {

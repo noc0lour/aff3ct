@@ -22,6 +22,8 @@ Decoder_polar_SCAN_naive_sys<B, R, F, V, H, I, S>::Decoder_polar_SCAN_naive_sys(
 {
     const std::string name = "Decoder_polar_SCAN_naive_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B,

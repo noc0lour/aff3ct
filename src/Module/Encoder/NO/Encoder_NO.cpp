@@ -10,6 +10,8 @@ Encoder_NO<B>::Encoder_NO(const int K)
 {
     const std::string name = "Encoder_NO";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

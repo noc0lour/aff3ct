@@ -17,6 +17,8 @@ Encoder_LDPC_from_QC<B>::Encoder_LDPC_from_QC(const int K, const int N, const to
 {
     const std::string name = "Encoder_LDPC_from_QC";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->H = _H;
 

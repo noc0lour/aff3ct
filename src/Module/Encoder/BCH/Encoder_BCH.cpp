@@ -17,6 +17,8 @@ Encoder_BCH<B>::Encoder_BCH(const int& K, const int& N, const tools::BCH_polynom
 {
     const std::string name = "Encoder_BCH";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if ((this->N - this->K) != n_rdncy)
     {

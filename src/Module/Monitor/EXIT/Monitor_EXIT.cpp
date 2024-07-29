@@ -19,6 +19,8 @@ Monitor_EXIT<B, R>::Monitor_EXIT(const int N, const unsigned max_n_trials)
     const std::string name = "Monitor_EXIT";
     this->set_name(name);
     this->set_single_wave(true);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     auto& p = this->create_task("check_mutual_info", (int)mnt::tsk::check_mutual_info);
     auto ps_bits = this->template create_socket_in<B>(p, "bits", get_N());

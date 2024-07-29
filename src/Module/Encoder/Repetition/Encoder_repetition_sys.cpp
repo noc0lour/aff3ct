@@ -16,6 +16,8 @@ Encoder_repetition_sys<B>::Encoder_repetition_sys(const int& K, const int& N, co
 {
     const std::string name = "Encoder_repetition_sys";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (N % K)
     {

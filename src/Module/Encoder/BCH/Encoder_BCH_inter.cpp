@@ -17,6 +17,8 @@ Encoder_BCH_inter<B>::Encoder_BCH_inter(const int& K, const int& N, const tools:
     const std::string name = "Encoder_BCH_inter";
     this->set_name(name);
     this->set_n_frames_per_wave(mipp::N<B>());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B>

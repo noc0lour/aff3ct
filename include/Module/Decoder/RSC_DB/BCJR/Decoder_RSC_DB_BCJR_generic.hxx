@@ -16,6 +16,8 @@ Decoder_RSC_DB_BCJR_generic<B, R, MAX>::Decoder_RSC_DB_BCJR_generic(const int K,
 {
     const std::string name = "Decoder_RSC_DB_BCJR_generic";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 }
 
 template<typename B, typename R, tools::proto_max<R> MAX>

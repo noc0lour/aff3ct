@@ -27,6 +27,8 @@ Encoder_RS<B>::Encoder_RS(const int& K, const int& N, const tools::RS_polynomial
 {
     const std::string name = "Encoder_RS";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if ((this->N_rs - this->K_rs) != n_rdncy)
     {

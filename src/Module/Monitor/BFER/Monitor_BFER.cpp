@@ -26,6 +26,8 @@ Monitor_BFER<B>::Monitor_BFER(const int K,
     const std::string name = "Monitor_BFER";
     this->set_name(name);
     this->set_single_wave(true);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (K <= 0)
     {

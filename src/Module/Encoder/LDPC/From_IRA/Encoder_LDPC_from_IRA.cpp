@@ -14,6 +14,8 @@ Encoder_LDPC_from_IRA<B>::Encoder_LDPC_from_IRA(const int K, const int N, const 
 {
     const std::string name = "Encoder_LDPC_from_IRA";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     this->H = _H;
 

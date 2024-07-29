@@ -34,6 +34,8 @@ Decoder_BCH_fast<B, R>::Decoder_BCH_fast(const int& K, const int& N, const tools
     const std::string name = "Decoder_BCH_fast";
     this->set_name(name);
     this->set_n_frames_per_wave(mipp::N<B>());
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if ((this->N - this->K) != GF_poly.get_n_rdncy())
     {

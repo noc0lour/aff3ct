@@ -26,6 +26,8 @@ Decoder_LDPC_bit_flipping_OMWBF<B, R>::Decoder_LDPC_bit_flipping_OMWBF(
 {
     const std::string name = "Decoder_LDPC_bit_flipping_OMWBF";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (typeid(R) == typeid(signed char))
     {

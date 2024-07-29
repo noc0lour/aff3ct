@@ -16,6 +16,8 @@ Decoder_RSC_DB_BCJR_DVB_RCS1<B, R, MAX>::Decoder_RSC_DB_BCJR_DVB_RCS1(const int 
 {
     const std::string name = "Decoder_RSC_DB_BCJR_DVB_RCS1";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (this->n_states != 8)
     {

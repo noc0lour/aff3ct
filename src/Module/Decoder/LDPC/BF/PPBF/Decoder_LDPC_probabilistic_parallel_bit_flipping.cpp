@@ -24,6 +24,8 @@ Decoder_LDPC_probabilistic_parallel_bit_flipping<B, R>::Decoder_LDPC_probabilist
 {
     const std::string name = "Decoder_LDPC_probabilistic_parallel_bit_flipping";
     this->set_name(name);
+    for (auto& t : this->tasks)
+        t->set_replicability(true);
 
     if (std::is_same<R, signed char>::value)
     {
